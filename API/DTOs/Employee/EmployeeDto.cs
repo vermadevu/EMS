@@ -1,0 +1,23 @@
+﻿using API.Models.Enums;
+
+namespace API.DTOs.Employee;
+
+public class EmployeeDto
+{
+    public int Id { get; set; }
+    public string EmployeeCode { get; set; } = string.Empty;
+    public string FullName { get; set; } = string.Empty;
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string Phone { get; set; } = string.Empty;
+    public DateOnly JoiningDate { get; set; }
+    public EmployeeStatus Status { get; set; }
+    public string? ProfileImage { get; set; }
+    public int DepartmentId { get; set; }
+    public string DepartmentName { get; set; } = string.Empty;
+    public int DesignationId { get; set; }
+    public string DesignationName { get; set; } = string.Empty;
+    public int? ManagerId { get; set; }
+    public string? ManagerName { get; set; }
+}

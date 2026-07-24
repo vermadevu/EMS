@@ -1,0 +1,18 @@
+﻿using API.Models.Entities;
+
+namespace API.Interfaces.Repository;
+
+public interface IDesignationRepository
+{
+    Task<IEnumerable<Designation>> GetAllAsync();
+
+    Task<Designation?> GetByIdAsync(int id);
+
+    Task AddAsync(Designation Designation);
+
+    Task UpdateAsync(Designation Designation);
+
+    Task DeleteAsync(Designation Designation);
+
+    Task<bool> ExistsByNameAsync(string name);
+}
