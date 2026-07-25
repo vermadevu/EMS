@@ -1,4 +1,5 @@
 using API.Data;
+using API.Helpers;
 using API.Interfaces.Repository;
 using API.Interfaces.Service;
 using API.Mapping;
@@ -28,7 +29,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.Configure<CloudinaryService>(builder.Configuration.GetSection("CloudinarySettings"));
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 builder.Services.AddAuthentication(options =>
 {
@@ -81,12 +82,12 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-
+    var context = services.GetRequiredService<ApplicationDbContext>();
     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
 
-    await DbInitializer.SeedAsync(userManager, roleManager);
+    await DbInitializer.SeedAsync(context, userManager, roleManager);
 }
 
 
@@ -97,7 +98,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseSwagger();
 app.UseSwaggerUI();

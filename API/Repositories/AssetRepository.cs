@@ -64,12 +64,6 @@ public class AssetRepository(ApplicationDbContext context) : IAssetRepository
             .FirstOrDefaultAsync();
     }
 
-    public async Task<bool> EmployeeExistsAsync(int employeeId)
-    {
-        return await _context.Employees
-            .AnyAsync(e => e.Id == employeeId);
-    }
-
     public async Task<Asset?> GetAvailableAssetAsync(int id)
     {
         return await _context.Assets

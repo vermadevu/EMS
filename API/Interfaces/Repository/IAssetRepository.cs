@@ -12,6 +12,5 @@ public interface IAssetRepository
     Task<bool> ExistsBySerialNumberAsync(string serialNumber);
     Task<bool> ExistsBySerialNumberAsync(string serialNumber, int excludeId);
     Task<string?> GetLastAssetCodeAsync();
-    Task<bool> EmployeeExistsAsync(int employeeId);
     Task<Asset?> GetAvailableAssetAsync(int id);
 }

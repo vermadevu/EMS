@@ -93,9 +93,6 @@ public class AssetService( IAssetRepository repository, IMapper mapper) : IAsset
         if (asset.Status == AssetStatus.Assigned)
             throw new Exception("Asset is already assigned.");
 
-        if (!await _repository.EmployeeExistsAsync(dto.EmployeeId))
-            throw new Exception("Employee not found.");
-
         asset.EmployeeId = dto.EmployeeId;
         asset.Status = AssetStatus.Assigned;
 

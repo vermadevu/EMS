@@ -31,9 +31,6 @@ public class DocumentService( IDocumentRepository repository, ICloudinaryService
 
     public async Task<IEnumerable<DocumentDto>> GetByEmployeeIdAsync(int employeeId)
     {
-        if (!await _repository.EmployeeExistsAsync(employeeId))
-            throw new Exception("Employee not found.");
-
         var documents = await _repository.GetByEmployeeIdAsync(employeeId);
 
         return _mapper.Map<IEnumerable<DocumentDto>>(documents);
@@ -42,13 +39,6 @@ public class DocumentService( IDocumentRepository repository, ICloudinaryService
     public async Task<DocumentDto> UploadAsync(UploadDocumentDto dto)
     {
         var employeeId = _currentUserService.EmployeeId;
-
-        if (employeeId == null || 
-            (!await _repository.EmployeeExistsAsync(employeeId.Value))
-        ){
-            throw new Exception("Employee not found.");
-        }
-
 
         var uploadResult = await _cloudinaryService.UploadDocumentAsync(dto.File);
 
@@ -59,13 +49,14 @@ public class DocumentService( IDocumentRepository repository, ICloudinaryService
             Url = uploadResult.Url,
             ContentType = dto.File.ContentType,
             FileSize = dto.File.Length,
-            EmployeeId = employeeId.Value,
+            EmployeeId = employeeId,
             DocumentType = dto.DocumentType
         };
 
         await _repository.AddAsync(document);
+        var savedDocument = await _repository.GetByIdAsync(document.Id);
 
-        return _mapper.Map<DocumentDto>(document);
+        return _mapper.Map<DocumentDto>(savedDocument);
     }
 
     public async Task<bool> DeleteAsync(int id)
@@ -84,14 +75,11 @@ public class DocumentService( IDocumentRepository repository, ICloudinaryService
 
     public async Task<IEnumerable<DocumentDto>> GetMyDocumentsAsync()
     {
+        Console.WriteLine("hello");
         var employeeId = _currentUserService.EmployeeId;
 
-        if (employeeId == null)
-        {
-            throw new Exception("Employee account not found.");
-        }
-
-        var documents = await _repository.GetByEmployeeIdAsync(employeeId.Value);
+        var documents = await _repository.GetByEmployeeIdAsync(employeeId);
+        Console.WriteLine(documents);
 
         return _mapper.Map<IEnumerable<DocumentDto>>(documents);
     }
@@ -100,12 +88,7 @@ public class DocumentService( IDocumentRepository repository, ICloudinaryService
     {
         var employeeId = _currentUserService.EmployeeId;
 
-        if (employeeId == null)
-        {
-            throw new Exception("Employee account not found.");
-        }
-
-        var document = await _repository.GetByIdAndEmployeeIdAsync(id, employeeId.Value);
+        var document = await _repository.GetByIdAndEmployeeIdAsync(id, employeeId);
 
         if (document == null)
         {

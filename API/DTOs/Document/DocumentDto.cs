@@ -11,4 +11,6 @@ public class DocumentDto
     public DateTime UploadedOn { get; set; }
     public int EmployeeId { get; set; }
     public string EmployeeName { get; set; } = "";
+    public string Url { get; set; } = "";
+    public string PublicId { get; set; } = "";
 }

@@ -61,6 +61,22 @@ public class EmployeeService(
 
     public async Task<bool> UpdateAsync(int id, UpdateEmployeeDto dto)
     {
+        if (!await _repository.DepartmentExistsAsync(dto.DepartmentId))
+            throw new Exception("Department not found.");
+
+        if (!await _repository.DesignationExistsAsync(dto.DesignationId))
+            throw new Exception("Designation not found.");
+
+        if (dto.ManagerId.HasValue)
+        {
+            if (dto.ManagerId.Value == id)
+                throw new Exception("An employee cannot be their own manager.");
+
+
+            if (!await _repository.ManagerExistsAsync(dto.ManagerId.Value))
+                throw new Exception("Manager not found.");
+        }
+
         var employee = await _repository.GetByIdAsync(id);
 
         if (employee == null)
@@ -102,8 +118,7 @@ public class EmployeeService(
 
     public async Task<bool> CompleteOnboardingAsync()
     {
-        var employeeId = _currentUserService.EmployeeId
-            ?? throw new Exception("Employee not found.");
+        var employeeId = _currentUserService.EmployeeId;
 
         var employee = await _repository.GetByIdAsync(employeeId);
 

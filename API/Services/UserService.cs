@@ -33,9 +33,7 @@ namespace API.Services
 
         public async Task<UserDto?> GetByIdAsync(string id)
         {
-            var user = await _userManager.Users
-                .Include(u => u.Employee)   
-                .FirstOrDefaultAsync(u => u.Id == id);
+            var user = await GetUserAsync(id);
 
             if (user == null) return null;
 
@@ -66,19 +64,8 @@ namespace API.Services
             {
                 throw new Exception("Email is already in use.");
             }
-            
-            if (dto.Roles.Count <= 0)
-            {
-                throw new Exception("At least one role must be assigned.");
-            }
 
-            foreach (var role in dto.Roles)
-            {
-                if (!await _roleManager.RoleExistsAsync(role))
-                {
-                    throw new Exception($"Role '{role}' does not exist.");
-                }
-            }
+            await ValidateRolesAsync(dto.Roles);
 
             var user = new ApplicationUser
             {
@@ -92,21 +79,16 @@ namespace API.Services
 
             var result = await _userManager.CreateAsync(user, dto.Password);
 
-            if (!result.Succeeded)
-            {
-                throw new Exception(string.Join(", ",
-                    result.Errors.Select(e => e.Description)));
-            }
+            EnsureSuccess(result);
 
             var roleResult = await _userManager.AddToRolesAsync(user, dto.Roles);
 
             if (!roleResult.Succeeded)
             {
                 // Delete the user if something goes wrong if user created and roles couldn't assign then user gets deleted to ensure no user exists without a 
-                await _userManager.DeleteAsync(user); 
+                await _userManager.DeleteAsync(user);
 
-                throw new Exception(string.Join(", ",
-                    roleResult.Errors.Select(e => e.Description)));
+                EnsureSuccess(roleResult);
             }
 
             return new UserDto
@@ -122,7 +104,7 @@ namespace API.Services
         }
         public async Task<bool> UpdateAsync(string id, UpdateUserDto dto)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await GetUserAsync(id);
 
             if (user == null)
             {
@@ -141,54 +123,29 @@ namespace API.Services
 
             var result = await _userManager.UpdateAsync(user);
 
-            if (!result.Succeeded)
-            {
-                throw new Exception(string.Join(", ",
-                    result.Errors.Select(e => e.Description)));
-            }
+            EnsureSuccess(result);
 
             return true;
         }
         
         public async Task<bool> UpdateRolesAsync(string id, UpdateUserRolesDto dto)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await GetUserAsync(id);
 
             if (user == null)
             {
                 return false;
             }
 
-            if (dto.Roles.Count <= 0)
-            {
-                throw new Exception("At least one role must be assigned.");
-            }
-
-            foreach (var role in dto.Roles)
-            {
-                if (!await _roleManager.RoleExistsAsync(role))
-                {
-                    throw new Exception($"Role '{role}' does not exist.");
-                }
-            }
+            await ValidateRolesAsync(dto.Roles);
 
             var currentRoles = await _userManager.GetRolesAsync(user);
 
             var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
-
-            if (!removeResult.Succeeded)
-            {
-                throw new Exception(string.Join(", ",
-                    removeResult.Errors.Select(e => e.Description)));
-            }
+            EnsureSuccess(removeResult);
 
             var addResult = await _userManager.AddToRolesAsync(user, dto.Roles);
-
-            if (!addResult.Succeeded)
-            {
-                throw new Exception(string.Join(", ",
-                    addResult.Errors.Select(e => e.Description)));
-            }
+            EnsureSuccess(addResult);
 
             return true;
         }
@@ -206,7 +163,7 @@ namespace API.Services
 
         public async Task<bool> ResetPasswordAsync(string id, ResetPasswordDto dto)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await GetUserAsync(id);
 
             if (user == null)
             {
@@ -220,11 +177,7 @@ namespace API.Services
                 token,
                 dto.NewPassword);
 
-            if (!result.Succeeded)
-            {
-                throw new Exception(string.Join(", ",
-                    result.Errors.Select(e => e.Description)));
-            }
+            EnsureSuccess(result);
 
             return true;
         }
@@ -237,7 +190,7 @@ namespace API.Services
                 Email = user.Email!,
                 DisplayName = user.DisplayName,
                 EmployeeId = user.EmployeeId,
-                EmployeeName = user.Employee?.FullName,
+                EmployeeName = user.Employee.FullName,
                 IsActive = user.IsActive,
                 Roles = (await _userManager.GetRolesAsync(user)).ToList()
             };
@@ -245,7 +198,7 @@ namespace API.Services
 
         private async Task<bool> SetUserStatusAsync(string id, bool isActive)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await GetUserAsync(id);
 
             if (user == null)
             {
@@ -256,23 +209,47 @@ namespace API.Services
 
             var result = await _userManager.UpdateAsync(user);
 
-            if (!result.Succeeded)
-            {
-                throw new Exception(string.Join(", ",
-                    result.Errors.Select(e => e.Description)));
-            }
+            EnsureSuccess(result);
 
             return true;
         }
 
         public async Task<IList<string>?> GetUserRolesAsync(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await GetUserAsync(id);
 
             if (user == null)
                 return null;
 
             return await _userManager.GetRolesAsync(user);
+        }
+
+        private async Task ValidateRolesAsync(IList<string> roles)
+        {
+            if (roles == null || roles.Count == 0)
+                throw new Exception("At least one role must be assigned.");
+
+            foreach (var role in roles)
+            {
+                if (!await _roleManager.RoleExistsAsync(role))
+                    throw new Exception($"Role '{role}' does not exist.");
+            }
+        }
+
+        private static void EnsureSuccess(IdentityResult result)
+        {
+            if (!result.Succeeded)
+            {
+                throw new Exception(string.Join(", ",
+                    result.Errors.Select(e => e.Description)));
+            }
+        }
+
+        private Task<ApplicationUser?> GetUserAsync(string id)
+        {
+            return _userManager.Users
+                .Include(u => u.Employee)
+                .FirstOrDefaultAsync(u => u.Id == id);
         }
     }
 }

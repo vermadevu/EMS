@@ -25,8 +25,6 @@ public class CreateEmployeeDto
 
     [Required]
     public int DesignationId { get; set; }
-
     public int? ManagerId { get; set; }
-
     public string? ProfileImage { get; set; }
 }

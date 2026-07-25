@@ -47,7 +47,7 @@ public class CloudinaryService : ICloudinaryService
         return
         (
             uploadResult.PublicId,
-            uploadResult.SecureUrl.AbsoluteUri
+            uploadResult.SecureUrl.ToString()
         );
     }
 

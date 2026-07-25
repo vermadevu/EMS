@@ -41,12 +41,6 @@ namespace API.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> EmployeeExistsAsync(int employeeId)
-        {
-            return await _context.Documents
-                .AnyAsync(e => e.Id == employeeId);
-        }
-
         public async Task<Document?> GetByIdAndEmployeeIdAsync(int id, int employeeId)
         {
             return await _context.Documents

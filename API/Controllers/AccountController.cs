@@ -20,15 +20,14 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<LoginResponseDto>> Login(LoginDto loginDto)
         {
-            var user = await _userManager.FindByEmailAsync(loginDto.Email);
+            var user = await _userManager.Users
+                .Include(u => u.Employee)
+                .FirstOrDefaultAsync(u => u.Email == loginDto.Email);
 
             if (user == null) {
                 return Unauthorized("Invalid email or password.");
             }
-
-            var employee = user.EmployeeId.HasValue
-                ? await _context.Employees.FindAsync(user.EmployeeId.Value)
-                : null;
+               
 
             var result = await _signInManager.CheckPasswordSignInAsync(
                 user,
@@ -50,7 +49,7 @@ namespace API.Controllers
                 Token = token,
                 Email = loginDto.Email!,
                 UserName = user.UserName!,
-                EmployeeStatus = employee?.Status,
+                EmployeeStatus = user.Employee.Status,
                 Roles = roles
             };
         }

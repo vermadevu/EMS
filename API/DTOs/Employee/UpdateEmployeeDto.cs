@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using API.Models.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.DTOs.Employee;
 
@@ -25,8 +26,6 @@ public class UpdateEmployeeDto
 
     [Required]
     public int DesignationId { get; set; }
-
     public int? ManagerId { get; set; }
-
     public string? ProfileImage { get; set; }
 }

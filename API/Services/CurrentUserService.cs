@@ -14,7 +14,7 @@ namespace API.Services
                 .FindFirst(ClaimTypes.NameIdentifier)?
                 .Value ?? "";
 
-        public int? EmployeeId
+        public int EmployeeId
         {
             get
             {
@@ -23,9 +23,7 @@ namespace API.Services
                     .FindFirst("EmployeeId")?
                     .Value;
 
-                return int.TryParse(value, out var id)
-                    ? id
-                    : null;
+                return int.Parse(value!);
             }
         }
 

@@ -38,7 +38,6 @@ public class DocumentController(IDocumentService documentService) : BaseApiContr
     }
 
     [HttpGet("my-documents")]
-    [Authorize(Roles = "Employee")]
     public async Task<ActionResult<IEnumerable<DocumentDto>>> GetMyDocuments()
     {
         return Ok(await _documentService.GetMyDocumentsAsync());
@@ -70,7 +69,6 @@ public class DocumentController(IDocumentService documentService) : BaseApiContr
     }
 
     [HttpDelete("my-documents/{id:int}")]
-    [Authorize(Roles = "Employee")]
     public async Task<IActionResult> DeleteMyDocument(int id)
     {
         var deleted = await _documentService.DeleteMyDocumentAsync(id);
