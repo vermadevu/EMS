@@ -1,4 +1,5 @@
 ﻿using API.DTOs.Department;
+using API.Exceptions;
 using API.Interfaces.Repository;
 using API.Interfaces.Service;
 using API.Models.Entities;
@@ -33,7 +34,7 @@ public class DepartmentService(
     public async Task<DepartmentDto> CreateAsync(CreateDepartmentDto dto)
     {
         if (await _repository.ExistsByNameAsync(dto.Name))
-            throw new Exception("Department already exists.");
+            throw new BadRequestException("Department already exists.");
 
         var department = _mapper.Map<Department>(dto);
 

@@ -1,4 +1,5 @@
 ﻿using API.DTOs.User;
+using API.Exceptions;
 using API.Interfaces.Repository;
 using API.Interfaces.Service;
 using API.Models.Identity;
@@ -51,18 +52,18 @@ namespace API.Services
 
         public async Task<UserDto> CreateAsync(CreateUserDto dto)
         {
-            var employee = await _employeeRepository.GetByIdAsync(dto.EmployeeId) ?? throw new Exception("Employee not found.");
+            var employee = await _employeeRepository.GetByIdAsync(dto.EmployeeId) ?? throw new NotFoundException("Employee not found.");
 
             if (await _employeeRepository.HasUserAccountAsync(dto.EmployeeId))
             {
-                throw new Exception("User account already exists for this employee.");
+                throw new BadRequestException("User account already exists for this employee.");
             }
 
             var existingUser = await _userManager.FindByEmailAsync(dto.Email);
 
             if (existingUser != null)
             {
-                throw new Exception("Email is already in use.");
+                throw new BadRequestException("Email is already in use.");
             }
 
             await ValidateRolesAsync(dto.Roles);
@@ -115,7 +116,7 @@ namespace API.Services
 
             if (existingUser != null && existingUser.Id != id)
             {
-                throw new Exception("Email is already in use.");
+                throw new BadRequestException("Email is already in use.");
             }
 
             user.Email = dto.Email;
@@ -227,12 +228,12 @@ namespace API.Services
         private async Task ValidateRolesAsync(IList<string> roles)
         {
             if (roles == null || roles.Count == 0)
-                throw new Exception("At least one role must be assigned.");
+                throw new BadRequestException("At least one role must be assigned.");
 
             foreach (var role in roles)
             {
                 if (!await _roleManager.RoleExistsAsync(role))
-                    throw new Exception($"Role '{role}' does not exist.");
+                    throw new NotFoundException($"Role '{role}' does not exist.");
             }
         }
 

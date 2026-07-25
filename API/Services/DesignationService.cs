@@ -1,4 +1,5 @@
 ﻿using API.DTOs.Designation;
+using API.Exceptions;
 using API.Interfaces.Repository;
 using API.Interfaces.Service;
 using API.Models.Entities;
@@ -33,7 +34,7 @@ public class DesignationService(
     public async Task<DesignationDto> CreateAsync(CreateDesignationDto dto)
     {
         if (await _repository.ExistsByNameAsync(dto.Name))
-            throw new Exception("Designation already exists.");
+            throw new BadRequestException("Designation already exists.");
 
         var designation = _mapper.Map<Designation>(dto);
 

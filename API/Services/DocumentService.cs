@@ -75,11 +75,9 @@ public class DocumentService( IDocumentRepository repository, ICloudinaryService
 
     public async Task<IEnumerable<DocumentDto>> GetMyDocumentsAsync()
     {
-        Console.WriteLine("hello");
         var employeeId = _currentUserService.EmployeeId;
 
         var documents = await _repository.GetByEmployeeIdAsync(employeeId);
-        Console.WriteLine(documents);
 
         return _mapper.Map<IEnumerable<DocumentDto>>(documents);
     }

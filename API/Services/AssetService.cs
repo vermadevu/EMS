@@ -1,4 +1,5 @@
 ﻿using API.DTOs.Asset;
+using API.Exceptions;
 using API.Interfaces.Repository;
 using API.Interfaces.Service;
 using API.Models.Entities;
@@ -34,7 +35,7 @@ public class AssetService( IAssetRepository repository, IMapper mapper) : IAsset
         if (!string.IsNullOrWhiteSpace(dto.SerialNumber))
         {
             if (await _repository.ExistsBySerialNumberAsync(dto.SerialNumber))
-                throw new Exception("Asset with the same serial number already exists.");
+                throw new BadRequestException("Asset with the same serial number already exists.");
         }
 
         var asset = _mapper.Map<Asset>(dto);
@@ -58,7 +59,7 @@ public class AssetService( IAssetRepository repository, IMapper mapper) : IAsset
         if (!string.IsNullOrWhiteSpace(dto.SerialNumber))
         {
             if (await _repository.ExistsBySerialNumberAsync(dto.SerialNumber, id))
-                throw new Exception("Asset with the same serial number already exists.");
+                throw new BadRequestException("Asset with the same serial number already exists.");
         }
 
         _mapper.Map(dto, asset);
@@ -76,7 +77,7 @@ public class AssetService( IAssetRepository repository, IMapper mapper) : IAsset
             return false;
 
         if (asset.Status == AssetStatus.Assigned)
-            throw new Exception("Assigned asset cannot be deleted.");
+            throw new BadRequestException("Assigned asset cannot be deleted.");
 
         await _repository.DeleteAsync(asset);
 
@@ -91,7 +92,7 @@ public class AssetService( IAssetRepository repository, IMapper mapper) : IAsset
             return false;
 
         if (asset.Status == AssetStatus.Assigned)
-            throw new Exception("Asset is already assigned.");
+            throw new BadRequestException("Asset is already assigned.");
 
         asset.EmployeeId = dto.EmployeeId;
         asset.Status = AssetStatus.Assigned;
@@ -109,7 +110,7 @@ public class AssetService( IAssetRepository repository, IMapper mapper) : IAsset
             return false;
 
         if (asset.Status == AssetStatus.Available)
-            throw new Exception("Asset is already available.");
+            throw new BadRequestException("Asset is already available.");
 
         asset.EmployeeId = null;
         asset.Status = AssetStatus.Available;

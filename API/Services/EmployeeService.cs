@@ -1,4 +1,5 @@
 ﻿using API.DTOs.Employee;
+using API.Exceptions;
 using API.Interfaces.Repository;
 using API.Interfaces.Service;
 using API.Models.Entities;
@@ -36,17 +37,17 @@ public class EmployeeService(
     public async Task<EmployeeDto> CreateAsync(CreateEmployeeDto dto)
     {
         if (await _repository.ExistsByEmailAsync(dto.Email))
-            throw new Exception("Email already exists.");
+            throw new BadRequestException("Email already exists.");
 
         if (!await _repository.DepartmentExistsAsync(dto.DepartmentId))
-            throw new Exception("Department not found.");
+            throw new NotFoundException("Department not found.");
 
         if (!await _repository.DesignationExistsAsync(dto.DesignationId))
-            throw new Exception("Designation not found.");
+            throw new NotFoundException("Designation not found.");
 
         if (dto.ManagerId.HasValue &&
             !await _repository.ManagerExistsAsync(dto.ManagerId.Value))
-            throw new Exception("Manager not found.");
+            throw new NotFoundException("Manager not found.");
 
         var employee = _mapper.Map<Employee>(dto);
 
@@ -62,19 +63,19 @@ public class EmployeeService(
     public async Task<bool> UpdateAsync(int id, UpdateEmployeeDto dto)
     {
         if (!await _repository.DepartmentExistsAsync(dto.DepartmentId))
-            throw new Exception("Department not found.");
+            throw new NotFoundException("Department not found.");
 
         if (!await _repository.DesignationExistsAsync(dto.DesignationId))
-            throw new Exception("Designation not found.");
+            throw new NotFoundException("Designation not found.");
 
         if (dto.ManagerId.HasValue)
         {
             if (dto.ManagerId.Value == id)
-                throw new Exception("An employee cannot be their own manager.");
+                throw new BadRequestException("An employee cannot be their own manager.");
 
 
             if (!await _repository.ManagerExistsAsync(dto.ManagerId.Value))
-                throw new Exception("Manager not found.");
+                throw new NotFoundException("Manager not found.");
         }
 
         var employee = await _repository.GetByIdAsync(id);
@@ -83,7 +84,7 @@ public class EmployeeService(
             return false;
         // Reject Update if the email already exists with other employee
         if (await _repository.ExistsByEmailAsync(dto.Email, id))
-            throw new Exception("Email already exists.");
+            throw new BadRequestException("Email already exists.");
 
         _mapper.Map(dto, employee);
 
@@ -145,7 +146,7 @@ public class EmployeeService(
 
         if (employee.Status != EmployeeStatus.DocumentsSubmitted)
         {
-            throw new Exception("Employee has not submitted documents.");
+            throw new BadRequestException("Employee has not submitted documents.");
         }
 
         employee.Status = EmployeeStatus.Active;

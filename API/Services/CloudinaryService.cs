@@ -1,4 +1,5 @@
-﻿using API.Helpers;
+﻿using API.Exceptions;
+using API.Helpers;
 using API.Interfaces.Service;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
@@ -25,7 +26,7 @@ public class CloudinaryService : ICloudinaryService
     public async Task<(string PublicId, string Url)> UploadDocumentAsync(IFormFile file)
     {
         if (file == null || file.Length == 0)
-            throw new Exception("No file was uploaded.");
+            throw new BadRequestException("No file was uploaded.");
 
         using var stream = file.OpenReadStream();
 
