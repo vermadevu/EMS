@@ -47,5 +47,10 @@ namespace API.Repositories
                 .AnyAsync(e => e.Id == employeeId);
         }
 
+        public async Task<Document?> GetByIdAndEmployeeIdAsync(int id, int employeeId)
+        {
+            return await _context.Documents
+                .FirstOrDefaultAsync(d => d.Id == id && d.EmployeeId == employeeId);
+        }
     }
 }

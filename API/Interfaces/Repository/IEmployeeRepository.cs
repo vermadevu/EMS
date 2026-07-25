@@ -16,4 +16,5 @@ public interface IEmployeeRepository
     Task<bool> DepartmentExistsAsync(int departmentId);
     Task<bool> DesignationExistsAsync(int designationId);
     Task<bool> ManagerExistsAsync(int managerId);
+    Task<bool> HasUserAccountAsync(int employeeId);
 }

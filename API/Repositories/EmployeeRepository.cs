@@ -1,5 +1,6 @@
 ﻿using API.Data;
 using API.Interfaces.Repository;
+using API.Interfaces.Service;
 using API.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -88,5 +89,11 @@ public class EmployeeRepository(ApplicationDbContext context) : IEmployeeReposit
     {
         return await _context.Employees
             .AnyAsync(e => e.Id == managerId);
+    }
+
+    public async Task<bool> HasUserAccountAsync(int employeeId)
+    {
+        return await _context.Users
+        .AnyAsync(u => u.EmployeeId == employeeId);
     }
 }

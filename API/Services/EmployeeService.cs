@@ -9,10 +9,12 @@ namespace API.Services;
 
 public class EmployeeService(
     IEmployeeRepository repository,
+    ICurrentUserService currentUserService,
     IMapper mapper) : IEmployeeService
 {
     private readonly IEmployeeRepository _repository = repository;
     private readonly IMapper _mapper = mapper;
+    private readonly ICurrentUserService _currentUserService = currentUserService;
 
     public async Task<IEnumerable<EmployeeDto>> GetAllAsync()
     {
@@ -96,5 +98,45 @@ public class EmployeeService(
         var number = int.Parse(lastCode.Substring(3));
 
         return $"E{(number + 1):D4}";
+    }
+
+    public async Task<bool> CompleteOnboardingAsync()
+    {
+        var employeeId = _currentUserService.EmployeeId
+            ?? throw new Exception("Employee not found.");
+
+        var employee = await _repository.GetByIdAsync(employeeId);
+
+        if (employee == null)
+        {
+            return false;
+        }
+
+        employee.Status = EmployeeStatus.DocumentsSubmitted;
+
+        await _repository.UpdateAsync(employee);
+
+        return true;
+    }
+
+    public async Task<bool> ActivateEmployeeAsync(int id)
+    {
+        var employee = await _repository.GetByIdAsync(id);
+
+        if (employee == null)
+        {
+            return false;
+        }
+
+        if (employee.Status != EmployeeStatus.DocumentsSubmitted)
+        {
+            throw new Exception("Employee has not submitted documents.");
+        }
+
+        employee.Status = EmployeeStatus.Active;
+
+        await _repository.UpdateAsync(employee);
+
+        return true;
     }
 }

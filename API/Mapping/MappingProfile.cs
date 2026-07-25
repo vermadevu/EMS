@@ -3,7 +3,9 @@ using API.DTOs.Department;
 using API.DTOs.Designation;
 using API.DTOs.Document;
 using API.DTOs.Employee;
+using API.DTOs.User;
 using API.Models.Entities;
+using API.Models.Identity;
 using AutoMapper;
 
 namespace API.Mapping;
@@ -48,6 +50,5 @@ public class MappingProfile : Profile
                 dest => dest.EmployeeName,
                 opt => opt.MapFrom(src => src.Employee.FullName)
             );
-
     }
 }

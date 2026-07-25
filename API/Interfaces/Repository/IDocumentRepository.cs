@@ -10,4 +10,5 @@ public interface IDocumentRepository
     Task AddAsync(Document document);
     Task DeleteAsync(Document document);
     Task<bool> EmployeeExistsAsync(int employeeId);
+    Task<Document?> GetByIdAndEmployeeIdAsync(int id, int employeeId);
 }

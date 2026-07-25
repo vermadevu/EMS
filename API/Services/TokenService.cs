@@ -17,6 +17,7 @@ namespace API.Services
                 new(JwtRegisteredClaimNames.NameId, user.Id),
                 new(JwtRegisteredClaimNames.Email, user.Email!),
                 new(JwtRegisteredClaimNames.UniqueName,user.UserName!),
+                new("EmployeeId", user.EmployeeId?.ToString() ?? ""),
                 new(ClaimTypes.Name, user.UserName!)
             };
 
