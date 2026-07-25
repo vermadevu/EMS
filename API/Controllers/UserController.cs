@@ -1,4 +1,5 @@
-﻿using API.DTOs.User;
+﻿using API.Authorization;
+using API.DTOs.User;
 using API.Interfaces.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,14 +12,14 @@ public class UsersController(IUserService userService) : BaseApiController
     private readonly IUserService _userService = userService;
 
     [HttpGet]
-    [Authorize(Roles = "Admin,HR")]
+    [HasPermission(Permissions.Users.Read)]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
     {
         return Ok(await _userService.GetAllAsync());
     }
 
     [HttpGet("{id}")]
-    [Authorize(Roles = "Admin,HR")]
+    [HasPermission(Permissions.Users.Read)]
     public async Task<ActionResult<UserDto>> GetUser(string id)
     {
         var user = await _userService.GetByIdAsync(id);
@@ -30,14 +31,14 @@ public class UsersController(IUserService userService) : BaseApiController
     }
 
     [HttpGet("roles")]
-    [Authorize(Roles = "Admin,HR")]
+    [HasPermission(Permissions.Users.Read)]
     public async Task<ActionResult<IEnumerable<string>>> GetRoles()
     {
         return Ok(await _userService.GetRolesAsync());
     }
 
     [HttpGet("{id}/roles")]
-    [Authorize(Roles = "Admin,HR")]
+    [HasPermission(Permissions.Users.Read)]
     public async Task<ActionResult<IEnumerable<string>>> GetUserRoles(string id)
     {
         var roles = await _userService.GetUserRolesAsync(id);
@@ -49,7 +50,7 @@ public class UsersController(IUserService userService) : BaseApiController
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    [HasPermission(Permissions.Users.Create)]
     public async Task<ActionResult<UserDto>> CreateUser(CreateUserDto dto)
     {
         var user = await _userService.CreateAsync(dto);
@@ -61,7 +62,7 @@ public class UsersController(IUserService userService) : BaseApiController
     }
 
     [HttpPut("{id}")]
-    [Authorize(Roles = "Admin")]
+    [HasPermission(Permissions.Users.Update)]
     public async Task<IActionResult> UpdateUser(string id, UpdateUserDto dto)
     {
         var updated = await _userService.UpdateAsync(id, dto);
@@ -73,7 +74,7 @@ public class UsersController(IUserService userService) : BaseApiController
     }
 
     [HttpPut("{id}/roles")]
-    [Authorize(Roles = "Admin")]
+    [HasPermission(Permissions.Users.UpdateRoles)]
     public async Task<IActionResult> UpdateUserRoles(string id, UpdateUserRolesDto dto)
     {
         var updated = await _userService.UpdateRolesAsync(id, dto);
@@ -85,7 +86,7 @@ public class UsersController(IUserService userService) : BaseApiController
     }
 
     [HttpPatch("{id}/activate")]
-    [Authorize(Roles = "Admin, HR")]
+    [HasPermission(Permissions.Users.Activate)]
     public async Task<IActionResult> ActivateUser(string id)
     {
         var activated = await _userService.ActivateAsync(id);
@@ -97,7 +98,7 @@ public class UsersController(IUserService userService) : BaseApiController
     }
 
     [HttpPatch("{id}/deactivate")]
-    [Authorize(Roles = "Admin, HR")]
+    [HasPermission(Permissions.Users.Deactivate)]
     public async Task<IActionResult> DeactivateUser(string id)
     {
         var deactivated = await _userService.DeactivateAsync(id);
@@ -109,7 +110,7 @@ public class UsersController(IUserService userService) : BaseApiController
     }
 
     [HttpPost("{id}/reset-password")]
-    [Authorize(Roles = "Admin")]
+    [HasPermission(Permissions.Users.ResetPassword)]
     public async Task<IActionResult> ResetPassword(string id, ResetPasswordDto dto)
     {
         var reset = await _userService.ResetPasswordAsync(id, dto);

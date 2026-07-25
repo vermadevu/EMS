@@ -3,6 +3,8 @@ using API.DTOs.Department;
 using API.DTOs.Designation;
 using API.DTOs.Document;
 using API.DTOs.Employee;
+using API.DTOs.Permission;
+using API.Models.Authorization;
 using API.Models.Entities;
 using AutoMapper;
 
@@ -46,5 +48,8 @@ public class MappingProfile : Profile
         CreateMap<Document, DocumentDto>()
             .ForMember(dest => dest.EmployeeName,
                 opt => opt.MapFrom(src => src.Employee.FullName));
+
+        // Permission
+        CreateMap<Permission, PermissionDto>();
     }
 }

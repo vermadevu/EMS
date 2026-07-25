@@ -1,4 +1,5 @@
-﻿using API.DTOs.Designation;
+﻿using API.Authorization;
+using API.DTOs.Designation;
 using API.Interfaces.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ public class DesignationController(IDesignationService designationService) : Bas
     private readonly IDesignationService _designationService = designationService;
 
     [HttpGet]
+    [HasPermission(Permissions.Designations.Read)]
     public async Task<ActionResult<IEnumerable<DesignationDto>>> GetAll()
     {
         var designations = await _designationService.GetAllAsync();
@@ -21,6 +23,7 @@ public class DesignationController(IDesignationService designationService) : Bas
 
 
     [HttpGet("{id:int}")]
+    [HasPermission(Permissions.Designations.Read)]
     public async Task<ActionResult<DesignationDto>> GetById(int id)
     {
         var designation = await _designationService.GetByIdAsync(id);
@@ -32,8 +35,8 @@ public class DesignationController(IDesignationService designationService) : Bas
     }
 
 
-    [Authorize(Roles = "Admin,HR")]
     [HttpPost]
+    [HasPermission(Permissions.Designations.Create)]
     public async Task<ActionResult<DesignationDto>> Create(CreateDesignationDto dto)
     {
         var designation = await _designationService.CreateAsync(dto);
@@ -45,8 +48,8 @@ public class DesignationController(IDesignationService designationService) : Bas
     }
 
 
-    [Authorize(Roles = "Admin,HR")]
     [HttpPut("{id:int}")]
+    [HasPermission(Permissions.Designations.Update)]
     public async Task<ActionResult> Update(int id, UpdateDesignationDto dto)
     {
         var updated = await _designationService.UpdateAsync(id, dto);
@@ -57,8 +60,8 @@ public class DesignationController(IDesignationService designationService) : Bas
         return NoContent();
     }
 
-    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:int}")]
+    [HasPermission(Permissions.Designations.Delete)]
     public async Task<ActionResult> Delete(int id)
     {
         var deleted = await _designationService.DeleteAsync(id);

@@ -1,4 +1,5 @@
-﻿using API.DTOs.Asset;
+﻿using API.Authorization;
+using API.DTOs.Asset;
 using API.Interfaces.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ public class AssetController(IAssetService service) : BaseApiController
     private readonly IAssetService _service = service;
 
     [HttpGet]
+    [HasPermission(Permissions.Assets.Read)]
     public async Task<ActionResult<IEnumerable<AssetDto>>> GetAssets()
     {
         var assets = await _service.GetAllAsync();
@@ -18,6 +20,7 @@ public class AssetController(IAssetService service) : BaseApiController
     }
 
     [HttpGet("{id:int}")]
+    [HasPermission(Permissions.Assets.Read)]
     public async Task<ActionResult<AssetDto>> GetAsset(int id)
     {
         var asset = await _service.GetByIdAsync(id);
@@ -28,8 +31,8 @@ public class AssetController(IAssetService service) : BaseApiController
         return Ok(asset);
     }
 
-    [Authorize(Roles = "Admin,HR")]
     [HttpPost]
+    [HasPermission(Permissions.Assets.Create)]
     public async Task<ActionResult<AssetDto>> CreateAsset(CreateAssetDto dto)
     {
         var asset = await _service.CreateAsync(dto);
@@ -40,8 +43,8 @@ public class AssetController(IAssetService service) : BaseApiController
             asset);
     }
 
-    [Authorize(Roles = "Admin,HR")]
     [HttpPut("{id:int}")]
+    [HasPermission(Permissions.Assets.Update)]
     public async Task<IActionResult> UpdateAsset(int id, UpdateAssetDto dto)
     {
         var updated = await _service.UpdateAsync(id, dto);
@@ -52,8 +55,8 @@ public class AssetController(IAssetService service) : BaseApiController
         return NoContent();
     }
 
-    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:int}")]
+    [HasPermission(Permissions.Assets.Delete)]
     public async Task<IActionResult> DeleteAsset(int id)
     {
         var deleted = await _service.DeleteAsync(id);
@@ -64,8 +67,8 @@ public class AssetController(IAssetService service) : BaseApiController
         return NoContent();
     }
 
-    [Authorize(Roles = "Admin,HR")]
     [HttpPost("{id:int}/assign")]
+    [HasPermission(Permissions.Assets.Assign)]
     public async Task<IActionResult> AssignAsset(int id, AssignAssetDto dto)
     {
         var assigned = await _service.AssignAssetAsync(id, dto);
@@ -76,8 +79,8 @@ public class AssetController(IAssetService service) : BaseApiController
         return NoContent();
     }
 
-    [Authorize(Roles = "Admin,HR")]
     [HttpPost("{id:int}/return")]
+    [HasPermission(Permissions.Assets.Return)]
     public async Task<IActionResult> ReturnAsset(int id)
     {
         var returned = await _service.ReturnAssetAsync(id);

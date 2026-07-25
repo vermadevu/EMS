@@ -1,4 +1,5 @@
-﻿using API.Models.Entities;
+﻿using API.Data.Seed;
+using API.Models.Entities;
 using API.Models.Enums;
 using API.Models.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +14,10 @@ public static class DbInitializer
         UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager)
     {
+
+        //if (await context.Permissions.AnyAsync())
+        //    return;
+
         // Seed Roles
         string[] roles =
         {
@@ -29,6 +34,10 @@ public static class DbInitializer
                 await roleManager.CreateAsync(new IdentityRole(role));
             }
         }
+
+        await PermissionSeeder.SeedAsync(context);
+
+        await RolePermissionSeeder.SeedAsync(context, roleManager);
 
         const string adminEmail = "admin@dems.com";
 

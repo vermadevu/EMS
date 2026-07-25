@@ -1,4 +1,5 @@
-﻿using API.DTOs.Department;
+﻿using API.Authorization;
+using API.DTOs.Department;
 using API.Interfaces.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ public class DepartmentController(IDepartmentService departmentService) : BaseAp
     private readonly IDepartmentService _departmentService = departmentService;
 
     [HttpGet]
+    [HasPermission(Permissions.Departments.Read)]
     public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetAll()
     {
         var departments = await _departmentService.GetAllAsync();
@@ -19,8 +21,8 @@ public class DepartmentController(IDepartmentService departmentService) : BaseAp
         return Ok(departments);
     }
 
-
     [HttpGet("{id:int}")]
+    [HasPermission(Permissions.Departments.Read)]
     public async Task<ActionResult<DepartmentDto>> GetById(int id)
     {
         var department = await _departmentService.GetByIdAsync(id);
@@ -32,8 +34,8 @@ public class DepartmentController(IDepartmentService departmentService) : BaseAp
     }
 
 
-    [Authorize(Roles = "Admin,HR")]
     [HttpPost]
+    [HasPermission(Permissions.Departments.Create)]
     public async Task<ActionResult<DepartmentDto>> Create(CreateDepartmentDto dto)
     {
         var department = await _departmentService.CreateAsync(dto);
@@ -45,8 +47,8 @@ public class DepartmentController(IDepartmentService departmentService) : BaseAp
     }
 
 
-    [Authorize(Roles = "Admin,HR")]
     [HttpPut("{id:int}")]
+    [HasPermission(Permissions.Departments.Update)]
     public async Task<ActionResult> Update(int id, UpdateDepartmentDto dto)
     {
         var updated = await _departmentService.UpdateAsync(id, dto);
@@ -57,8 +59,8 @@ public class DepartmentController(IDepartmentService departmentService) : BaseAp
         return NoContent();
     }
 
-    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:int}")]
+    [HasPermission(Permissions.Departments.Delete)]
     public async Task<ActionResult> Delete(int id)
     {
         var deleted = await _departmentService.DeleteAsync(id);

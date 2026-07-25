@@ -1,3 +1,4 @@
+using API.Models.Authorization;
 using API.Models.Entities;
 using API.Models.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -13,6 +14,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Designation> Designations => Set<Designation>();
     public DbSet<Asset> Assets => Set<Asset>();
     public DbSet<Document> Documents => Set<Document>();
+    public DbSet<Permission> Permissions => Set<Permission>();
+    public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
+    public DbSet<UserPermission> UserPermissions => Set<UserPermission>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -58,6 +62,50 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .HasOne(u => u.Employee)
             .WithOne(e => e.User)
             .HasForeignKey<ApplicationUser>(u => u.EmployeeId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Permission name should never duplicate
+        builder.Entity<Permission>()
+            .HasIndex(p => p.Name)
+            .IsUnique();
+
+
+        builder.Entity<RolePermission>()
+            .HasKey(rp => new
+            {
+                rp.RoleId,
+                rp.PermissionId
+            });
+
+        builder.Entity<RolePermission>()
+            .HasOne(rp => rp.Role)
+            .WithMany()
+            .HasForeignKey(rp => rp.RoleId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<RolePermission>()
+            .HasOne(rp => rp.Permission)
+            .WithMany(p => p.RolePermissions)
+            .HasForeignKey(rp => rp.PermissionId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<UserPermission>()
+            .HasKey(up => new
+            {
+                up.UserId,
+                up.PermissionId
+            });
+
+        builder.Entity<UserPermission>()
+            .HasOne(up => up.User)
+            .WithMany()
+            .HasForeignKey(up => up.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<UserPermission>()
+            .HasOne(up => up.Permission)
+            .WithMany(p => p.UserPermissions)
+            .HasForeignKey(up => up.PermissionId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

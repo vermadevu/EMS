@@ -1,4 +1,5 @@
-﻿using API.DTOs.Employee;
+﻿using API.Authorization;
+using API.DTOs.Employee;
 using API.Interfaces.Service;
 using API.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +13,7 @@ public class EmployeeController(IEmployeeService employeeService) : BaseApiContr
     private readonly IEmployeeService _employeeService = employeeService;
 
     [HttpGet]
+    [HasPermission(Permissions.Employees.Read)]
     public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetAll()
     {
         var employees = await _employeeService.GetAllAsync();
@@ -19,6 +21,7 @@ public class EmployeeController(IEmployeeService employeeService) : BaseApiContr
     }
 
     [HttpGet("{id:int}")]
+    [HasPermission(Permissions.Employees.Read)]
     public async Task<ActionResult<EmployeeDto>> GetById(int id)
     {
         var employee = await _employeeService.GetByIdAsync(id);
@@ -29,8 +32,8 @@ public class EmployeeController(IEmployeeService employeeService) : BaseApiContr
         return Ok(employee);
     }
 
-    [Authorize(Roles = "Admin,HR")]
     [HttpPost]
+    [HasPermission(Permissions.Employees.Create)]
     public async Task<ActionResult<EmployeeDto>> Create(CreateEmployeeDto dto)
     {
         var employee = await _employeeService.CreateAsync(dto);
@@ -40,8 +43,8 @@ public class EmployeeController(IEmployeeService employeeService) : BaseApiContr
             employee);
     }
 
-    [Authorize(Roles = "Admin,HR")]
     [HttpPut("{id:int}")]
+    [HasPermission(Permissions.Employees.Update)]
     public async Task<ActionResult> Update(int id, UpdateEmployeeDto dto)
     {
         var updated = await _employeeService.UpdateAsync(id, dto);
@@ -52,8 +55,8 @@ public class EmployeeController(IEmployeeService employeeService) : BaseApiContr
         return NoContent();
     }
 
-    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:int}")]
+    [HasPermission(Permissions.Employees.Delete)]
     public async Task<ActionResult> Delete(int id)
     {
         var deleted = await _employeeService.DeleteAsync(id);
@@ -65,7 +68,7 @@ public class EmployeeController(IEmployeeService employeeService) : BaseApiContr
     }
 
     [HttpPatch("me/complete-onboarding")]
-    [Authorize(Roles = "Employee")]
+    [HasPermission(Permissions.Employees.CompleteOnboarding)]
     public async Task<IActionResult> CompleteOnboarding()
     {
         var result = await _employeeService.CompleteOnboardingAsync();
@@ -77,7 +80,7 @@ public class EmployeeController(IEmployeeService employeeService) : BaseApiContr
     }
 
     [HttpPatch("{id:int}/activate")]
-    [Authorize(Roles = "Admin,HR")]
+    [HasPermission(Permissions.Employees.Activate)]
     public async Task<IActionResult> ActivateEmployee(int id)
     {
         var result = await _employeeService.ActivateEmployeeAsync(id);

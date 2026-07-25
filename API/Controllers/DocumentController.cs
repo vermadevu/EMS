@@ -1,4 +1,5 @@
-﻿using API.DTOs.Document;
+﻿using API.Authorization;
+using API.DTOs.Document;
 using API.Interfaces.Service;
 using API.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +13,7 @@ public class DocumentController(IDocumentService documentService) : BaseApiContr
     private readonly IDocumentService _documentService = documentService;
 
     [HttpGet]
+    [HasPermission(Permissions.Documents.Read)]
     public async Task<ActionResult<IEnumerable<DocumentDto>>> GetDocuments()
     {
         var documents = await _documentService.GetAllAsync();
@@ -20,6 +22,7 @@ public class DocumentController(IDocumentService documentService) : BaseApiContr
     }
 
     [HttpGet("{id:int}")]
+    [HasPermission(Permissions.Documents.Read)]
     public async Task<ActionResult<DocumentDto>> GetDocument(int id)
     {
         var document = await _documentService.GetByIdAsync(id);
@@ -31,21 +34,22 @@ public class DocumentController(IDocumentService documentService) : BaseApiContr
     }
 
     [HttpGet("employee/{employeeId:int}")]
-    [Authorize(Roles = "Admin,HR")]
+    [HasPermission(Permissions.Documents.Read)]
     public async Task<ActionResult<IEnumerable<DocumentDto>>> GetEmployeeDocuments(int employeeId)
     {
         return Ok(await _documentService.GetByEmployeeIdAsync(employeeId));
     }
 
     [HttpGet("my-documents")]
+    [HasPermission(Permissions.Documents.ReadOwn)]
     public async Task<ActionResult<IEnumerable<DocumentDto>>> GetMyDocuments()
     {
         return Ok(await _documentService.GetMyDocumentsAsync());
     }
 
 
-    [Authorize(Roles = "Admin,HR")]
     [HttpPost]
+    [HasPermission(Permissions.Documents.Upload)]
     public async Task<ActionResult<DocumentDto>> UploadDocument([FromForm] UploadDocumentDto dto)
     {
         var document = await _documentService.UploadAsync(dto);
@@ -56,8 +60,8 @@ public class DocumentController(IDocumentService documentService) : BaseApiContr
             document);
     }
 
-    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:int}")]
+    [HasPermission(Permissions.Documents.Delete)]
     public async Task<IActionResult> DeleteDocument(int id)
     {
         var deleted = await _documentService.DeleteAsync(id);
@@ -69,6 +73,7 @@ public class DocumentController(IDocumentService documentService) : BaseApiContr
     }
 
     [HttpDelete("my-documents/{id:int}")]
+    [HasPermission(Permissions.Documents.DeleteOwn)]
     public async Task<IActionResult> DeleteMyDocument(int id)
     {
         var deleted = await _documentService.DeleteMyDocumentAsync(id);
