@@ -126,6 +126,8 @@ builder.Services.AddScoped<IDashboardWidgetProvider, DepartmentStatisticsProvide
 builder.Services.AddScoped<IDashboardWidgetProvider, AssetStatisticsProvider>();
 //builder.Services.AddScoped<IDashboardWidgetProvider, UserStatisticsProvider>();
 builder.Services.AddScoped<IDashboardWidgetProvider, RecentEmployeesProvider>();
+
+builder.Services.AddScoped<IDashboardWidgetProvider, PendingOnboardingProvider>();
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
     {

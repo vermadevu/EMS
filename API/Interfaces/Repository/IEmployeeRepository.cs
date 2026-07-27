@@ -19,4 +19,5 @@ public interface IEmployeeRepository
     Task<bool> HasUserAccountAsync(int employeeId);
     Task<int> CountAsync();
     Task<List<Employee>> GetRecentEmployeesAsync(int count = 5);
+    Task<List<Employee>> GetPendingOnboardingAsync(int count = 5);
 }

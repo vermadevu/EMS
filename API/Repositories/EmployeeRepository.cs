@@ -2,6 +2,7 @@
 using API.Interfaces.Repository;
 using API.Interfaces.Service;
 using API.Models.Entities;
+using API.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Repositories;
@@ -109,6 +110,18 @@ public class EmployeeRepository(ApplicationDbContext context) : IEmployeeReposit
             .Include(e => e.Designation)
             .OrderByDescending(e => e.JoiningDate)
             .ThenByDescending(e => e.Id) // tie breaker
+            .Take(count)
+            .ToListAsync();
+    }
+
+    public async Task<List<Employee>> GetPendingOnboardingAsync(int count = 5)
+    {
+        return await _context.Employees
+            .Include(e => e.Department)
+            .Include(e => e.Designation)
+            .Where(e => e.Status == EmployeeStatus.Pending)
+            .OrderByDescending(e => e.JoiningDate)
+            .ThenByDescending(e => e.Id)
             .Take(count)
             .ToListAsync();
     }
