@@ -1,8 +1,6 @@
 <header class="navbar bg-base-100 border-b border-base-300 px-6">
     <div class="flex-1">
-        <button
-            class="btn btn-ghost btn-circle"
-            (click)="toggleSidebar.emit()">
+        <button class="btn btn-ghost btn-circle" (click)="toggleSidebar.emit()">
             <mat-icon>
                 menu
             </mat-icon>
@@ -17,8 +15,9 @@
             {{ currentUser.user()?.displayName }}
         </span>
         <div class="avatar placeholder">
-            <div class="bg-primary text-primary-content rounded-full w-10">
-                <span>
+
+            <div class="bg-primary text-primary-content rounded-full w-12 flex items-center justify-center">
+                <span class="text-xl font-semibold leading-none">
                     {{ currentUser.user()?.displayName?.charAt(0) }}
                 </span>
             </div>

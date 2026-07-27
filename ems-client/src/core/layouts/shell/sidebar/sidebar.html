@@ -1,39 +1,48 @@
-<aside class="bg-base-200 border-r border-base-300 transition-all duration-300" 
-        [class.w-64]="!collapsed()"
-        [class.w-20]="collapsed()">
-    <div class="flex items-center gap-3 p-6">
-        <div class="avatar placeholder">
-            <div class="bg-primary text-primary-content rounded-xl w-12">
-                <span class="text-xl font-bold">
-                    D
-                </span>
+<aside class="flex flex-col h-screen bg-base-200 border-r border-base-300 transition-all duration-300"
+    [class.w-64]="!collapsed()" 
+    [class.w-20]="collapsed()">
+
+    <div class="border-b border-base-300">
+        <div class="flex items-center gap-4 p-5">
+
+            <img src="/logo.png" alt="DEMS Logo" class="w-12 h-12 object-contain rounded-xl bg-base-100 p-2 shadow" />
+            @if (!collapsed()) {
+            <div>
+                <h1 class="text-xl font-bold tracking-wide">
+                    DEMS
+                </h1>
+                <p class="text-xs opacity-60">
+                    Employee Management
+                </p>
+
             </div>
-        </div>
-        <div>
-            <h2 class="font-bold text-lg">
-                DEMS
-            </h2>
-            <p class="text-xs opacity-60">
-                Employee Management
-            </p>
+            }
         </div>
     </div>
 
-    <ul class="menu flex-1 px-3">
-        @for (item of navigationItems(); track item.route) {
-
-        <li>
-            <a [routerLink]="item.route" routerLinkActive="menu-active" [routerLinkActiveOptions]="{ exact: true }">
-                <mat-icon>
-                    {{ item.icon }}
-                </mat-icon>
-                @if (!collapsed()) {
-                    <span>
+    <div class="flex-1 overflow-y-auto py-4">
+        @if (!collapsed()) {
+        <p class="px-6 mb-3 text-xs font-semibold uppercase tracking-widest opacity-50">
+            General
+        </p>
+        }
+        <ul class="menu px-3">
+            @for (item of navigationItems(); track item.route) {
+            <li class="mb-1">
+                <a [routerLink]="item.route" routerLinkActive="bg-primary text-primary-content shadow-sm"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    class="rounded-xl transition-all duration-200 hover:bg-base-300 hover:translate-x-1">
+                    <mat-icon>
+                        {{ item.icon }}
+                    </mat-icon>
+                    @if (!collapsed()) {
+                    <span class="font-medium">
                         {{ item.label }}
                     </span>
-                }
-            </a>
-        </li>
-        }
-    </ul>
+                    }
+                </a>
+            </li>
+            }
+        </ul>
+    </div>
 </aside>

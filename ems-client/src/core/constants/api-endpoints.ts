@@ -4,6 +4,8 @@ export const API_ENDPOINTS = {
     me: '/account/me'
   },
 
+  dashboard: '/dashboard',
+
   employees: '/employee',
 
   departments: '/department',

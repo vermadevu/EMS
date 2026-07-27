@@ -1,5 +1,30 @@
-<div class="p-10">
-    <h1 class="text-3xl font-bold">
-        Dashboard
-    </h1>
-</div>
+@if (dashboard$ | async; as dashboard) {
+
+    <div class="grid grid-cols-12 gap-6">
+
+        @for (widget of dashboard.widgets; track widget.order) {
+
+            <div
+                class="col-span-12"
+                [class.md:col-span-3]="widget.width === 3"
+                [class.md:col-span-6]="widget.width === 6"
+                [class.md:col-span-12]="widget.width === 12">
+
+                <app-dashboard-widget
+                    [widget]="widget">
+                </app-dashboard-widget>
+
+            </div>
+
+        }
+
+    </div>
+
+}
+@else {
+
+    <div class="flex justify-center items-center h-96">
+        <span class="loading loading-spinner loading-lg"></span>
+    </div>
+
+}

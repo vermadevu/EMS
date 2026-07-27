@@ -1,0 +1,33 @@
+@switch (widget().type) {
+
+    @case (DashboardWidgetType.EmployeeStatistics)
+    @case (DashboardWidgetType.DepartmentStatistics)
+    @case (DashboardWidgetType.DesignationStatistics)
+    @case (DashboardWidgetType.AssetStatistics)
+    @case (DashboardWidgetType.UserStatistics) {
+
+        <app-statistic-card [widget]="widget()" />
+
+    }
+
+    @case (DashboardWidgetType.RecentEmployees) {
+
+        <app-recent-employees [widget]="widget()" />
+
+    }
+
+    @case (DashboardWidgetType.PendingOnboarding) {
+        <app-pending-onboarding [widget]="widget()"/>
+    }
+
+    @default {
+
+        <div class="alert alert-warning">
+
+            Widget "{{ widget().type }}" is not implemented yet.
+
+        </div>
+
+    }
+
+}
