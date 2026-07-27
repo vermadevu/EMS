@@ -1,4 +1,4 @@
-﻿using API.DTOs.Auth;
+﻿using API.Exceptions;
 using API.Interfaces.Service;
 using API.Models.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -44,13 +44,13 @@ namespace API.Services
             var userId = _userManager.GetUserId(_httpContextAccessor.HttpContext!.User);
 
             if (string.IsNullOrWhiteSpace(userId))
-                throw new UnauthorizedAccessException();
+                throw new UnauthorizedException("Invalid User ID");
 
             var user = await _userManager.Users
                 .Include(u => u.Employee)
                 .FirstOrDefaultAsync(u => u.Id == userId);
 
-            return user ?? throw new UnauthorizedAccessException();
+            return user ?? throw new UnauthorizedException("No User Found");
         }
     }
 }

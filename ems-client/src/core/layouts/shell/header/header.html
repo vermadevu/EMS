@@ -9,18 +9,46 @@
             {{ layout.pageTitle() }}
         </span>
     </div>
-
-    <div class="flex items-center gap-4">
-        <span>
-            {{ currentUser.user()?.displayName }}
-        </span>
-        <div class="avatar placeholder">
-
-            <div class="bg-primary text-primary-content rounded-full w-12 flex items-center justify-center">
-                <span class="text-xl font-semibold leading-none">
-                    {{ currentUser.user()?.displayName?.charAt(0) }}
-                </span>
+    <div class="dropdown dropdown-end">
+        <label tabindex="0" class="btn btn-ghost h-auto px-3">
+            <div class="flex items-center gap-3">
+                <div class="text-right hidden md:block">
+                    <p class="font-semibold leading-none">
+                        {{ currentUser.user()?.displayName }}
+                    </p>
+                    <p class="text-xs opacity-60">
+                        {{ currentUser.user()?.roles?.[0] }}
+                    </p>
+                </div>
+                <div class="avatar">
+                    <div class="bg-primary text-primary-content rounded-full w-11 flex items-center justify-center">
+                        <span class="text-lg font-semibold">
+                            {{ currentUser.user()?.displayName?.charAt(0) }}
+                        </span>
+                    </div>
+                </div>
             </div>
-        </div>
+        </label>
+        <ul tabindex="0"
+            class="dropdown-content z-[100] menu p-2 shadow-lg bg-base-100 rounded-box w-60 border border-base-300 mt-3">
+
+            <li class="menu-title">
+                <span class="text-xs">
+                    {{ currentUser.user()?.email }}
+                </span>
+            </li>
+            <li>
+                <a routerLink="/profile">
+                    <mat-icon>account_circle</mat-icon>
+                    Profile
+                </a>
+            </li>
+            <li>
+                <a class="text-error" (click)="logout()">
+                    <mat-icon>logout</mat-icon>
+                    Logout
+                </a>
+            </li>
+        </ul>
     </div>
 </header>

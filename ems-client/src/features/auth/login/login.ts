@@ -34,6 +34,8 @@ export class Login {
 
   readonly hidePassword = signal(true);
 
+  readonly loginError = signal<string | null>(null);
+
   readonly form = this.fb.nonNullable.group({
 
     email: [
@@ -52,6 +54,7 @@ export class Login {
   });
 
   login(): void {
+    this.loginError.set(null);
 
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -71,8 +74,10 @@ export class Login {
 
         error: (error) => {
           console.error(error);
-          // NotificationService later
-
+          this.loginError.set(
+          error?.error?.message ??
+          'Invalid email or password.'
+        );
         }
 
       });

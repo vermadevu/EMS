@@ -1,4 +1,5 @@
 using API.DTOs.Auth;
+using API.Exceptions;
 using API.Interfaces.Service;
 using API.Models.Identity;
 using Microsoft.AspNetCore.Http;
@@ -26,12 +27,12 @@ public class AccountService(
         var user = await _userManager.Users
             .Include(u => u.Employee)
             .FirstOrDefaultAsync(u => u.Email == loginDto.Email) 
-        ?? throw new UnauthorizedAccessException("Invalid email or password.");
+        ?? throw new UnauthorizedException("Invalid email or password.");
 
 
         if (!user.IsActive)
         {
-            throw new UnauthorizedAccessException("Your account has been deactivated.");
+            throw new UnauthorizedException("Your account has been deactivated.");
         }
 
         var result = await _signInManager.CheckPasswordSignInAsync(
@@ -41,7 +42,8 @@ public class AccountService(
 
         if (!result.Succeeded)
         {
-            throw new UnauthorizedAccessException("Invalid email or password.");
+            Console.WriteLine("Hello there!");
+            throw new UnauthorizedException("Invalid email or password.");
         }
 
         var roles = await _userManager.GetRolesAsync(user);
@@ -64,7 +66,7 @@ public class AccountService(
 
         if (string.IsNullOrWhiteSpace(userId))
         {
-            throw new UnauthorizedAccessException();
+            throw new UnauthorizedException("Invalid User ID");
         }
 
         var user = await _userManager.Users
@@ -73,7 +75,7 @@ public class AccountService(
 
         if (user == null)
         {
-            throw new UnauthorizedAccessException();
+            throw new UnauthorizedException("No User Found");
         }
 
         var roles = await _userManager.GetRolesAsync(user);
