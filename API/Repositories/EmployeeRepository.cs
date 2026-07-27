@@ -96,4 +96,20 @@ public class EmployeeRepository(ApplicationDbContext context) : IEmployeeReposit
         return await _context.Users
         .AnyAsync(u => u.EmployeeId == employeeId);
     }
+
+    public async Task<int> CountAsync()
+    {
+        return await _context.Employees.CountAsync();
+    }
+
+    public async Task<List<Employee>> GetRecentEmployeesAsync(int count = 5)
+    {
+        return await _context.Employees
+            .Include(e => e.Department)
+            .Include(e => e.Designation)
+            .OrderByDescending(e => e.JoiningDate)
+            .ThenByDescending(e => e.Id) // tie breaker
+            .Take(count)
+            .ToListAsync();
+    }
 }

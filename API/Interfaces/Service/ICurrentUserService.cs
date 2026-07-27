@@ -1,4 +1,7 @@
-﻿namespace API.Interfaces.Service
+﻿using API.DTOs.Auth;
+using API.Models.Identity;
+
+namespace API.Interfaces.Service
 {
     public interface ICurrentUserService
     {
@@ -6,6 +9,6 @@
         int EmployeeId { get; }
         bool IsAuthenticated { get; }
         bool IsInRole(string role);
-
+        Task<ApplicationUser> GetCurrentUserAsync();
     }
 }

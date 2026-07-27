@@ -1,4 +1,5 @@
 ﻿using API.DTOs.Asset;
+using API.DTOs.Dashboard.Widgets;
 using API.DTOs.Department;
 using API.DTOs.Designation;
 using API.DTOs.Document;
@@ -51,5 +52,13 @@ public class MappingProfile : Profile
 
         // Permission
         CreateMap<Permission, PermissionDto>();
+
+        CreateMap<Employee, RecentEmployeeDto>()
+            .ForMember(d => d.Department,
+                o => o.MapFrom(s => s.Department.Name))
+            .ForMember(d => d.Designation,
+                o => o.MapFrom(s => s.Designation.Name))
+            .ForMember(d => d.Status,
+                o => o.MapFrom(s => s.Status.ToString()));
     }
 }

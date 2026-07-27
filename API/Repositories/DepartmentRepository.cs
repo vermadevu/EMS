@@ -45,4 +45,9 @@ public class DepartmentRepository(ApplicationDbContext context) : IDepartmentRep
         return await _context.Departments
             .AnyAsync(d => d.Name.ToLower() == name.ToLower());
     }
+
+    public async Task<int> CountAsync()
+    {
+        return await _context.Departments.CountAsync();
+    }
 }

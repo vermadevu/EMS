@@ -2,11 +2,13 @@ using API.Authorization;
 using API.Data;
 using API.Exceptions;
 using API.Helpers;
+using API.Interfaces.Providers;
 using API.Interfaces.Repository;
 using API.Interfaces.Service;
 using API.Mapping;
 using API.Middlewares;
 using API.Models.Identity;
+using API.Providers.Dashboard;
 using API.Repositories;
 using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -17,6 +19,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +28,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddCors(); // Add Cors Policy Service to the app
+
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -112,6 +118,14 @@ builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
 builder.Services.AddScoped<IUserPermissionRepository, UserPermissionRepository>();
 builder.Services.AddScoped<IUserPermissionService, UserPermissionService>();
 
+builder.Services.AddScoped<IDashboardService, DashboardService>();
+
+builder.Services.AddScoped<IDashboardWidgetProvider, EmployeeStatisticsProvider>();
+builder.Services.AddScoped<IDashboardWidgetProvider, DepartmentStatisticsProvider>();
+//builder.Services.AddScoped<IDashboardWidgetProvider, DesignationStatisticsProvider>();
+builder.Services.AddScoped<IDashboardWidgetProvider, AssetStatisticsProvider>();
+//builder.Services.AddScoped<IDashboardWidgetProvider, UserStatisticsProvider>();
+builder.Services.AddScoped<IDashboardWidgetProvider, RecentEmployeesProvider>();
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
     {
@@ -132,6 +146,13 @@ builder.Services.AddControllers()
 
             return new BadRequestObjectResult(response);
         };
+    })
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+
+        options.JsonSerializerOptions.Converters.Add(
+            new JsonStringEnumConverter());
     });
 
 var app = builder.Build();
@@ -157,6 +178,7 @@ if (app.Environment.IsDevelopment())
 
 //app.UseHttpsRedirection();
 app.UseMiddleware<ExceptionMiddleware>();
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200", "https://localhost:4200")); // Add the cors origins where you need to allow the access.
 
 app.UseSwagger();
 app.UseSwaggerUI();

@@ -71,4 +71,9 @@ public class AssetRepository(ApplicationDbContext context) : IAssetRepository
                 a.Id == id &&
                 a.Status == AssetStatus.Available);
     }
+
+    public async Task<int> CountAsync()
+    {
+        return await _context.Assets.CountAsync();
+    }
 }

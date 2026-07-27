@@ -15,4 +15,7 @@ public interface IDepartmentRepository
     Task DeleteAsync(Department department);
 
     Task<bool> ExistsByNameAsync(string name);
+
+    Task<int> CountAsync();
+
 }
