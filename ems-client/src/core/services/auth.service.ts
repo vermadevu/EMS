@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Service } from '@angular/core';
 import { Router } from '@angular/router';
-import { tap, switchMap, EMPTY, catchError } from 'rxjs';
+import { tap, switchMap, EMPTY, catchError, of } from 'rxjs';
 import { TokenService } from './token-service';
 import { LoginRequest } from '../authentication/login-request.model';
 import { LoginResponse } from '../authentication/long-response.model';
@@ -58,7 +58,7 @@ export class AuthService {
     restoreSession() {
 
         if (!this.tokenService.hasToken) {
-            return EMPTY;
+            return of(null);
         }
 
         return this.http.get<CurrentUser>(
@@ -74,7 +74,7 @@ export class AuthService {
             this.tokenService.remove();
             this.currentUserService.clear();
 
-            return EMPTY;
+            return of(null);
     })
   );
 }

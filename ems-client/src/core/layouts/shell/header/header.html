@@ -1,0 +1,27 @@
+<header class="navbar bg-base-100 border-b border-base-300 px-6">
+    <div class="flex-1">
+        <button
+            class="btn btn-ghost btn-circle"
+            (click)="toggleSidebar.emit()">
+            <mat-icon>
+                menu
+            </mat-icon>
+        </button>
+        <span class="ml-4 text-xl font-semibold">
+            {{ layout.pageTitle() }}
+        </span>
+    </div>
+
+    <div class="flex items-center gap-4">
+        <span>
+            {{ currentUser.user()?.displayName }}
+        </span>
+        <div class="avatar placeholder">
+            <div class="bg-primary text-primary-content rounded-full w-10">
+                <span>
+                    {{ currentUser.user()?.displayName?.charAt(0) }}
+                </span>
+            </div>
+        </div>
+    </div>
+</header>

@@ -1,0 +1,39 @@
+<aside class="bg-base-200 border-r border-base-300 transition-all duration-300" 
+        [class.w-64]="!collapsed()"
+        [class.w-20]="collapsed()">
+    <div class="flex items-center gap-3 p-6">
+        <div class="avatar placeholder">
+            <div class="bg-primary text-primary-content rounded-xl w-12">
+                <span class="text-xl font-bold">
+                    D
+                </span>
+            </div>
+        </div>
+        <div>
+            <h2 class="font-bold text-lg">
+                DEMS
+            </h2>
+            <p class="text-xs opacity-60">
+                Employee Management
+            </p>
+        </div>
+    </div>
+
+    <ul class="menu flex-1 px-3">
+        @for (item of navigationItems(); track item.route) {
+
+        <li>
+            <a [routerLink]="item.route" routerLinkActive="menu-active" [routerLinkActiveOptions]="{ exact: true }">
+                <mat-icon>
+                    {{ item.icon }}
+                </mat-icon>
+                @if (!collapsed()) {
+                    <span>
+                        {{ item.label }}
+                    </span>
+                }
+            </a>
+        </li>
+        }
+    </ul>
+</aside>

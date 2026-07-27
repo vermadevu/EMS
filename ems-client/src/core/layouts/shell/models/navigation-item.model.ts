@@ -1,0 +1,8 @@
+export interface NavigationItem {
+    label: string;
+    route: string;
+    icon: string;
+    permission?: string;
+    children?: NavigationItem[];
+
+}
