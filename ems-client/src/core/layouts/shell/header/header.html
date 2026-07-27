@@ -30,9 +30,11 @@
             </div>
         </label>
         <ul tabindex="0"
-            class="dropdown-content z-[100] menu p-2 shadow-lg bg-base-100 rounded-box w-60 border border-base-300 mt-3">
-
+            class="dropdown-content z-50 menu p-2 shadow-lg bg-base-100 rounded-box w-60 border border-base-300 mt-3">
             <li class="menu-title">
+                <span>
+                    {{ currentUser.user()?.displayName }}
+                </span>
                 <span class="text-xs">
                     {{ currentUser.user()?.email }}
                 </span>
@@ -44,8 +46,17 @@
                 </a>
             </li>
             <li>
+                <a>
+                    <mat-icon>settings</mat-icon>
+                    Settings
+                </a>
+            </li>
+            <div class="divider my-1"></div>
+            <li>
                 <a class="text-error" (click)="logout()">
-                    <mat-icon>logout</mat-icon>
+                    <mat-icon>
+                        logout
+                    </mat-icon>
                     Logout
                 </a>
             </li>
