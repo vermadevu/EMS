@@ -1,0 +1,46 @@
+<div class="card bg-base-100 shadow-sm border border-base-300">
+    <div class="card-body">
+        <div class="flex flex-col lg:flex-row gap-4 justify-between">
+            <div class="flex flex-1 flex-col md:flex-row gap-4">
+
+                <app-search-box class="flex-1" placeholder="Search employees..." [value]="search()"
+                    (valueChange)="searchChange.emit($event)">
+                </app-search-box>
+
+
+                <!-- Department Filter -->
+                <select class="select select-bordered" 
+                (change)="onDepartmentChange($event)">
+                    <option value="">
+                        All Departments
+                    </option>
+                    @for(department of departments(); track department.id){
+                    <option [value]="department.id">
+                        {{ department.name }}
+                    </option>
+                    }
+                </select>
+
+
+                <!-- Designation Filter -->
+                <select class="select select-bordered">
+                    <option>
+                        All Designations
+                    </option>
+                </select>
+                <!-- Status Filter -->
+                <select class="select select-bordered">
+                    <option>
+                        All Status
+                    </option>
+                </select>
+            </div>
+            <a routerLink="/employees/create" class="btn btn-primary">
+                <mat-icon>
+                    person_add
+                </mat-icon>
+                Add Employee
+            </a>
+        </div>
+    </div>
+</div>

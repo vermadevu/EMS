@@ -1,9 +1,11 @@
 ﻿using API.DTOs.Employee;
 using API.Exceptions;
+using API.Helpers.Pagination;
 using API.Interfaces.Repository;
 using API.Interfaces.Service;
 using API.Models.Entities;
 using API.Models.Enums;
+using API.Repositories;
 using AutoMapper;
 
 namespace API.Services;
@@ -154,5 +156,18 @@ public class EmployeeService(
         await _repository.UpdateAsync(employee);
 
         return true;
+    }
+
+    public async Task<PagedResult<EmployeeListItemDto>> GetPagedAsync(EmployeeQueryParams queryParams)
+    {
+        var result = await _repository.GetPagedAsync(queryParams);
+
+        return new PagedResult<EmployeeListItemDto>
+        {
+            Items = _mapper.Map<List<EmployeeListItemDto>>(result.Items),
+            PageNumber = result.PageNumber,
+            PageSize = result.PageSize,
+            TotalCount = result.TotalCount
+        };
     }
 }

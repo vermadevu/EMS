@@ -1,4 +1,5 @@
-﻿using API.Models.Entities;
+﻿using API.Helpers.Pagination;
+using API.Models.Entities;
 
 namespace API.Interfaces.Repository;
 
@@ -20,4 +21,5 @@ public interface IEmployeeRepository
     Task<int> CountAsync();
     Task<List<Employee>> GetRecentEmployeesAsync(int count = 5);
     Task<List<Employee>> GetPendingOnboardingAsync(int count = 5);
+    Task<PagedResult<Employee>> GetPagedAsync(EmployeeQueryParams query);
 }

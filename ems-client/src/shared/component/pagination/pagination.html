@@ -1,0 +1,36 @@
+@if (totalCount() > 0) {
+<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <div class="text-sm text-base-content/70">
+        Showing
+        <span class="font-semibold">
+            {{ startItem() }}
+        </span>
+        -
+        <span class="font-semibold">
+            {{ endItem() }}
+        </span>
+        of
+        <span class="font-semibold">
+            {{ totalCount() }}
+        </span>
+        records
+    </div>
+    <div class="join">
+        <button
+            class="join-item btn btn-sm"
+            [disabled]="pageNumber() === 1"
+            (click)="previous()">
+            Previous
+        </button>
+        <button class="join-item btn btn-sm btn-active">
+            {{ pageNumber() }}
+        </button>
+        <button
+            class="join-item btn btn-sm"
+            [disabled]="pageNumber() === totalPages()"
+            (click)="next()">
+            Next
+        </button>
+    </div>
+</div>
+}

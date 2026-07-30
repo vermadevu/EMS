@@ -1,4 +1,5 @@
 ﻿using API.Data;
+using API.Helpers.Pagination;
 using API.Interfaces.Repository;
 using API.Interfaces.Service;
 using API.Models.Entities;
@@ -124,5 +125,65 @@ public class EmployeeRepository(ApplicationDbContext context) : IEmployeeReposit
             .ThenByDescending(e => e.Id)
             .Take(count)
             .ToListAsync();
+    }
+
+    public async Task<PagedResult<Employee>> GetPagedAsync(EmployeeQueryParams query)
+    {
+        var employees = _context.Employees
+            .Include(e => e.Department)
+            .Include(e => e.Designation)
+            .AsQueryable();
+
+        // Search
+
+        if (!string.IsNullOrWhiteSpace(query.Search))
+        {
+            var search = query.Search.Trim().ToLower();
+
+            employees = employees.Where(e =>
+                e.FirstName.ToLower().Contains(search) ||
+                e.LastName.ToLower().Contains(search) ||
+                e.EmployeeCode.ToLower().Contains(search) ||
+                e.Email.ToLower().Contains(search));
+        }
+
+        // Filters
+
+        if (query.DepartmentId.HasValue)
+            employees = employees.Where(e =>
+                e.DepartmentId == query.DepartmentId);
+
+        if (query.DesignationId.HasValue)
+            employees = employees.Where(e =>
+                e.DesignationId == query.DesignationId);
+
+        if (query.Status.HasValue)
+            employees = employees.Where(e =>
+                e.Status == query.Status);
+
+        // Sorting
+
+        employees = (query.SortBy.ToLower(), query.SortDirection.ToLower()) switch
+        {
+            ("fullname", "asc") => employees.OrderBy(e => e.FirstName).ThenBy(e => e.LastName),
+            ("fullname", "desc") => employees.OrderByDescending(e => e.FirstName).ThenByDescending(e => e.LastName),
+            ("joiningdate", "asc") => employees.OrderBy(e => e.JoiningDate),
+            _ => employees.OrderByDescending(e => e.JoiningDate)
+        };
+
+        var totalCount = await employees.CountAsync();
+
+        var items = await employees
+            .Skip((query.PageNumber - 1) * query.PageSize)
+            .Take(query.PageSize)
+            .ToListAsync();
+
+        return new PagedResult<Employee>
+        {
+            Items = items,
+            PageNumber = query.PageNumber,
+            PageSize = query.PageSize,
+            TotalCount = totalCount,
+        };
     }
 }

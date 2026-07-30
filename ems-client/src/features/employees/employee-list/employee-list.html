@@ -1,1 +1,34 @@
-<p>employee-list works!</p>
+<app-page-header
+    title="Employees"
+    subtitle="Manage employees across your organization."
+    buttonText="Add Employee"
+    buttonIcon="person_add"
+    buttonRoute="/employees/create">
+</app-page-header>
+
+<div class="mt-6">
+    <app-employee-toolbar
+        [search]="state().search"
+        [departments]="departments()"
+        (departmentChange)="changeDepartment($event)"
+        (searchChange)="search($event)">
+    </app-employee-toolbar>
+</div>
+
+<div class="mt-6">
+    <app-employee-table
+        [employees]="employees()"
+        [loading]="loading()">
+    </app-employee-table>
+</div>
+
+<div class="mt-6">
+    @if(page(); as page){
+        <app-pagination
+            [pageNumber]="page.pageNumber"
+            [pageSize]="page.pageSize"
+            [totalCount]="page.totalCount"
+            (pageChange)="changePage($event)">
+        </app-pagination>
+    }
+</div>

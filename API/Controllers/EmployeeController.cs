@@ -1,7 +1,7 @@
 ﻿using API.Authorization;
 using API.DTOs.Employee;
+using API.Helpers.Pagination;
 using API.Interfaces.Service;
-using API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,14 +11,6 @@ namespace API.Controllers;
 public class EmployeeController(IEmployeeService employeeService) : BaseApiController
 {
     private readonly IEmployeeService _employeeService = employeeService;
-
-    [HttpGet]
-    [HasPermission(Permissions.Employees.Read)]
-    public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetAll()
-    {
-        var employees = await _employeeService.GetAllAsync();
-        return Ok(employees);
-    }
 
     [HttpGet("{id:int}")]
     [HasPermission(Permissions.Employees.Read)]
@@ -89,6 +81,14 @@ public class EmployeeController(IEmployeeService employeeService) : BaseApiContr
             return NotFound();
 
         return NoContent();
+    }
+
+    [HttpGet]
+    [HasPermission(Permissions.Employees.Read)]
+    public async Task<ActionResult<PagedResult<EmployeeListItemDto>>> Get(
+    [FromQuery] EmployeeQueryParams queryParams)
+    {
+        return Ok(await _employeeService.GetPagedAsync(queryParams));
     }
 
 }

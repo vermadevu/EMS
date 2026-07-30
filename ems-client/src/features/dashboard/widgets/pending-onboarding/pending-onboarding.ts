@@ -1,7 +1,7 @@
 import { Component, computed, input } from '@angular/core';
-import { EmployeeListCard } from '../../../../shared/employee-list-card/employee-list-card';
 import { DashboardWidget } from '../../models/dashboard-widget';
 import { PendingOnboardingWidget } from '../../models/widgets/pending-onboarding-widget';
+import { EmployeeListCard } from '../../../../shared/components/employee-list-card/employee-list-card';
 
 @Component({
   selector: 'app-pending-onboarding',

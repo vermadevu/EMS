@@ -1,8 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 import { DashboardWidget } from '../../models/dashboard-widget';
 import { RecentEmployeesWidget } from '../../models/widgets/recent-employees-widget';
-import { RouterLink } from '@angular/router';
-import { EmployeeListCard } from '../../../../shared/employee-list-card/employee-list-card';
+import { EmployeeListCard } from '../../../../shared/components/employee-list-card/employee-list-card';
 
 @Component({
   selector: 'app-recent-employees',

@@ -1,0 +1,77 @@
+@if (loading()) {
+    <div class="flex justify-center py-20">
+        <span class="loading loading-spinner loading-lg"></span>
+    </div>
+}
+
+@else if (employees().length === 0) {
+    <app-empty-state 
+        icon="groups" 
+        title="No employees found" 
+        subtitle="There are no employees matching your search.">
+    </app-empty-state>
+}
+
+@else {
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+        <div class="overflow-x-auto">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Employee</th>
+                        <th>Department</th>
+                        <th>Designation</th>
+                        <th>Status</th>
+                        <th>Joining Date</th>
+                        <th class="w-16"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (employee of employees(); track employee.id) {
+                    <tr>
+                        <td>
+                            <div class="flex items-center gap-3">
+                                <div class="avatar placeholder">
+                                    <div class="bg-primary text-primary-content rounded-full w-10">
+                                        <span>
+                                            {{ employee.fullName.charAt(0) }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-semibold">
+                                        {{ employee.fullName }}
+                                    </div>
+                                    <div class="text-sm opacity-60">
+                                        {{ employee.employeeCode }}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            {{ employee.department }}
+                        </td>
+                        <td>
+                            {{ employee.designation }}
+                        </td>
+                        <td>
+                            <app-status-badge 
+                                [status]="employee.status">
+                            </app-status-badge>
+                        </td>
+                        <td>
+                            {{ employee.joiningDate | date }}
+                        </td>
+                        <td>
+                            <app-action-menu 
+                                [actions]="getActions(employee)"
+                                (actionSelected)="onAction(employee.id, $event)">
+                            </app-action-menu>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

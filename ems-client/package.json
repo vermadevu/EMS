@@ -21,9 +21,11 @@
     "@angular/router": "^22.0.0",
     "@tailwindcss/postcss": "^4.3.3",
     "daisyui": "^5.7.4",
+    "depcruise": "^1.0.0",
     "postcss": "^8.5.23",
     "rxjs": "~7.8.0",
     "tailwindcss": "^4.3.3",
+    "ts-prune": "^0.10.3",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
