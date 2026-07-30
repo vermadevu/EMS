@@ -5,6 +5,7 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state/empt
 import { StatusBadge } from '../../../shared/components/status-badge/status-badge';
 import { ActionMenu } from '../../../shared/components/action-menu/action-menu';
 import { DatePipe } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-employee-table',
@@ -12,7 +13,8 @@ import { DatePipe } from '@angular/common';
     EmptyStateComponent,
     StatusBadge,
     ActionMenu,
-    DatePipe
+    DatePipe,
+    MatIconModule
   ],
   templateUrl: './employee-table.html',
   styleUrl: './employee-table.css',
@@ -25,6 +27,9 @@ export class EmployeeTableComponent {
   readonly delete = output<number>();
   readonly activate = output<number>();
   readonly completeOnboarding = output<number>();
+  readonly sortBy = input.required<string>();
+  readonly sortDirection = input.required<'asc' | 'desc'>();
+  readonly sortChange = output<string>();
 
   getActions(employee: EmployeeListItem): ActionMenuItem[] {
     return [
@@ -88,5 +93,20 @@ export class EmployeeTableComponent {
         this.completeOnboarding.emit(employeeId);
         break;
     }
+  }
+  isSorted(column: string): boolean {
+    return this.sortBy() === column;
+  }
+
+  getSortIcon(column: string): string {
+
+    if (!this.isSorted(column)) {
+      return 'unfold_more';
+    }
+
+    return this.sortDirection() === 'asc'
+      ? 'keyboard_arrow_up'
+      : 'keyboard_arrow_down';
+
   }
 }

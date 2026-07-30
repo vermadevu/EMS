@@ -10,15 +10,22 @@
     <app-employee-toolbar
         [search]="state().search"
         [departments]="departments()"
+        [designations]="designations()"
+        [statuses]="statuses()"
+        (searchChange)="search($event)"
         (departmentChange)="changeDepartment($event)"
-        (searchChange)="search($event)">
+        (designationChange)="changeDesignation($event)"
+        (statusChange)="changeStatus($event)">
     </app-employee-toolbar>
 </div>
 
 <div class="mt-6">
     <app-employee-table
         [employees]="employees()"
-        [loading]="loading()">
+        [loading]="loading()"
+        [sortBy]="state().sortBy"
+        [sortDirection]="state().sortDirection"
+        (sortChange)="sort($event)">
     </app-employee-table>
 </div>
 

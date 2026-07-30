@@ -10,6 +10,8 @@ import { debounceTime, distinctUntilChanged, finalize, Subject } from 'rxjs';
 import { PaginationComponent } from '../../../shared/component/pagination/pagination';
 import { DepartmentService } from '../../../core/services/department-service';
 import { Department } from '../../../core/models/department';
+import { StatusOption } from '../../../core/models/status-option';
+import { DesignationService } from '../../../core/services/designation-service';
 
 @Component({
   selector: 'app-employee-list',
@@ -31,8 +33,14 @@ export class EmployeeListComponent {
   private readonly employeeService = inject(EmployeeService);
   readonly employees = signal<EmployeeListItem[]>([]);
 
+
+  private readonly designationService = inject(DesignationService);
+  readonly designations = signal<Department[]>([]);
+
   private readonly departmentService = inject(DepartmentService);
   readonly departments = signal<Department[]>([]);
+
+  readonly statuses = signal<StatusOption[]>([]);
 
   constructor() {
 
@@ -54,6 +62,8 @@ export class EmployeeListComponent {
   ngOnInit(): void {
     this.loadDepartments();
     this.loadEmployees();
+    this.loadStatuses();
+    this.loadDesignations();
   }
 
   readonly state = signal<EmployeeListState>({
@@ -90,6 +100,23 @@ export class EmployeeListComponent {
       });
   }
 
+  private loadDesignations(): void {
+    this.designationService
+      .getDesignations()
+      .subscribe({
+        next: designations =>
+          this.designations.set(designations)
+      });
+  }
+
+  private loadStatuses(): void {
+    this.employeeService
+      .getStatuses()
+      .subscribe({
+        next: statuses => this.statuses.set(statuses)
+      });
+
+  }
   search(value: string): void {
     this.searchSubject.next(value);
   }
@@ -104,13 +131,38 @@ export class EmployeeListComponent {
 
 
   changeDepartment(departmentId?: number): void {
+    this.updateState({ departmentId });
+  }
+
+  changeStatus(status?: string): void {
+    this.updateState({ status });
+  }
+
+  changeDesignation(designationId?: number): void {
+    this.updateState({ designationId });
+  }
+
+
+  private updateState(changes: Partial<EmployeeListState>): void {
     this.state.update(state => ({
-        ...state,
-        departmentId,
-        pageNumber: 1
+      ...state,
+      ...changes,
+      pageNumber: 1
     }));
     this.loadEmployees();
-}
+  }
 
+  sort(column: string): void {
+  const current = this.state();
+  const direction =
+    current.sortBy === column &&
+    current.sortDirection === 'asc'
+      ? 'desc'
+      : 'asc';
+  this.updateState({
+    sortBy: column,
+    sortDirection: direction
+  });
+}
 
 }

@@ -23,17 +23,33 @@
 
 
                 <!-- Designation Filter -->
-                <select class="select select-bordered">
-                    <option>
+                <select class="select select-bordered" 
+                (change)="onDesignationChanged($event)">
+                    <option value="">
                         All Designations
                     </option>
-                </select>
-                <!-- Status Filter -->
-                <select class="select select-bordered">
-                    <option>
-                        All Status
+                    @for(designation of designations(); track designation.id){
+                    <option [value]="designation.id">
+                        {{ designation.name }}
                     </option>
+                    }
                 </select>
+
+
+                <!-- Status Filter -->
+                <select
+                    class="select select-bordered"
+                    (change)="onStatusChanged($event)">
+                    <option value="">
+                        All Statuses
+                    </option>
+                    @for(status of statuses(); track status.value){
+                        <option [value]="status.value">
+                            {{ status.label }}
+                        </option>
+                    }
+                </select>
+
             </div>
             <a routerLink="/employees/create" class="btn btn-primary">
                 <mat-icon>

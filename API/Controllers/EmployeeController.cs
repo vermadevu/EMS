@@ -1,7 +1,9 @@
 ﻿using API.Authorization;
 using API.DTOs.Employee;
+using API.Helpers;
 using API.Helpers.Pagination;
 using API.Interfaces.Service;
+using API.Models.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -91,4 +93,18 @@ public class EmployeeController(IEmployeeService employeeService) : BaseApiContr
         return Ok(await _employeeService.GetPagedAsync(queryParams));
     }
 
+    
+    [HttpGet("statuses")]
+    [HasPermission(Permissions.Employees.Read)]
+    public IActionResult GetStatuses()
+    {
+        var statuses = Enum.GetValues<EmployeeStatus>()
+            .Select(status => new
+            {
+                Value = status.ToString(),
+                Label = status.ToString().ToDisplayName()
+            });
+
+        return Ok(statuses);
+    }
 }

@@ -5,6 +5,7 @@ import { PagedResult } from '../../features/employees/models/paged-result';
 import { EmployeeListItem } from '../../shared/models/employee-list-item';
 import { API_ENDPOINTS } from '../constants/api-endpoints';
 import { environment } from '../../environments/environment';
+import { StatusOption } from '../models/status-option';
 
 @Service()
 export class EmployeeService {
@@ -53,5 +54,11 @@ export class EmployeeService {
     );
 
   }
+
+  getStatuses() {
+  return this.http.get<StatusOption[]>(
+    `${environment.apiUrl}${API_ENDPOINTS.employees}/statuses`
+  );
+}
 
 }
