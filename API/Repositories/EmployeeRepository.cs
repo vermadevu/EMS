@@ -1,4 +1,7 @@
-﻿using API.Data;
+﻿using API.Constants;
+using API.Data;
+using API.DTOs;
+using API.DTOs.Employee;
 using API.Helpers.Pagination;
 using API.Interfaces.Repository;
 using API.Interfaces.Service;
@@ -185,5 +188,28 @@ public class EmployeeRepository(ApplicationDbContext context) : IEmployeeReposit
             PageSize = query.PageSize,
             TotalCount = totalCount,
         };
+    }
+
+    public async Task<List<EmployeeListItemDto>> GetManagersAsync()
+    {
+        var managerRoleId = await _context.Roles
+            .Where(r => r.Name == Roles.Manager)
+            .Select(r => r.Id)
+            .FirstAsync();
+
+        return await (
+            from employee in _context.Employees
+            join user in _context.Users
+                on employee.Id equals user.EmployeeId
+            join userRole in _context.UserRoles
+                on user.Id equals userRole.UserId
+            where userRole.RoleId == managerRoleId
+            orderby employee.FirstName, employee.LastName
+            select new EmployeeListItemDto
+            {
+                Id = employee.Id,
+                FullName = employee.FirstName + " " + employee.LastName
+            }
+        ).ToListAsync();
     }
 }

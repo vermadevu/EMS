@@ -6,4 +6,5 @@ export interface CurrentUser {
   employeeStatus: number;
   roles: string[];
   permissions: string[];
+  profileImage: string;
 }

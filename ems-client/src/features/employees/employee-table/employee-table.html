@@ -47,12 +47,22 @@
                 <tr>
                     <td>
                         <div class="flex items-center gap-3">
-                            <div class="avatar placeholder">
-                                <div class="bg-primary text-primary-content rounded-full w-10">
-                                    <span>
-                                        {{ employee.fullName.charAt(0) }}
-                                    </span>
-                                </div>
+                            <div class="avatar">
+
+                                @if (employee.profileImage) {
+                                    <div class="w-10 rounded-full">
+                                        <img
+                                            [src]="employee.profileImage"
+                                            [alt]="employee.fullName">
+                                    </div>
+
+                                } @else {
+                                    <div class="bg-primary text-primary-content rounded-full w-10 flex items-center justify-center">
+                                        <span class="text-lg font-semibold">
+                                            {{ employee.fullName.charAt(0) }}
+                                        </span>
+                                    </div>
+                                }
                             </div>
                             <div>
                                 <div class="font-semibold">

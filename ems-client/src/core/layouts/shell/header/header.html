@@ -21,11 +21,20 @@
                     </p>
                 </div>
                 <div class="avatar">
-                    <div class="bg-primary text-primary-content rounded-full w-11 flex items-center justify-center">
-                        <span class="text-lg font-semibold">
-                            {{ currentUser.user()?.displayName?.charAt(0) }}
-                        </span>
-                    </div>
+                    @if (currentUser.user()?.profileImage) {
+                        <div class="w-10 rounded-full">
+                            <img
+                                [src]="currentUser.user()?.profileImage"
+                                [alt]="currentUser.user()?.displayName">
+                        </div>
+
+                    } @else {
+                        <div class="bg-primary text-primary-content rounded-full w-10 flex items-center justify-center">
+                            <span class="text-lg font-semibold">
+                                {{ currentUser.user()?.displayName?.charAt(0) }}
+                            </span>
+                        </div>
+                    }
                 </div>
             </div>
         </label>

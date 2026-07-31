@@ -1,4 +1,5 @@
 ﻿using API.Authorization;
+using API.DTOs;
 using API.DTOs.Employee;
 using API.Helpers;
 using API.Helpers.Pagination;
@@ -106,5 +107,12 @@ public class EmployeeController(IEmployeeService employeeService) : BaseApiContr
             });
 
         return Ok(statuses);
+    }
+
+    [HttpGet("managers")]
+    [HasPermission(Permissions.Employees.Read)]
+    public async Task<ActionResult<IEnumerable<EmployeeListItemDto>>> GetManagers()
+    {
+        return Ok(await _employeeService.GetManagersAsync());
     }
 }

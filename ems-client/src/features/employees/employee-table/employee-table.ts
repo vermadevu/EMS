@@ -76,14 +76,6 @@ export class EmployeeTableComponent {
         icon: 'edit'
       },
 
-      ...(employee.status === 'Pending'
-        ? [{
-          id: 'completeOnboarding',
-          label: 'Complete Onboarding',
-          icon: 'check_circle'
-        }]
-        : []),
-
       ...(employee.status !== 'Active'
         ? [{
           id: 'activate',

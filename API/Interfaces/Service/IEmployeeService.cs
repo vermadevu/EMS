@@ -1,4 +1,5 @@
-﻿using API.DTOs.Employee;
+﻿using API.DTOs;
+using API.DTOs.Employee;
 using API.Helpers.Pagination;
 
 namespace API.Interfaces.Service;
@@ -12,4 +13,5 @@ public interface IEmployeeService
     Task<bool> CompleteOnboardingAsync();
     Task<bool> ActivateEmployeeAsync(int id);
     Task<PagedResult<EmployeeListItemDto>> GetPagedAsync(EmployeeQueryParams query);
+    Task<IEnumerable<EmployeeListItemDto>> GetManagersAsync();
 }

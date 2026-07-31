@@ -14,6 +14,8 @@ import { StatusOption } from '../../../core/models/status-option';
 import { DesignationService } from '../../../core/services/designation-service';
 import { Router } from '@angular/router';
 import { Designation } from '../../../core/models/designation';
+import { ConfirmationService } from '../../../core/services/confirmation-service';
+import { NotificationService } from '../../../core/services/notification-service';
 
 @Component({
   selector: 'app-employee-list',
@@ -45,6 +47,8 @@ export class EmployeeListComponent {
   readonly statuses = signal<StatusOption[]>([]);
 
   private readonly router = inject(Router);
+  private readonly confirmationService = inject(ConfirmationService);
+  private readonly notificationService = inject(NotificationService)
 
   constructor() {
 
@@ -182,10 +186,53 @@ export class EmployeeListComponent {
         this.router.navigate(['/employees/edit', event.employee.id]);
         break;
       case 'delete':
-        console.log('Delete', event.employee.id);
+        this.confirmationService
+          .confirm({
+            title: 'Delete Employee',
+            message: `Are you sure you want to delete ${event.employee.fullName}?`,
+            confirmText: 'Delete',
+            confirmButtonClass: 'btn-error'
+          })
+          .subscribe(result => {
+            if (!result) {
+              return;
+            }
+            this.employeeService.delete(event.employee.id).subscribe({
+              next: () => {
+                this.notificationService.success(
+                  'Employee deleted successfully.'
+                );
+                this.loadEmployees();
+              },
+              error: error => {
+                console.log(error);
+              }
+            })
+          });
         break;
       case 'activate':
-        console.log('Activate', event.employee.id);
+        this.confirmationService.confirm({
+          title: 'Activate Employee',
+          message: `Are you sure you want to activate ${event.employee.fullName}?`,
+          icon: 'task_alt',
+          confirmText: 'Activate',
+          confirmButtonClass: 'btn-success'
+        })
+          .subscribe(confirmed => {
+            if (!confirmed) {
+              return;
+            }
+
+            this.employeeService.activate(event.employee.id).subscribe({
+              next: () => {
+                 this.notificationService.success(
+                  'Employee activated successfully.'
+                );
+                this.loadEmployees();
+              },
+              error : error => console.error(error)
+            })
+          });
         break;
     }
   }

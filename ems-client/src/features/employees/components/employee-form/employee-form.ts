@@ -12,6 +12,8 @@ import { finalize, forkJoin } from 'rxjs';
 import { MatSpinner } from '@angular/material/progress-spinner';
 import { CreateEmployeeRequest } from '../../models/create-employee-request';
 import { UpdateEmployeeRequest } from '../../models/update-employee-request';
+import { ImageUploadComponent } from '../../../../shared/components/image-upload/image-upload';
+import { NotificationService } from '../../../../core/services/notification-service';
 
 @Component({
   selector: 'app-employee-form',
@@ -19,7 +21,7 @@ import { UpdateEmployeeRequest } from '../../models/update-employee-request';
   imports: [
     MatIconModule,
     ReactiveFormsModule,
-    MatSpinner
+    ImageUploadComponent
   ],
   templateUrl: './employee-form.html',
   styleUrl: './employee-form.css',
@@ -32,6 +34,8 @@ export class EmployeeFormComponent implements OnInit {
   readonly mode = input<'create' | 'edit'>('create');
   readonly isEditMode = computed(() => this.mode() === 'edit');
   readonly employee = input<Employee | null>(null);
+
+  private readonly notification = inject(NotificationService);
 
   readonly loading = signal(false);
 
@@ -78,7 +82,8 @@ export class EmployeeFormComponent implements OnInit {
     joiningDate: ['', Validators.required],
     departmentId: [0, Validators.min(1)],
     designationId: [0, Validators.min(1)],
-    managerId: [null as number | null]
+    managerId: [null as number | null],
+    profileImage: ['']
   });
 
   submit(): void {
@@ -90,10 +95,10 @@ export class EmployeeFormComponent implements OnInit {
     this.loading.set(true);
 
     const request = this.form.getRawValue();
-    if(!this.isEditMode()){
+    if (!this.isEditMode()) {
       this.createEmployee(request);
     }
-    else{
+    else {
       this.updateEmployee(request);
     }
   }
@@ -144,6 +149,9 @@ export class EmployeeFormComponent implements OnInit {
       )
       .subscribe({
         next: () => {
+          this.notification.success(
+            'Employee created successfully.'
+          );
           this.router.navigate(['/employees']);
         },
         error: error => {
@@ -167,6 +175,9 @@ export class EmployeeFormComponent implements OnInit {
       )
       .subscribe({
         next: () => {
+          this.notification.success(
+            'Employee updated successfully.'
+          );
           this.router.navigate(['/employees']);
         },
         error: error => {

@@ -36,6 +36,20 @@ public class MappingProfile : Profile
 
         CreateMap<CreateEmployeeDto, Employee>();
         CreateMap<UpdateEmployeeDto, Employee>();
+        CreateMap<Employee, RecentEmployeeDto>()
+            .ForMember(d => d.Department,
+                o => o.MapFrom(s => s.Department.Name))
+            .ForMember(d => d.Designation,
+                o => o.MapFrom(s => s.Designation.Name))
+            .ForMember(d => d.Status,
+                o => o.MapFrom(s => s.Status.ToString()));
+
+        CreateMap<Employee, EmployeeListItemDto>()
+            .ForMember(d => d.Department,
+                o => o.MapFrom(s => s.Department.Name))
+
+            .ForMember(d => d.Designation,
+                o => o.MapFrom(s => s.Designation.Name));
 
         // Asset
         CreateMap<Asset, AssetDto>()
@@ -52,22 +66,5 @@ public class MappingProfile : Profile
 
         // Permission
         CreateMap<Permission, PermissionDto>();
-
-
-        CreateMap<Employee, RecentEmployeeDto>()
-            .ForMember(d => d.Department,
-                o => o.MapFrom(s => s.Department.Name))
-            .ForMember(d => d.Designation,
-                o => o.MapFrom(s => s.Designation.Name))
-            .ForMember(d => d.Status,
-                o => o.MapFrom(s => s.Status.ToString()));
-
-
-        CreateMap<Employee, EmployeeListItemDto>()
-            .ForMember(d => d.Department,
-                o => o.MapFrom(s => s.Department.Name))
-
-            .ForMember(d => d.Designation,
-                o => o.MapFrom(s => s.Designation.Name));
     }
 }

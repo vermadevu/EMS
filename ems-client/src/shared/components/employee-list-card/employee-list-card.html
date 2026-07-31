@@ -30,12 +30,22 @@
             <div class="flex items-center justify-between py-4">
                 <div class="flex items-center gap-4">
 
-                    <div class="avatar placeholder">
-                        <div class="bg-primary text-primary-content rounded-full w-12 flex items-center justify-center">
-                            <span class="text-xl font-semibold leading-none">
-                                {{ employee.fullName.charAt(0) }}
-                            </span>
-                        </div>
+                    <div class="avatar">
+
+                        @if (employee.profileImage) {
+                            <div class="w-10 rounded-full">
+                                <img
+                                    [src]="employee.profileImage"
+                                    [alt]="employee.fullName">
+                            </div>
+
+                        } @else {
+                            <div class="bg-primary text-primary-content rounded-full w-10 flex items-center justify-center">
+                                <span class="text-lg font-semibold">
+                                    {{ employee.fullName.charAt(0) }}
+                                </span>
+                            </div>
+                        }
                     </div>
                     <!-- Employee Info -->
                     <div>

@@ -1,0 +1,44 @@
+<div class="bg-base-100 rounded-2xl overflow-hidden">
+    <div class="p-6">
+        <div class="flex items-start gap-4">
+            @if(data.icon){
+                <div class="w-14 h-14 rounded-full bg-error/10 flex items-center justify-center shrink-0">
+                    <mat-icon class="text-error text-3xl">
+                        {{ data.icon }}
+                    </mat-icon>
+                </div>
+            }
+
+            <div class="flex-1">
+                <h2 class="text-xl font-semibold">
+                    {{ data.title }}
+                </h2>
+                <p class="text-base-content/70 mt-2 leading-6">
+                    {{ data.message }}
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="bg-base-200 px-6 py-4 flex justify-end gap-3">
+        <button
+            type="button"
+            class="btn btn-outline"
+            (click)="cancel()">
+            {{ data.cancelText ?? 'Cancel' }}
+        </button>
+
+        <button
+            type="button"
+            class="btn"
+            [ngClass]="data.confirmButtonClass ?? 'btn-error'"
+            (click)="confirm()">
+
+            @if(data.icon){
+                <mat-icon>
+                    {{ data.icon }}
+                </mat-icon>
+            }
+            {{ data.confirmText ?? 'Confirm' }}
+        </button>
+    </div>
+</div>

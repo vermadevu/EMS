@@ -6,4 +6,5 @@ export interface EmployeeListItem {
     designation: string;
     joiningDate: string;
     status: string;
+    profileImage?: string;
 }

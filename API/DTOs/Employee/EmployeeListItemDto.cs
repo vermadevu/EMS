@@ -11,5 +11,6 @@ namespace API.DTOs.Employee
         public string Designation { get; set; } = "";
         public EmployeeStatus Status { get; set; }
         public DateOnly JoiningDate { get; set; }
+        public string? ProfileImage { get; set; }
     }
 }

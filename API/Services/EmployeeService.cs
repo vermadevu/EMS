@@ -1,4 +1,5 @@
-﻿using API.DTOs.Employee;
+﻿using API.DTOs;
+using API.DTOs.Employee;
 using API.Exceptions;
 using API.Helpers.Pagination;
 using API.Interfaces.Repository;
@@ -146,14 +147,15 @@ public class EmployeeService(
             return false;
         }
 
-        if (employee.Status != EmployeeStatus.DocumentsSubmitted)
-        {
-            throw new BadRequestException("Employee has not submitted documents.");
-        }
+        //if (employee.Status != EmployeeStatus.DocumentsSubmitted)
+        //{
+        //    throw new BadRequestException("Employee has not submitted documents.");
+        //}
 
         employee.Status = EmployeeStatus.Active;
 
         await _repository.UpdateAsync(employee);
+
 
         return true;
     }
@@ -170,4 +172,10 @@ public class EmployeeService(
             TotalCount = result.TotalCount
         };
     }
+
+    public async Task<IEnumerable<EmployeeListItemDto>> GetManagersAsync()
+    {
+        return await _repository.GetManagersAsync();
+    }
+
 }

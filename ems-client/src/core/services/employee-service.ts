@@ -9,6 +9,7 @@ import { StatusOption } from '../models/status-option';
 import { Employee } from '../../features/employees/models/employee';
 import { CreateEmployeeRequest } from '../../features/employees/models/create-employee-request';
 import { UpdateEmployeeRequest } from '../../features/employees/models/update-employee-request';
+import { Observable } from 'rxjs';
 
 @Service()
 export class EmployeeService {
@@ -83,11 +84,18 @@ export class EmployeeService {
 
   update(id: number, request: UpdateEmployeeRequest) {
     return this.http.put<void>(
-        `${environment.apiUrl}/employee/${id}`,
-        request
+      `${environment.apiUrl}/employee/${id}`,
+      request
     );
+  }
 
-}
+  delete(id: number) : Observable<void> {
+    return this.http.delete<void>(`${environment.apiUrl}/employee/${id}`);
+  }
+
+  activate(id: number) : Observable<void> {
+    return this.http.patch<void>(`${environment.apiUrl}/employee/${id}/activate`,{});
+  }
 
 
 }

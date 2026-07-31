@@ -9,4 +9,5 @@ public class RecentEmployeeDto
     public string Designation { get; set; } = string.Empty;
     public DateOnly JoiningDate { get; set; }
     public string Status { get; set; } = string.Empty;
+    public string? ProfileImage { get; set; }
 }

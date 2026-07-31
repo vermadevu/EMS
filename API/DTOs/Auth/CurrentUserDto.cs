@@ -11,4 +11,5 @@ public class CurrentUserDto
     public EmployeeStatus EmployeeStatus { get; set; }
     public IList<string> Roles { get; set; } = [];
     public HashSet<string> Permissions { get; set; } = [];
+    public string? ProfileImage { get; set; }
 }

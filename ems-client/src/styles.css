@@ -1,3 +1,30 @@
 @import 'tailwindcss';
 @plugin "daisyui";
 
+/* Backdrop */
+.confirm-dialog-backdrop {
+    backdrop-filter: blur(6px);
+    background: rgb(0 0 0 / 0.45) !important;
+}
+
+/* Dialog */
+.confirm-dialog-panel .mat-mdc-dialog-container {
+    padding: 0 !important;
+    border-radius: 18px !important;
+    overflow: hidden;
+    box-shadow:
+        0 24px 48px rgb(0 0 0 / 0.28),
+        0 8px 24px rgb(0 0 0 / 0.18) !important;
+}
+
+/* Remove Material padding */
+.confirm-dialog-panel .mdc-dialog__surface {
+    padding: 0 !important;
+    border-radius: 18px !important;
+    background: transparent !important;
+}
+
+/* Z-index */
+.cdk-overlay-container {
+    z-index: 9999;
+}

@@ -4,5 +4,7 @@
     {
         Task<(string PublicId, string Url)> UploadDocumentAsync(IFormFile file);
         Task DeleteDocumentAsync(string publicId);
+        Task<(string PublicId, string Url)> UploadImageAsync(IFormFile file);
+        Task DeleteImageAsync(string publicId);
     }
 }

@@ -14,7 +14,6 @@ import { DatePipe } from '@angular/common';
   imports: [
     DetailItemComponent,
     PageHeaderComponent,
-    RouterLink,
     MatIconModule,
     StatusBadge,
     DatePipe

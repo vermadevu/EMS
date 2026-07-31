@@ -90,7 +90,8 @@ public class AccountService(
             Email = user.Email!,
             EmployeeStatus = user.Employee.Status,
             Roles = roles,
-            Permissions = permissions
+            Permissions = permissions,
+            ProfileImage = user.Employee?.ProfileImage
         };
     }
 }
