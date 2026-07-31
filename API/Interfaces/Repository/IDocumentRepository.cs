@@ -1,4 +1,6 @@
-﻿using API.Models.Entities;
+﻿using API.DTOs.Document;
+using API.Helpers.Pagination;
+using API.Models.Entities;
 
 namespace API.Interfaces.Repository;
 
@@ -10,4 +12,5 @@ public interface IDocumentRepository
     Task AddAsync(Document document);
     Task DeleteAsync(Document document);
     Task<Document?> GetByIdAndEmployeeIdAsync(int id, int employeeId);
+    Task<PagedResult<EmployeeDocumentSummaryDto>> GetEmployeeDocumentSummaryAsync(DocumentQueryParams queryParams);
 }

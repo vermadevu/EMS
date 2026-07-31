@@ -14,6 +14,7 @@ public static class Permissions
         public const string Update = "Employee.Update";
         public const string Delete = "Employee.Delete";
         public const string Activate = "Employee.Activate";
+        public const string Deactivate = "Employee.Deactivate";
         public const string CompleteOnboarding = "Employee.CompleteOnboarding";
     }
 

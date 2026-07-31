@@ -21,7 +21,6 @@
 .confirm-dialog-panel .mdc-dialog__surface {
     padding: 0 !important;
     border-radius: 18px !important;
-    background: transparent !important;
 }
 
 /* Z-index */

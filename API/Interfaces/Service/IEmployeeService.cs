@@ -12,6 +12,7 @@ public interface IEmployeeService
     Task<bool> DeleteAsync(int id);
     Task<bool> CompleteOnboardingAsync();
     Task<bool> ActivateEmployeeAsync(int id);
+    Task<bool> DeactivateEmployeeAsync(int id);
     Task<PagedResult<EmployeeListItemDto>> GetPagedAsync(EmployeeQueryParams query);
     Task<IEnumerable<EmployeeListItemDto>> GetManagersAsync();
 }

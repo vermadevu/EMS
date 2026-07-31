@@ -86,6 +86,18 @@ public class EmployeeController(IEmployeeService employeeService) : BaseApiContr
         return NoContent();
     }
 
+    [HttpPatch("{id:int}/deactivate")]
+    [HasPermission(Permissions.Employees.Deactivate)]
+    public async Task<IActionResult> DeactivateEmployee(int id)
+    {
+        var result = await _employeeService.DeactivateEmployeeAsync(id);
+
+        if (!result)
+            return NotFound();
+
+        return NoContent();
+    }
+
     [HttpGet]
     [HasPermission(Permissions.Employees.Read)]
     public async Task<ActionResult<PagedResult<EmployeeListItemDto>>> Get(

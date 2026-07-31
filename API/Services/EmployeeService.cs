@@ -11,7 +11,7 @@ using AutoMapper;
 
 namespace API.Services;
 
-public class EmployeeService(
+public class EmployeeService (
     IEmployeeRepository repository,
     ICurrentUserService currentUserService,
     IMapper mapper) : IEmployeeService
@@ -156,6 +156,22 @@ public class EmployeeService(
 
         await _repository.UpdateAsync(employee);
 
+
+        return true;
+    }
+
+    public async Task<bool> DeactivateEmployeeAsync(int id)
+    {
+        var employee = await _repository.GetByIdAsync(id);
+
+        if (employee == null)
+        {
+            return false;
+        }
+
+        employee.Status = EmployeeStatus.Inactive;
+
+        await _repository.UpdateAsync(employee);
 
         return true;
     }

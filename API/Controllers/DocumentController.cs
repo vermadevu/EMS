@@ -1,5 +1,6 @@
 ﻿using API.Authorization;
 using API.DTOs.Document;
+using API.Helpers.Pagination;
 using API.Interfaces.Service;
 using API.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -84,6 +85,15 @@ public class DocumentController(IDocumentService documentService) : BaseApiContr
         }
 
         return NoContent();
+    }
+
+    [HttpGet("employee")]
+    [HasPermission(Permissions.Documents.Read)]
+    public async Task<ActionResult<PagedResult<EmployeeDocumentSummaryDto>>> GetEmployeeDocumentSummary([FromQuery] DocumentQueryParams queryParams)
+    {
+        return Ok(
+            await _documentService
+                .GetEmployeeDocumentSummaryAsync(queryParams));
     }
 
 }

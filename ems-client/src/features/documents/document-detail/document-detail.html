@@ -1,0 +1,125 @@
+<app-page-header
+    title="Employee Documents"
+    subtitle="Manage employee documents.">
+</app-page-header>
+
+@if(loading()){
+<div class="flex justify-center py-20">
+    <span class="loading loading-spinner loading-lg"></span>
+</div>
+}
+@else if(employee(); as employee){
+    <div class="space-y-6">
+        
+        <!-- Employee Card -->
+
+        <div class="card bg-base-100 border border-base-300 shadow-sm">
+            <div class="card-body">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-4">
+                        <div class="avatar">
+                            @if(employee.profileImage){
+                            <div class="w-16 rounded-full">
+                                <img
+                                    [src]="employee.profileImage">
+                            </div>
+                            }
+                            @else{
+                            <div class="w-16 rounded-full bg-primary text-primary-content flex items-center justify-center">
+                                <span class="text-xl font-bold">
+                                    {{ employee.fullName.charAt(0) }}
+                                </span>
+                            </div>
+                            }
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold">
+                                {{ employee.fullName }}
+                            </h2>
+                            <p class="text-base-content/60">
+                                {{ employee.employeeCode }}
+                            </p>
+                            <p class="text-base-content/60">
+                                {{ employee.departmentName }}
+                            </p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary"
+                    (click)="uploadDocument()">
+                        <mat-icon>
+                            upload
+                        </mat-icon>
+                        Upload Document
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Documents -->
+
+        <div class="card bg-base-100 border border-base-300 shadow-sm">
+            <div class="card-body">
+                <h3 class="card-title">
+                    Documents
+                </h3>
+                @if(documents().length === 0){
+                <div class="py-12 text-center">
+                    <mat-icon class="!text-6xl text-base-content/30">
+                        description
+                    </mat-icon>
+                    <p class="mt-4 text-base-content/60">
+                        No documents uploaded yet.
+                    </p>
+                </div>
+                }
+                @else{
+                <div class="overflow-x-auto mt-4">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Uploaded On</th>
+                                <th>Size</th>
+                                <th class="w-28"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for(document of documents(); track document.id){
+                            <tr>
+                                <td>
+                                    {{ document.documentType }}
+                                </td>
+                                <td>
+                                    {{ document.uploadedOn | date }}
+                                </td>
+                                <td>
+                                    {{ (document.fileSize / 1024).toFixed(1) }} KB
+                                </td>
+                                <td>
+                                    <div class="flex gap-2 justify-end">
+                                        <button
+                                            class="btn btn-ghost btn-sm"
+                                            (click)="viewDocument(document)">
+                                            <mat-icon>
+                                                visibility
+                                            </mat-icon>
+                                        </button>
+                                        <button
+                                            class="btn btn-ghost btn-sm text-error"
+                                            (click)="deleteDocument(document)">
+                                            <mat-icon>
+                                                delete
+                                            </mat-icon>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+}

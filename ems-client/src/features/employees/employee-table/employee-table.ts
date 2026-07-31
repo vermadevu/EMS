@@ -75,6 +75,14 @@ export class EmployeeTableComponent {
         label: 'Edit',
         icon: 'edit'
       },
+      
+      ...(employee.status === 'Active'
+        ? [{
+          id: 'deactivate',
+          label: 'Deactivate',
+          icon: 'task_alt'
+        }]
+        : []),
 
       ...(employee.status !== 'Active'
         ? [{
@@ -100,7 +108,7 @@ export class EmployeeTableComponent {
 
     if (!this.isSorted(column)) {
       return 'unfold_more';
-    }
+    } 
 
     return this.sortDirection() === 'asc'
       ? 'keyboard_arrow_up'

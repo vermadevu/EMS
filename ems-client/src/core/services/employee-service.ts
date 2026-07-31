@@ -97,5 +97,8 @@ export class EmployeeService {
     return this.http.patch<void>(`${environment.apiUrl}/employee/${id}/activate`,{});
   }
 
+  deactivate(id: number) : Observable<void> {
+    return this.http.patch<void>(`${environment.apiUrl}/employee/${id}/deactivate`,{});
+  }
 
 }

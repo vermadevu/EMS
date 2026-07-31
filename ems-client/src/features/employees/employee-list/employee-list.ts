@@ -225,12 +225,37 @@ export class EmployeeListComponent {
 
             this.employeeService.activate(event.employee.id).subscribe({
               next: () => {
-                 this.notificationService.success(
+                this.notificationService.success(
                   'Employee activated successfully.'
                 );
                 this.loadEmployees();
               },
-              error : error => console.error(error)
+              error: error => console.error(error)
+            })
+          });
+        break;
+
+      case 'deactivate':
+        this.confirmationService.confirm({
+          title: 'Deactivate Employee',
+          message: `Are you sure you want to deactivate ${event.employee.fullName}?`,
+          icon: 'task_alt',
+          confirmText: 'Deactivate',
+          confirmButtonClass: 'btn-error'
+        })
+          .subscribe(confirmed => {
+            if (!confirmed) {
+              return;
+            }
+
+            this.employeeService.deactivate(event.employee.id).subscribe({
+              next: () => {
+                this.notificationService.success(
+                  'Employee deactivated successfully.'
+                );
+                this.loadEmployees();
+              },
+              error: error => console.error(error)
             })
           });
         break;

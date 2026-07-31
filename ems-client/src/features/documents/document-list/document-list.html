@@ -1,1 +1,42 @@
-<p>document-list works!</p>
+<app-page-header
+    title="Documents"
+    subtitle="Manage employee documents.">
+</app-page-header>
+
+    
+<div class="mb-6">
+    <input
+        type="text"
+        class="input input-bordered w-full max-w-md"
+        placeholder="Search employees..."
+        [value]="state().search"
+        (input)="search($any($event.target).value)">
+</div>
+
+<div class="mt-6">
+
+    <app-document-table
+        [employees]="employees()"
+        [loading]="loading()"
+        [sortBy]="state().sortBy"
+        [sortDirection]="state().sortDirection"
+        (sortChange)="sort($event)"
+        (employeeSelected)="open($event)">
+    </app-document-table>
+
+</div>
+
+<div class="mt-6">
+
+    @if(page(); as page){
+
+        <app-pagination
+            [pageNumber]="page.pageNumber"
+            [pageSize]="page.pageSize"
+            [totalCount]="page.totalCount"
+            (pageChange)="changePage($event)">
+        </app-pagination>
+
+    }
+
+</div>

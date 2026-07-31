@@ -1,16 +1,16 @@
-﻿using API.Models.Enums;
+﻿    using API.Models.Enums;
 
-namespace API.DTOs.Document;
+    namespace API.DTOs.Document;
 
-public class DocumentDto
-{
-    public int Id { get; set; }
-    public string OriginalFileName { get; set; } = "";
-    public DocumentType DocumentType { get; set; }
-    public long FileSize { get; set; }
-    public DateTime UploadedOn { get; set; }
-    public int EmployeeId { get; set; }
-    public string EmployeeName { get; set; } = "";
-    public string Url { get; set; } = "";
-    public string PublicId { get; set; } = "";
-}
+    public class DocumentDto
+    {
+        public int Id { get; set; }
+        public string OriginalFileName { get; set; } = "";
+        public DocumentType DocumentType { get; set; }
+        public long FileSize { get; set; }
+        public DateTime UploadedOn { get; set; }
+        public int EmployeeId { get; set; }
+        public string EmployeeName { get; set; } = "";
+        public string Url { get; set; } = "";
+        public string PublicId { get; set; } = "";
+    }

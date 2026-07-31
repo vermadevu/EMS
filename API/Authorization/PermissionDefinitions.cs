@@ -62,6 +62,14 @@ public static class PermissionDefinitions
 
             new()
             {
+                Name = Permissions.Employees.Deactivate,
+                DisplayName = "Dectivate Employee",
+                Category = "Employee",
+                Description = "Allows deactivating employees."
+            },
+
+            new()
+            {
                 Name = Permissions.Employees.CompleteOnboarding,
                 DisplayName = "Complete Onboarding",
                 Category = "Employee",

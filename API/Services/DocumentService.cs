@@ -1,4 +1,5 @@
 ﻿using API.DTOs.Document;
+using API.Helpers.Pagination;
 using API.Interfaces.Repository;
 using API.Interfaces.Service;
 using AutoMapper;
@@ -49,7 +50,7 @@ public class DocumentService( IDocumentRepository repository, ICloudinaryService
             Url = uploadResult.Url,
             ContentType = dto.File.ContentType,
             FileSize = dto.File.Length,
-            EmployeeId = employeeId,
+            EmployeeId = dto.EmployeeId,
             DocumentType = dto.DocumentType
         };
 
@@ -98,5 +99,11 @@ public class DocumentService( IDocumentRepository repository, ICloudinaryService
         await _repository.DeleteAsync(document);
 
         return true;
+    }
+
+    public async Task<PagedResult<EmployeeDocumentSummaryDto>>
+        GetEmployeeDocumentSummaryAsync(DocumentQueryParams queryParams)
+    {
+        return await _repository.GetEmployeeDocumentSummaryAsync(queryParams);
     }
 }
