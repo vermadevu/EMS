@@ -23,6 +23,7 @@
     <app-employee-table
         [employees]="employees()"
         [loading]="loading()"
+        (action)="handleAction($event)"
         [sortBy]="state().sortBy"
         [sortDirection]="state().sortDirection"
         (sortChange)="sort($event)">

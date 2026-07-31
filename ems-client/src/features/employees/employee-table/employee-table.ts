@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { EmployeeListItem } from '../../../shared/models/employee-list-item';
 import { ActionMenuItem } from '../../../shared/models/action-menu-item';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state';
@@ -6,6 +6,7 @@ import { StatusBadge } from '../../../shared/components/status-badge/status-badg
 import { ActionMenu } from '../../../shared/components/action-menu/action-menu';
 import { DatePipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-employee-table',
@@ -30,6 +31,36 @@ export class EmployeeTableComponent {
   readonly sortBy = input.required<string>();
   readonly sortDirection = input.required<'asc' | 'desc'>();
   readonly sortChange = output<string>();
+
+  private readonly router = inject(Router);
+
+  readonly action = output<{
+    action: string;
+    employee: EmployeeListItem;
+  }>();
+
+  onActionSelected(action: string, employee: EmployeeListItem): void {
+    this.action.emit({
+      action,
+      employee
+    });
+  }
+
+  viewEmployee(id: number): void {
+    this.router.navigate(['/employees', id]);
+  }
+
+  editEmployee(id: number): void {
+    this.router.navigate(['/employees/edit', id]);
+  }
+
+  deleteEmployee(id: number) {
+    console.log('Delete', id);
+  }
+
+  activateEmployee(id: number) {
+    console.log('Activate', id);
+  }
 
   getActions(employee: EmployeeListItem): ActionMenuItem[] {
     return [
@@ -69,31 +100,6 @@ export class EmployeeTableComponent {
     ];
   }
 
-
-  onAction(employeeId: number, action: string): void {
-    switch (action) {
-
-      case 'view':
-        this.view.emit(employeeId);
-        break;
-
-      case 'edit':
-        this.edit.emit(employeeId);
-        break;
-
-      case 'delete':
-        this.delete.emit(employeeId);
-        break;
-
-      case 'activate':
-        this.activate.emit(employeeId);
-        break;
-
-      case 'completeOnboarding':
-        this.completeOnboarding.emit(employeeId);
-        break;
-    }
-  }
   isSorted(column: string): boolean {
     return this.sortBy() === column;
   }

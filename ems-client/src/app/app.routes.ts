@@ -21,9 +21,12 @@ import { DocumentListComponent } from '../features/documents/document-list/docum
 import { UserListComponent } from '../features/users/user-list/user-list';
 import { RolePermissionsComponent } from '../features/users/role-permissions/role-permissions';
 import { UserPermissionsComponent } from '../features/users/user-permissions/user-permissions';
+import { EmployeeCreateComponent } from '../features/employees/employee-create/employee-create';
+import { EmployeeEditComponent } from '../features/employees/employee-edit/employee-edit';
+import { EmployeeDetailsComponent } from '../features/employees/employee-details/employee-details';
 
 export const routes: Routes = [
-  
+
   {
     path: 'login',
     component: Login,
@@ -50,6 +53,22 @@ export const routes: Routes = [
       {
         path: 'employees',
         component: EmployeeListComponent
+      },
+      {
+        path: 'employees',
+        component: EmployeeListComponent
+      },
+      {
+        path: 'employees/create',
+        component: EmployeeCreateComponent
+      },
+      {
+        path: 'employees/edit/:id',
+        component: EmployeeEditComponent
+      },
+      {
+        path: 'employees/:id',
+        component: EmployeeDetailsComponent
       },
 
       {

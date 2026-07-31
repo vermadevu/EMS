@@ -12,6 +12,8 @@ import { DepartmentService } from '../../../core/services/department-service';
 import { Department } from '../../../core/models/department';
 import { StatusOption } from '../../../core/models/status-option';
 import { DesignationService } from '../../../core/services/designation-service';
+import { Router } from '@angular/router';
+import { Designation } from '../../../core/models/designation';
 
 @Component({
   selector: 'app-employee-list',
@@ -35,12 +37,14 @@ export class EmployeeListComponent {
 
 
   private readonly designationService = inject(DesignationService);
-  readonly designations = signal<Department[]>([]);
+  readonly designations = signal<Designation[]>([]);
 
   private readonly departmentService = inject(DepartmentService);
   readonly departments = signal<Department[]>([]);
 
   readonly statuses = signal<StatusOption[]>([]);
+
+  private readonly router = inject(Router);
 
   constructor() {
 
@@ -153,16 +157,37 @@ export class EmployeeListComponent {
   }
 
   sort(column: string): void {
-  const current = this.state();
-  const direction =
-    current.sortBy === column &&
-    current.sortDirection === 'asc'
-      ? 'desc'
-      : 'asc';
-  this.updateState({
-    sortBy: column,
-    sortDirection: direction
-  });
-}
+    const current = this.state();
+    const direction =
+      current.sortBy === column &&
+        current.sortDirection === 'asc'
+        ? 'desc'
+        : 'asc';
+    this.updateState({
+      sortBy: column,
+      sortDirection: direction
+    });
+  }
+
+
+  handleAction(event: {
+    action: string;
+    employee: EmployeeListItem;
+  }): void {
+    switch (event.action) {
+      case 'view':
+        this.router.navigate(['/employees', event.employee.id]);
+        break;
+      case 'edit':
+        this.router.navigate(['/employees/edit', event.employee.id]);
+        break;
+      case 'delete':
+        console.log('Delete', event.employee.id);
+        break;
+      case 'activate':
+        console.log('Activate', event.employee.id);
+        break;
+    }
+  }
 
 }

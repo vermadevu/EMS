@@ -5,7 +5,10 @@
 }
 
 @else if (employees().length === 0) {
-<app-empty-state icon="groups" title="No employees found" subtitle="There are no employees matching your search.">
+<app-empty-state 
+    icon="groups" 
+    title="No employees found" 
+    subtitle="There are no employees matching your search.">
 </app-empty-state>
 }
 
@@ -68,16 +71,18 @@
                         {{ employee.designation }}
                     </td>
                     <td>
-                        <app-status-badge [status]="employee.status">
+                        <app-status-badge 
+                            [status]="employee.status">
                         </app-status-badge>
                     </td>
                     <td>
                         {{ employee.joiningDate | date }}
                     </td>
                     <td>
-                        <app-action-menu [actions]="getActions(employee)"
-                            (actionSelected)="onAction(employee.id, $event)">
-                        </app-action-menu>
+                        <app-action-menu 
+                            [actions]="getActions(employee)"
+                            (actionSelected)="onActionSelected($event, employee)">         
+                       </app-action-menu>
                     </td>
                 </tr>
                 }

@@ -1,0 +1,317 @@
+<form
+    [formGroup]="form"
+    (ngSubmit)="submit()"
+    class="card bg-base-100 border border-base-300 shadow-sm">
+    @if(loading()){
+        <div class="flex justify-center py-20">
+            <mat-spinner diameter="40"></mat-spinner>
+        </div>
+    }
+    @else {
+        <div class="card-body">
+    
+            <h2 class="card-title text-2xl">
+                Employee Information
+            </h2>
+    
+            <p class="text-base-content/60 mb-6">
+                Enter the employee details below.
+            </p>
+    
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    
+                <!-- First Name -->
+                <fieldset class="fieldset">
+    
+                    <legend class="fieldset-legend">
+                        First Name
+                        <span class="text-error">*</span>
+                    </legend>
+    
+                    <input
+                        type="text"
+                        autocomplete="given-name"
+                        class="input input-bordered w-full"
+                        placeholder="John"
+                        formControlName="firstName">
+    
+                    @if(form.controls.firstName.touched &&
+                    form.controls.firstName.hasError('required')){
+    
+                        <label class="label">
+                            <span class="label-text-alt text-error">
+                                First name is required.
+                            </span>
+                        </label>
+    
+                    }
+    
+                </fieldset>
+    
+                <!-- Last Name -->
+                <fieldset class="fieldset">
+    
+                    <legend class="fieldset-legend">
+                        Last Name
+                        <span class="text-error">*</span>
+                    </legend>
+    
+                    <input
+                        type="text"
+                        autocomplete="family-name"
+                        class="input input-bordered w-full"
+                        placeholder="Doe"
+                        formControlName="lastName">
+    
+                    @if(form.controls.lastName.touched &&
+                    form.controls.lastName.hasError('required')){
+    
+                        <label class="label">
+                            <span class="label-text-alt text-error">
+                                Last name is required.
+                            </span>
+                        </label>
+    
+                    }
+    
+                </fieldset>
+    
+                <!-- Email -->
+                <fieldset class="fieldset">
+    
+                    <legend class="fieldset-legend">
+                        Email
+                        <span class="text-error">*</span>
+                    </legend>
+    
+                    <input
+                        type="email"
+                        autocomplete="email"
+                        class="input input-bordered w-full"
+                        placeholder="john@example.com"
+                        formControlName="email">
+    
+                    @if(form.controls.email.touched){
+    
+                        @if(form.controls.email.hasError('required')){
+    
+                            <label class="label">
+                                <span class="label-text-alt text-error">
+                                    Email is required.
+                                </span>
+                            </label>
+    
+                        }
+    
+                        @if(form.controls.email.hasError('email')){
+    
+                            <label class="label">
+                                <span class="label-text-alt text-error">
+                                    Enter a valid email.
+                                </span>
+                            </label>
+    
+                        }
+    
+                    }
+    
+                </fieldset>
+    
+                <!-- Joining Date -->
+                <fieldset class="fieldset">
+    
+                    <legend class="fieldset-legend">
+                        Joining Date
+                        <span class="text-error">*</span>
+                    </legend>
+    
+                    <input
+                        type="date"
+                        class="input input-bordered w-full"
+                        formControlName="joiningDate">
+    
+                    @if(form.controls.joiningDate.touched &&
+                    form.controls.joiningDate.hasError('required')){
+    
+                        <label class="label">
+                            <span class="label-text-alt text-error">
+                                Joining date is required.
+                            </span>
+                        </label>
+    
+                    }
+    
+                </fieldset>
+    
+                <!-- Phone -->
+                <fieldset class="fieldset">
+    
+                    <legend class="fieldset-legend">
+                        Phone
+                        <span class="text-error">*</span>
+                    </legend>
+    
+                    <input
+                        type="tel"
+                        autocomplete="tel"
+                        class="input input-bordered w-full"
+                        placeholder="+91 9999888877"
+                        formControlName="phone">
+    
+                    @if(form.controls.phone.touched){
+    
+                        @if(form.controls.phone.hasError('required')){
+    
+                            <label class="label">
+                                <span class="label-text-alt text-error">
+                                    Phone number is required.
+                                </span>
+                            </label>
+    
+                        }
+    
+                        @if(form.controls.phone.hasError('pattern')){
+    
+                            <label class="label">
+                                <span class="label-text-alt text-error">
+                                    Enter a valid phone number.
+                                </span>
+                            </label>
+    
+                        }
+    
+                    }
+    
+                </fieldset>
+    
+                <!-- Department -->
+                <fieldset class="fieldset">
+    
+                    <legend class="fieldset-legend">
+                        Department
+                        <span class="text-error">*</span>
+                    </legend>
+    
+                    <select
+                        class="select select-bordered w-full"
+                        formControlName="departmentId"
+                        [disabled]="loading()">
+    
+                        <option value="0">
+                            Select Department
+                        </option>
+                        @for(department of lookupData().departments; track department.id){
+                            <option [value]="department.id">
+                                {{ department.name }}
+                            </option>
+                        }
+                    </select>
+    
+                    @if(form.controls.departmentId.touched &&
+                    form.controls.departmentId.hasError('min')){
+    
+                        <label class="label">
+                            <span class="label-text-alt text-error">
+                                Please select a department.
+                            </span>
+                        </label>
+    
+                    }
+    
+                </fieldset>
+    
+                <!-- Designation -->
+                <fieldset class="fieldset">
+    
+                    <legend class="fieldset-legend">
+                        Designation
+                        <span class="text-error">*</span>
+                    </legend>
+    
+                    <select
+                        class="select select-bordered w-full"
+                        formControlName="designationId"
+                        [disabled]="loading()">
+    
+                        <option value="0">
+                            Select Designation
+                        </option>
+                        @for(designation of lookupData().designations; track designation.id){
+                            <option [value]="designation.id">
+                                {{ designation.name }}
+                            </option>
+                        }
+                    </select>
+    
+                    @if(form.controls.designationId.touched &&
+                    form.controls.designationId.hasError('min')){
+    
+                        <label class="label">
+                            <span class="label-text-alt text-error">
+                                Please select a designation.
+                            </span>
+                        </label>
+    
+                    }
+    
+                </fieldset>
+    
+                <!-- Manager -->
+                <fieldset class="fieldset">
+    
+                    <legend class="fieldset-legend">
+                        Manager
+                    </legend>
+    
+                    <select
+                        class="select select-bordered w-full"
+                        formControlName="managerId"
+                        [disabled]="loading()">
+    
+                        <option [ngValue]="null">
+                            No Manager
+                        </option>
+                        @for(manager of lookupData().managers; track manager.id){
+                            <option [ngValue]="manager.id">
+                                {{ manager.fullName }}
+                            </option>
+                        }
+                    </select>
+                </fieldset>
+            </div>
+    
+            <div class="divider my-8"></div>
+    
+            <div class="flex justify-end gap-3">
+    
+                <button
+                    type="button"
+                    class="btn btn-ghost"
+                    (click)="cancel()">
+                    Cancel
+                </button>
+    
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    [disabled]="loading() || form.invalid">
+
+                    @if(loading()){
+                        <span class="loading loading-spinner loading-sm"></span>
+                    } @else {
+
+                       @if(!isEditMode()){
+                            <mat-icon>person_add</mat-icon>
+                            Create Employee
+                        }
+                        @else{
+                            <mat-icon>save</mat-icon>
+                            Update Employee
+                        }
+                    }
+                    
+                </button>
+            </div>
+        </div>
+    }
+</form>

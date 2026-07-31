@@ -3,6 +3,7 @@ import { SearchBox } from '../../../shared/components/search-box/search-box';
 import { MatIconModule } from '@angular/material/icon';
 import { Department } from '../../../core/models/department';
 import { StatusOption } from '../../../core/models/status-option';
+import { Designation } from '../../../core/models/designation';
 
 @Component({
   selector: 'app-employee-toolbar',
@@ -19,7 +20,7 @@ export class EmployeeToolbarComponent {
   readonly departments = input<Department[]>([]);
   readonly departmentChange = output<number | undefined>();
 
-  readonly designations = input<Department[]>([]);
+  readonly designations = input<Designation[]>([]);
   readonly designationChange = output<number | undefined>();
 
   readonly statuses = input<StatusOption[]>([]);

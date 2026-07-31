@@ -16,6 +16,5 @@ export class PageHeaderComponent {
   readonly subtitle = input<string>();
   readonly buttonText = input<string>();
   readonly buttonIcon = input('add');
-  readonly buttonRoute = input<string>();
-
+  readonly buttonRoute = input<string | any[]>();
 }

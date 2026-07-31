@@ -1,0 +1,119 @@
+<app-page-header
+    title="Employee Details"
+    subtitle="View employee information."
+    buttonText="Edit Employee"
+    buttonIcon="edit"
+    [buttonRoute]="['/employees', 'edit', employee()?.id]">
+</app-page-header>
+
+@if(loading()){
+
+<div class="flex justify-center py-20">
+
+    <span class="loading loading-spinner loading-lg"></span>
+
+</div>
+
+}
+
+@else if(employee(); as employee){
+
+<div class="space-y-6">
+
+    <!-- Header -->
+
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+        <div class="card-body">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-5">
+
+                    <!-- Avatar -->
+                    @if(employee.profileImage){
+                    <div class="avatar">
+                        <div class="w-20 rounded-full">
+                            <img [src]="employee.profileImage" [alt]="employee.fullName">
+                        </div>
+                    </div>
+                    }
+
+                    @else{
+                    <div class="avatar placeholder">
+                        <div class="bg-primary text-primary-content rounded-full w-20">
+                            <span class="text-2xl font-semibold">
+                                {{ employee.firstName[0] }}{{ employee.lastName[0] }}
+                            </span>
+                        </div>
+                    </div>
+                    }
+
+                    <!-- Details -->
+                    <div>
+                        <h2 class="text-2xl font-bold">
+                            {{ employee.fullName }}
+                        </h2>
+                        <p class="text-base-content/60">
+                            {{ employee.employeeCode }}
+                        </p>
+                        <p class="text-sm text-base-content/60 mt-1">
+                            {{ employee.designationName }}
+                            •
+                            {{ employee.departmentName }}
+                        </p>
+                    </div>
+                </div>
+                <app-status-badge [status]="employee.status">
+                </app-status-badge>
+            </div>
+        </div>
+    </div>
+
+    <!-- Personal Information -->
+
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+        <div class="card-body">
+            <h3 class="card-title">
+                Personal Information
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                <app-detail-item label="First Name" [value]="employee.firstName">
+                </app-detail-item>
+
+                <app-detail-item label="Last Name" [value]="employee.lastName">
+                </app-detail-item>
+
+                <app-detail-item label="Email" [value]="employee.email">
+                </app-detail-item>
+
+                <app-detail-item label="Phone" [value]="employee.phone">
+                </app-detail-item>
+            </div>
+        </div>
+    </div>
+
+    <!-- Organization -->
+
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+        <div class="card-body">
+            <h3 class="card-title">
+                Organization
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+
+                <app-detail-item label="Department" [value]="employee.departmentName">
+                </app-detail-item>
+
+                <app-detail-item label="Designation" [value]="employee.designationName">
+                </app-detail-item>
+
+                <app-detail-item label="Manager" [value]="employee.managerName">
+                </app-detail-item>
+
+                <app-detail-item label="Joining Date" [value]="employee.joiningDate | date:'dd MMM yyyy'">
+                </app-detail-item>
+            </div>
+        </div>
+    </div>
+</div>
+}
