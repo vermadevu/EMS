@@ -54,7 +54,15 @@ public class MappingProfile : Profile
         // Asset
         CreateMap<Asset, AssetDto>()
             .ForMember(dest => dest.EmployeeName,
-                opt => opt.MapFrom(src => src.Employee == null ? null : src.Employee.FullName));
+                opt => opt.MapFrom(src => src.Employee == null ? null : src.Employee.FullName))
+            .ForMember(dest => dest.EmployeeCode,
+                opt => opt.MapFrom(src =>
+                    src.Employee == null ? null : src.Employee.EmployeeCode));
+
+        CreateMap<Asset, AssetListItemDto>()
+            .ForMember(dest => dest.EmployeeName,
+                opt => opt.MapFrom(src =>
+                    src.Employee == null ? null : src.Employee.FullName));
 
         CreateMap<CreateAssetDto, Asset>();
         CreateMap<UpdateAssetDto, Asset>();

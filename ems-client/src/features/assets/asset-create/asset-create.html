@@ -1,0 +1,14 @@
+<app-page-header
+    title="Add Asset"
+    subtitle="Register a new company asset.">
+</app-page-header>
+
+<div class="mt-6">
+
+    <app-asset-form
+        [loading]="loading()"
+        (save)="create($event)"
+        (cancel)="cancel()">
+    </app-asset-form>
+
+</div>

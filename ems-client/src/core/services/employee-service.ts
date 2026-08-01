@@ -59,6 +59,10 @@ export class EmployeeService {
 
   }
 
+  getAll() {
+    return this.http.get<EmployeeListItem[]>(`${environment.apiUrl}${API_ENDPOINTS.employees}/all`);
+  }
+
   getStatuses() {
     return this.http.get<StatusOption[]>(
       `${environment.apiUrl}${API_ENDPOINTS.employees}/statuses`
@@ -89,16 +93,16 @@ export class EmployeeService {
     );
   }
 
-  delete(id: number) : Observable<void> {
+  delete(id: number): Observable<void> {
     return this.http.delete<void>(`${environment.apiUrl}/employee/${id}`);
   }
 
-  activate(id: number) : Observable<void> {
-    return this.http.patch<void>(`${environment.apiUrl}/employee/${id}/activate`,{});
+  activate(id: number): Observable<void> {
+    return this.http.patch<void>(`${environment.apiUrl}/employee/${id}/activate`, {});
   }
 
-  deactivate(id: number) : Observable<void> {
-    return this.http.patch<void>(`${environment.apiUrl}/employee/${id}/deactivate`,{});
+  deactivate(id: number): Observable<void> {
+    return this.http.patch<void>(`${environment.apiUrl}/employee/${id}/deactivate`, {});
   }
 
 }

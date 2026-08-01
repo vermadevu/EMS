@@ -46,33 +46,38 @@
                 @for (employee of employees(); track employee.id) {
                 <tr>
                     <td>
-                        <div class="flex items-center gap-3">
-                            <div class="avatar">
+                         <button 
+                            class="text-left hover:text-primary transition-colors cursor-pointer"
+                            (click)="employeeDetails(employee)">
 
-                                @if (employee.profileImage) {
-                                    <div class="w-10 rounded-full">
-                                        <img
-                                            [src]="employee.profileImage"
-                                            [alt]="employee.fullName">
-                                    </div>
+                            <div class="flex items-center gap-3">
+                                <div class="avatar">
 
-                                } @else {
-                                    <div class="bg-primary text-primary-content rounded-full w-10 flex items-center justify-center">
-                                        <span class="text-lg font-semibold">
-                                            {{ employee.fullName.charAt(0) }}
-                                        </span>
+                                    @if (employee.profileImage) {
+                                        <div class="w-10 rounded-full">
+                                            <img
+                                                [src]="employee.profileImage"
+                                                [alt]="employee.fullName">
+                                        </div>
+
+                                    } @else {
+                                        <div class="bg-primary text-primary-content rounded-full w-10 flex items-center justify-center">
+                                            <span class="text-lg font-semibold">
+                                                {{ employee.fullName.charAt(0) }}
+                                            </span>
+                                        </div>
+                                    }
+                                </div>
+                                <div>
+                                    <div class="font-semibold">
+                                        {{ employee.fullName }}
                                     </div>
-                                }
-                            </div>
-                            <div>
-                                <div class="font-semibold">
-                                    {{ employee.fullName }}
-                                </div>
-                                <div class="text-sm opacity-60">
-                                    {{ employee.employeeCode }}
+                                    <div class="text-sm opacity-60">
+                                        {{ employee.employeeCode }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </button>
                     </td>
                     <td>
                         {{ employee.department }}

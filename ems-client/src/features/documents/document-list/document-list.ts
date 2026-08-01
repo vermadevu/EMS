@@ -17,7 +17,6 @@ import { DocumentListState } from '../../../core/models/document-list-state';
     MatIconModule,
     PageHeaderComponent,
     DocumentTableComponent,
-    SearchBox,
     PaginationComponent,
   ],
   templateUrl: './document-list.html',

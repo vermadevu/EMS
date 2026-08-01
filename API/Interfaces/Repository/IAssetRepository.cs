@@ -1,4 +1,6 @@
-﻿using API.Models.Entities;
+﻿using API.DTOs.Asset;
+using API.Helpers.Pagination;
+using API.Models.Entities;
 
 namespace API.Interfaces.Repository;
 
@@ -13,6 +15,8 @@ public interface IAssetRepository
     Task<bool> ExistsBySerialNumberAsync(string serialNumber, int excludeId);
     Task<string?> GetLastAssetCodeAsync();
     Task<Asset?> GetAvailableAssetAsync(int id);
-    Task<int> CountAsync();
+    Task<int> GetCountAsync();
+    Task<PagedResult<AssetListItemDto>> GetPagedAsync(AssetQueryParams queryParams);
+    Task<IEnumerable<Asset>> GetByEmployeeAsync(int employeeId);
 
 }

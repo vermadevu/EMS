@@ -15,6 +15,15 @@ public class EmployeeController(IEmployeeService employeeService) : BaseApiContr
 {
     private readonly IEmployeeService _employeeService = employeeService;
 
+    [HttpGet("all")]
+    [HasPermission(Permissions.Employees.Read)]
+    public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetAll()
+    {
+        var employees = await _employeeService.GetAllAsync();
+        return Ok(employees);
+    }
+
+
     [HttpGet("{id:int}")]
     [HasPermission(Permissions.Employees.Read)]
     public async Task<ActionResult<EmployeeDto>> GetById(int id)
@@ -100,8 +109,7 @@ public class EmployeeController(IEmployeeService employeeService) : BaseApiContr
 
     [HttpGet]
     [HasPermission(Permissions.Employees.Read)]
-    public async Task<ActionResult<PagedResult<EmployeeListItemDto>>> Get(
-    [FromQuery] EmployeeQueryParams queryParams)
+    public async Task<ActionResult<PagedResult<EmployeeListItemDto>>> Get([FromQuery] EmployeeQueryParams queryParams)
     {
         return Ok(await _employeeService.GetPagedAsync(queryParams));
     }

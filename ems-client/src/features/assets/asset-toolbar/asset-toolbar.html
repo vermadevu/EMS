@@ -1,0 +1,41 @@
+<div class="card bg-base-100 border border-base-300 shadow-sm">
+    <div class="card-body">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+            <!-- Search -->
+            <label class="input input-bordered flex items-center gap-2 w-full">
+                <mat-icon>search</mat-icon>
+
+                <input type="text" class="grow" placeholder="Search assets..." [ngModel]="search()"
+                    (ngModelChange)="onSearch($event)" />
+            </label>
+
+            <!-- Asset Type -->
+            <select class="select select-bordered w-full" (change)="onAssetTypeChange($any($event.target).value)">
+
+                <option value="">All Asset Types</option>
+
+                @for (type of assetTypes; track type.value) {
+                <option [value]="type.value">
+                    {{ type.label }}
+                </option>
+                }
+
+            </select>
+
+            <!-- Status -->
+            <select class="select select-bordered w-full" (change)="onStatusChange($any($event.target).value)">
+
+                <option value="">All Statuses</option>
+
+                @for (status of statuses; track status.value) {
+                <option [value]="status.value">
+                    {{ status.label }}
+                </option>
+                }
+
+            </select>
+
+        </div>
+    </div>
+</div>

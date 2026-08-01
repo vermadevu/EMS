@@ -1,0 +1,134 @@
+<form
+    [formGroup]="form"
+    (ngSubmit)="submit()"
+    class="card bg-base-100 border border-base-300 shadow-sm">
+
+    <div class="card-body">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <!-- Asset Name -->
+
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">
+                    Asset Name
+                </legend>
+
+                <input
+                    type="text"
+                    class="input input-bordered w-full"
+                    formControlName="assetName"
+                    placeholder="Dell Latitude 7440">
+
+                @if(form.controls.assetName.invalid &&
+                    form.controls.assetName.touched){
+
+                    <span class="text-error text-sm">
+                        Asset name is required.
+                    </span>
+
+                }
+
+            </fieldset>
+
+            <!-- Asset Type -->
+
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">
+                    Asset Type
+                </legend>
+
+                <select
+                    class="select select-bordered w-full"
+                    formControlName="assetType">
+
+                    @for(type of assetTypes; track type.value){
+
+                        <option [ngValue]="type.value">
+                            {{ type.label }}
+                        </option>
+
+                    }
+
+                </select>
+
+            </fieldset>
+
+            <!-- Brand -->
+
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">
+                    Brand
+                </legend>
+
+                <input
+                    type="text"
+                    class="input input-bordered w-full"
+                    formControlName="brand">
+            </fieldset>
+
+            <!-- Model -->
+
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">
+                    Model
+                </legend>
+
+                <input
+                    type="text"
+                    class="input input-bordered w-full"
+                    formControlName="model">
+            </fieldset>
+
+            <!-- Serial Number -->
+
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">
+                    Serial Number
+                </legend>
+
+                <input
+                    type="text"
+                    class="input input-bordered w-full"
+                    formControlName="serialNumber">
+            </fieldset>
+
+            <!-- Purchase Date -->
+
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">
+                    Purchase Date
+                </legend>
+
+                <input
+                    type="date"
+                    class="input input-bordered w-full"
+                    formControlName="purchaseDate">
+                @if(form.controls.purchaseDate.invalid &&
+                    form.controls.purchaseDate.touched){
+                    <span class="text-error text-sm">
+                        Purchase date is required.
+                    </span>
+                }
+            </fieldset>
+        </div>
+        <div class="divider"></div>
+        <div class="flex justify-end gap-3">
+            <button
+                type="button"
+                class="btn btn-ghost"
+                (click)="cancelClick()">
+                Cancel
+            </button>
+
+            <button
+                class="btn btn-primary"
+                [disabled]="loading()">
+                @if(loading()){
+                    <span class="loading loading-spinner loading-sm"></span>
+                }
+                Save Asset
+            </button>
+        </div>
+    </div>
+</form>

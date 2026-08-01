@@ -1,0 +1,188 @@
+@if(asset(); as asset){
+
+<app-page-header
+    [title]="asset.assetName"
+    subtitle="View asset details.">
+</app-page-header>
+
+<div class="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    <!-- Left -->
+
+    <div class="lg:col-span-2 space-y-6">
+
+        <!-- Asset Information -->
+
+        <div class="card bg-base-100 border border-base-300 shadow-sm">
+
+            <div class="card-body">
+
+                <h2 class="card-title">
+                    Asset Information
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+
+                    <div>
+                        <p class="text-sm text-base-content/60">
+                            Asset Code
+                        </p>
+
+                        <p class="font-medium">
+                            {{ asset.assetCode }}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-base-content/60">
+                            Asset Name
+                        </p>
+
+                        <p class="font-medium">
+                            {{ asset.assetName }}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-base-content/60">
+                            Asset Type
+                        </p>
+
+                        <p class="font-medium">
+                            {{ asset.assetType }}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-base-content/60">
+                            Brand
+                        </p>
+
+                        <p class="font-medium">
+                            {{ asset.brand || '-' }}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-base-content/60">
+                            Model
+                        </p>
+
+                        <p class="font-medium">
+                            {{ asset.model || '-' }}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-base-content/60">
+                            Serial Number
+                        </p>
+
+                        <p class="font-medium">
+                            {{ asset.serialNumber || '-' }}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-base-content/60">
+                            Purchase Date
+                        </p>
+
+                        <p class="font-medium">
+                            {{ asset.purchaseDate }}
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Assignment -->
+
+        <div class="card bg-base-100 border border-base-300 shadow-sm">
+
+            <div class="card-body">
+
+                <h2 class="card-title">
+                    Assignment
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+
+                    <div>
+
+                        <p class="text-sm text-base-content/60">
+                            Employee
+                        </p>
+
+                        <p class="font-medium">
+                            {{ asset.employeeName || 'Unassigned' }}
+                        </p>
+
+                    </div>
+                    
+                    <div>
+
+                        <p class="text-sm text-base-content/60">
+                            Employee Code
+                        </p>
+
+                        <p class="font-medium">
+                            {{ asset.employeeCode || '-' }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right -->
+    <div>
+        <div class="card bg-base-100 border border-base-300 shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title">
+                    Status
+                </h2>
+                <div class="mt-4">
+
+                    <app-status-badge
+                        [status]="asset.status">
+                    </app-status-badge>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="space-y-3">
+                    <button
+                        class="btn btn-primary w-full"
+                        (click)="router.navigate(['/assets/edit', asset.id])">
+                        Edit Asset
+                    </button>
+
+                    @if(asset.status === 'Available'){
+                        <button
+                            class="btn btn-success w-full"
+                            (click)="assignAsset()">
+                            Assign Asset
+                        </button>
+                    }
+                    @if(asset.status === 'Assigned'){
+                        <button
+                            class="btn btn-warning w-full"
+                            (click)="returnAsset()">
+                            Return Asset
+                        </button>
+                    }
+                    <button
+                        class="btn btn-outline w-full"
+                        (click)="router.navigate(['/assets'])">
+                        Back
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}

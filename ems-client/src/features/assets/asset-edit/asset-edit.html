@@ -1,0 +1,19 @@
+<app-page-header
+    title="Edit Asset"
+    subtitle="Update asset information.">
+</app-page-header>
+
+<div class="mt-6">
+
+    @if(asset(); as asset){
+
+        <app-asset-form
+            [asset]="asset"
+            [loading]="loading()"
+            (save)="update($event)"
+            (cancel)="cancel()">
+        </app-asset-form>
+
+    }
+
+</div>

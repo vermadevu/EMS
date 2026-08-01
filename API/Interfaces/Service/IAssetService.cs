@@ -1,14 +1,17 @@
 ﻿using API.DTOs.Asset;
+using API.Helpers.Pagination;
 
 namespace API.Interfaces.Service;
 
 public interface IAssetService
 {
     Task<IEnumerable<AssetDto>> GetAllAsync();
-    Task<AssetDto?> GetByIdAsync(int id);
+    Task<AssetDto> GetByIdAsync(int id);
     Task<AssetDto> CreateAsync(CreateAssetDto dto);
-    Task<bool> UpdateAsync(int id, UpdateAssetDto dto);
-    Task<bool> DeleteAsync(int id);
-    Task<bool> AssignAssetAsync(int assetId, AssignAssetDto dto);
-    Task<bool> ReturnAssetAsync(int assetId);
+    Task<AssetDto> UpdateAsync(int id, UpdateAssetDto dto);
+    Task DeleteAsync(int id);
+    Task AssignAsync(int assetId, AssignAssetDto dto);
+    Task ReturnAsync(int assetId);
+    Task<PagedResult<AssetListItemDto>> GetPagedAsync(AssetQueryParams queryParams);
+    Task<IEnumerable<AssetDto>> GetByEmployeeAsync(int employeeId);
 }

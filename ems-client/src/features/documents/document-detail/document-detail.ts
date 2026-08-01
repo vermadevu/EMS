@@ -82,22 +82,6 @@ export class DocumentDetailComponent {
     });
   }
 
-  //   loadDocuments() {
-  //   const employeeId = Number(
-  //     this.route.snapshot.paramMap.get('employeeId')
-  //   );
-
-  //   this.documentService
-  //     .getByEmployee(employeeId)
-  //     .subscribe({
-  //       next: documents => {
-  //         console.log(documents);
-  //         this.documents.set(documents);
-  //       }
-  //     });
-  // }
-
-
   viewDocument(document: Document): void {
     window.open(document.url, '_blank');
   }

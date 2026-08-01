@@ -1,0 +1,67 @@
+<div class="bg-base-100 rounded-2xl overflow-hidden">
+    <div class="p-6">
+        <div class="flex items-start gap-4">
+            <div class="w-14 h-14 rounded-full bg-success/10 flex items-center justify-center shrink-0">
+                <mat-icon class="text-success text-3xl">
+                    assignment_ind
+                </mat-icon>
+            </div>
+            <div class="flex-1">
+                <h2 class="text-xl font-semibold">
+                    Assign Asset
+                </h2>
+                <p class="text-base-content/70 mt-2">
+                    Assign
+                    <strong>{{ data.assetName }}</strong>
+                    to an employee.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <form
+        [formGroup]="form"
+        (ngSubmit)="assign()">
+        <div class="px-6 pb-6">
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">
+                    Employee
+                </legend>
+
+                <select
+                    class="select select-bordered w-full"
+                    formControlName="employeeId">
+                    <option [value]="0">
+                        Select Employee
+                    </option>
+
+                    @for(employee of employees; track employee.id){
+                        <option [value]="employee.id">
+                            {{ employee.employeeCode }}
+                            -
+                            {{ employee.fullName }}
+                        </option>
+                    }
+                </select>
+            </fieldset>
+        </div>
+
+        <div class="bg-base-200 px-6 py-4 flex justify-end gap-3">
+
+            <button
+                type="button"
+                class="btn btn-outline"
+                (click)="close()">
+                Cancel
+            </button>
+            <button
+                class="btn btn-success"
+                [disabled]="form.invalid">
+                <mat-icon>
+                    assignment_ind
+                </mat-icon>
+                Assign
+            </button>
+        </div>
+    </form>
+</div>

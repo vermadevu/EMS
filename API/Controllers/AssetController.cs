@@ -1,6 +1,8 @@
 ﻿using API.Authorization;
 using API.DTOs.Asset;
+using API.Helpers.Pagination;
 using API.Interfaces.Service;
+using API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,11 +15,12 @@ public class AssetController(IAssetService service) : BaseApiController
 
     [HttpGet]
     [HasPermission(Permissions.Assets.Read)]
-    public async Task<ActionResult<IEnumerable<AssetDto>>> GetAssets()
+    public async Task<ActionResult<PagedResult<AssetListItemDto>>> GetAssets(
+        [FromQuery] AssetQueryParams queryParams)
     {
-        var assets = await _service.GetAllAsync();
-        return Ok(assets);
+        return Ok(await _service.GetPagedAsync(queryParams));
     }
+
 
     [HttpGet("{id:int}")]
     [HasPermission(Permissions.Assets.Read)]
@@ -45,49 +48,45 @@ public class AssetController(IAssetService service) : BaseApiController
 
     [HttpPut("{id:int}")]
     [HasPermission(Permissions.Assets.Update)]
-    public async Task<IActionResult> UpdateAsset(int id, UpdateAssetDto dto)
+    public async Task<ActionResult<AssetDto>> UpdateAsset(
+        int id,
+        UpdateAssetDto dto)
     {
-        var updated = await _service.UpdateAsync(id, dto);
-
-        if (!updated)
-            return NotFound();
-
-        return NoContent();
+        return Ok(await _service.UpdateAsync(id, dto));
     }
 
     [HttpDelete("{id:int}")]
     [HasPermission(Permissions.Assets.Delete)]
     public async Task<IActionResult> DeleteAsset(int id)
     {
-        var deleted = await _service.DeleteAsync(id);
-
-        if (!deleted)
-            return NotFound();
+        await _service.DeleteAsync(id);
 
         return NoContent();
     }
 
-    [HttpPost("{id:int}/assign")]
+    [HttpPatch("{id:int}/assign")]
     [HasPermission(Permissions.Assets.Assign)]
-    public async Task<IActionResult> AssignAsset(int id, AssignAssetDto dto)
+    public async Task<IActionResult> AssignAsset(
+        int id,
+        AssignAssetDto dto)
     {
-        var assigned = await _service.AssignAssetAsync(id, dto);
-
-        if (!assigned)
-            return NotFound();
+        await _service.AssignAsync(id, dto);
 
         return NoContent();
     }
 
-    [HttpPost("{id:int}/return")]
+    [HttpPatch("{id:int}/return")]
     [HasPermission(Permissions.Assets.Return)]
     public async Task<IActionResult> ReturnAsset(int id)
     {
-        var returned = await _service.ReturnAssetAsync(id);
-
-        if (!returned)
-            return NotFound();
+        await _service.ReturnAsync(id);
 
         return NoContent();
+    }
+
+    [HttpGet("employee/{employeeId:int}")]
+    public async Task<ActionResult<IEnumerable<AssetDto>>> GetByEmployee(int employeeId)
+    {
+        return Ok(await _service.GetByEmployeeAsync(employeeId));
     }
 }

@@ -25,6 +25,9 @@ import { EmployeeCreateComponent } from '../features/employees/employee-create/e
 import { EmployeeEditComponent } from '../features/employees/employee-edit/employee-edit';
 import { EmployeeDetailsComponent } from '../features/employees/employee-details/employee-details';
 import { DocumentDetailComponent } from '../features/documents/document-detail/document-detail';
+import { AssetCreateComponent } from '../features/assets/asset-create/asset-create';
+import { AssetEditComponent } from '../features/assets/asset-edit/asset-edit';
+import { AssetDetailComponent } from '../features/assets/asset-detail/asset-detail';
 
 export const routes: Routes = [
 
@@ -84,7 +87,24 @@ export const routes: Routes = [
 
       {
         path: 'assets',
-        component: AssetListComponent
+        children: [
+          {
+            path: '',
+            component: AssetListComponent
+          },
+          {
+            path: 'create',
+            component: AssetCreateComponent
+          },
+          {
+            path: 'edit/:id',
+            component: AssetEditComponent
+          },
+          {
+            path: ':id',
+            component: AssetDetailComponent
+          }
+        ]
       },
 
       {

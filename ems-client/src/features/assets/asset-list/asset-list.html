@@ -2,5 +2,37 @@
     title="Assets"
     subtitle="Manage company assets."
     buttonText="Add Asset"
+    buttonIcon="add"
     buttonRoute="/assets/create">
 </app-page-header>
+
+<div class="mt-6">
+    <app-asset-toolbar
+        [search]="state().search"
+        (searchChange)="search($event)"
+        (assetTypeChange)="changeAssetType($event)"
+        (statusChange)="changeStatus($event)">
+    </app-asset-toolbar>
+</div>
+
+<div class="mt-6">
+    <app-asset-table
+        [assets]="assets()"
+        [loading]="loading()"
+        [sortBy]="state().sortBy"
+        [sortDirection]="state().sortDirection"
+        (sortChange)="sort($event)"
+        (action)="handleAction($event)">
+    </app-asset-table>
+</div>
+
+<div class="mt-6">
+    @if(page(); as page){
+        <app-pagination
+            [pageNumber]="page.pageNumber"
+            [pageSize]="page.pageSize"
+            [totalCount]="page.totalCount"
+            (pageChange)="changePage($event)">
+        </app-pagination>
+    }
+</div>

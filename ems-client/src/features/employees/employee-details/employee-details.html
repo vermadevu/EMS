@@ -1,9 +1,5 @@
-<app-page-header
-    title="Employee Details"
-    subtitle="View employee information."
-    buttonText="Edit Employee"
-    buttonIcon="edit"
-    [buttonRoute]="['/employees', 'edit', employee()?.id]">
+<app-page-header title="Employee Details" subtitle="View employee information." buttonText="Edit Employee"
+    buttonIcon="edit" [buttonRoute]="['/employees', 'edit', employee()?.id]">
 </app-page-header>
 
 @if(loading()){
@@ -113,6 +109,76 @@
                 <app-detail-item label="Joining Date" [value]="employee.joiningDate | date:'dd MMM yyyy'">
                 </app-detail-item>
             </div>
+        </div>
+    </div>
+
+
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+        <div class="card-body">
+            <div class="flex justify-between items-center">
+                <h3 class="card-title">
+                    Documents
+                </h3>
+            </div>
+
+            @if(documents().length === 0){
+                <p class="text-base-content/60">
+                    No documents uploaded.
+                </p>
+            }
+            @else{
+                <div class="divide-y">
+                    @for(document of documents(); track document.id){
+                        <div class="py-3 flex justify-between items-center">
+                            <div>
+                                <div class="font-medium">
+                                    {{ document.originalFileName }}
+                                </div>
+                                <div class="text-sm opacity-60">
+                                    {{ document.documentType }}
+                                </div>
+                            </div>
+                            <a [href]="document.url" target="_blank" class="btn btn-outline btn-sm">
+                                View
+                            </a>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+        <div class="card-body">
+            <div class="flex justify-between items-center">
+                <h3 class="card-title">
+                    Assigned Assets
+                </h3>
+            </div>
+
+            @if(assets().length === 0){
+                <p class="text-base-content/60">
+                    No assets assigned.
+                </p>
+            }
+            @else{
+                <div class="divide-y">
+                    @for(asset of assets(); track asset.id){
+                    <div class="py-3 flex justify-between items-center">
+                        <div>
+                            <div class="font-medium">
+                                {{ asset.assetName }}
+                            </div>
+                            <div class="text-sm opacity-60">
+                                {{ asset.assetCode }}
+                            </div>
+                        </div>
+                        <app-status-badge [status]="asset.status">
+                        </app-status-badge>
+                    </div>
+                    }
+                </div>
+            }
         </div>
     </div>
 </div>

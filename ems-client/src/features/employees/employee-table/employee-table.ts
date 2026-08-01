@@ -46,20 +46,8 @@ export class EmployeeTableComponent {
     });
   }
 
-  viewEmployee(id: number): void {
-    this.router.navigate(['/employees', id]);
-  }
-
-  editEmployee(id: number): void {
-    this.router.navigate(['/employees/edit', id]);
-  }
-
-  deleteEmployee(id: number) {
-    console.log('Delete', id);
-  }
-
-  activateEmployee(id: number) {
-    console.log('Activate', id);
+  employeeDetails(employee: EmployeeListItem){
+    return this.router.navigate(['employees',employee.id]);
   }
 
   getActions(employee: EmployeeListItem): ActionMenuItem[] {

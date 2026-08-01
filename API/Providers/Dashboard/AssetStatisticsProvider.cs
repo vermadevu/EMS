@@ -14,6 +14,6 @@ namespace API.Providers.Dashboard
         protected override string Title => "Assets";
         protected override string Icon => "inventory_2";
         protected override int Order => 4;
-        protected override Task<int> GetCountAsync() => _repository.CountAsync();
+        protected override Task<int> GetCountAsync() => _repository.GetCountAsync();
     }
 }

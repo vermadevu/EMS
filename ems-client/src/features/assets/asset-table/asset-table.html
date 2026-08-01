@@ -1,0 +1,101 @@
+@if (loading()) {
+<div class="flex justify-center py-20">
+    <span class="loading loading-spinner loading-lg"></span>
+</div>
+}
+
+@else if (assets().length === 0) {
+<app-empty-state
+    icon="inventory_2"
+    title="No assets found"
+    subtitle="There are no assets matching your search.">
+</app-empty-state>
+}
+
+@else {
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+        <div class="overflow-x-auto">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <button
+                                class="btn btn-ghost btn-sm px-0 hover:bg-transparent"
+                                (click)="sortChange.emit('assetName')">
+                                Asset
+                                <mat-icon class="!text-lg">
+                                    {{ getSortIcon('assetName') }}
+                                </mat-icon>
+                            </button>
+                        </th>
+
+                        <th>
+                            <button
+                                class="btn btn-ghost btn-sm px-0 hover:bg-transparent"
+                                (click)="sortChange.emit('assetType')">
+                                Type
+                                <mat-icon class="!text-lg">
+                                    {{ getSortIcon('assetType') }}
+                                </mat-icon>
+                            </button>
+                        </th>
+
+                        <th>
+                            <button
+                                class="btn btn-ghost btn-sm px-0 hover:bg-transparent"
+                                (click)="sortChange.emit('status')">
+                                Status
+                                <mat-icon class="!text-lg">
+                                    {{ getSortIcon('status') }}
+                                </mat-icon>
+                            </button>
+                        </th>
+                        <th>
+                            Assigned To
+                        </th>
+                        <th class="w-16"></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @for(asset of assets(); track asset.id){
+                    <tr>
+                        <td>
+                            <button 
+                            class="text-left hover:text-primary transition-colors cursor-pointer"
+                            (click)="assetDetails(asset)">
+                                <div>
+                                    <div class="font-semibold">
+                                        {{ asset.assetName }}
+                                    </div>
+    
+                                    <div class="text-sm opacity-60">
+                                        {{ asset.assetCode }}
+                                    </div>
+                                </div>
+                            </button>
+                        </td>
+                        <td>
+                            {{ getAssetTypeName(asset.assetType) }}
+                        </td>
+                        <td>
+                            <app-status-badge
+                                [status]="getStatusName(asset.status)">
+                            </app-status-badge>
+                        </td>
+                        <td>
+                            {{ asset.employeeName || '-' }}
+                        </td>
+                        <td>
+                            <app-action-menu
+                                [actions]="getActions(asset)"
+                                (actionSelected)="onActionSelected($event, asset)">
+                            </app-action-menu>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

@@ -13,6 +13,7 @@ public class AssetDto
     public string? SerialNumber { get; set; }
     public DateOnly PurchaseDate { get; set; }
     public AssetStatus Status { get; set; }
+    public string? EmployeeCode { get; set; }
     public int? EmployeeId { get; set; }
     public string? EmployeeName { get; set; }
 }
