@@ -1,5 +1,6 @@
 ﻿using API.Authorization;
 using API.DTOs.Department;
+using API.Helpers.Pagination;
 using API.Interfaces.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ public class DepartmentController(IDepartmentService departmentService) : BaseAp
 {
     private readonly IDepartmentService _departmentService = departmentService;
 
-    [HttpGet]
+    [HttpGet("all")]
     [HasPermission(Permissions.Departments.Read)]
     public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetAll()
     {
@@ -69,5 +70,11 @@ public class DepartmentController(IDepartmentService departmentService) : BaseAp
             return NotFound();
 
         return NoContent();
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<PagedResult<DepartmentListItemDto>>> GetDepartments([FromQuery] DepartmentQueryParams queryParams)
+    {
+        return Ok(await _departmentService.GetPagedAsync(queryParams));
     }
 }

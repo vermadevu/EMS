@@ -1,6 +1,36 @@
 <app-page-header
     title="Departments"
-    subtitle="Manage organization departments."
+    subtitle="Manage departments."
     buttonText="Add Department"
+    buttonIcon="add"
     buttonRoute="/departments/create">
 </app-page-header>
+
+<div class="mt-6">
+    <app-department-toolbar
+        [search]="state().search"
+        (searchChange)="search($event)">
+    </app-department-toolbar>
+</div>
+
+<div class="mt-6">
+    <app-department-table
+        [departments]="departments()"
+        [loading]="loading()"
+        [sortBy]="state().sortBy"
+        [sortDirection]="state().sortDirection"
+        (sortChange)="sort($event)"
+        (action)="handleAction($event)">
+    </app-department-table>
+</div>
+
+<div class="mt-6">
+    @if(page(); as page){
+        <app-pagination
+            [pageNumber]="page.pageNumber"
+            [pageSize]="page.pageSize"
+            [totalCount]="page.totalCount"
+            (pageChange)="changePage($event)">
+        </app-pagination>
+    }
+</div>

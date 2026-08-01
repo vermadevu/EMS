@@ -1,0 +1,14 @@
+<app-page-header
+    title="Create Department"
+    subtitle="Add a new department.">
+</app-page-header>
+
+<div class="mt-6">
+
+    <app-department-form
+        [loading]="loading()"
+        (save)="createDepartment($event)"
+        (cancel)="cancel()">
+    </app-department-form>
+
+</div>

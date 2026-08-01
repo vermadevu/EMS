@@ -1,0 +1,15 @@
+<app-page-header
+    title="Edit Department"
+    subtitle="Update department information.">
+</app-page-header>
+
+<div class="mt-6">
+
+    <app-department-form
+        [loading]="loading()"
+        [department]="department()"
+        (save)="updateDepartment($event)"
+        (cancel)="cancel()">
+    </app-department-form>
+
+</div>

@@ -1,0 +1,63 @@
+<form
+    [formGroup]="form"
+    (ngSubmit)="submit()"
+    class="card bg-base-100 border border-base-300 shadow-sm">
+
+    <div class="card-body">
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">
+                Department Name
+            </legend>
+
+            <input
+                type="text"
+                class="input input-bordered w-full"
+                formControlName="name"
+                placeholder="Engineering">
+
+            @if(form.controls.name.invalid &&
+                form.controls.name.touched){
+
+                <span class="text-error text-sm">
+                    Department name is required.
+                </span>
+            }
+        </fieldset>
+
+        <fieldset class="fieldset">
+
+            <legend class="fieldset-legend">
+                Description
+            </legend>
+
+            <textarea
+                rows="4"
+                class="textarea textarea-bordered w-full"
+                formControlName="description"
+                placeholder="Software Development Department">
+            </textarea>
+        </fieldset>
+
+        <div class="divider"></div>
+
+        <div class="flex justify-end gap-3">
+
+            <button
+                type="button"
+                class="btn btn-ghost"
+                (click)="cancelClick()">
+                Cancel
+            </button>
+
+            <button
+                class="btn btn-primary"
+                [disabled]="loading()">
+
+                @if(loading()){
+                    <span class="loading loading-spinner loading-sm"></span>
+                }
+                Save Department
+            </button>
+        </div>
+    </div>
+</form>

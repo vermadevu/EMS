@@ -28,6 +28,8 @@ import { DocumentDetailComponent } from '../features/documents/document-detail/d
 import { AssetCreateComponent } from '../features/assets/asset-create/asset-create';
 import { AssetEditComponent } from '../features/assets/asset-edit/asset-edit';
 import { AssetDetailComponent } from '../features/assets/asset-detail/asset-detail';
+import { DepartmentCreateComponent } from '../features/departments/department-create/department-create';
+import { DepartmentEditComponent } from '../features/departments/department-edit/department-edit';
 
 export const routes: Routes = [
 
@@ -77,7 +79,20 @@ export const routes: Routes = [
 
       {
         path: 'departments',
-        component: DepartmentListComponent
+        children:[
+          {
+            path: '',
+            component: DepartmentListComponent
+          },
+          {
+            path: 'create',
+            component: DepartmentCreateComponent
+          },
+          {
+            path: 'edit/:id',
+            component: DepartmentEditComponent
+          },
+        ]
       },
 
       {

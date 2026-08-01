@@ -1,5 +1,6 @@
 ﻿using API.DTOs.Department;
 using API.Exceptions;
+using API.Helpers.Pagination;
 using API.Interfaces.Repository;
 using API.Interfaces.Service;
 using API.Models.Entities;
@@ -67,5 +68,10 @@ public class DepartmentService(
         await _repository.DeleteAsync(department);
 
         return true;
+    }
+
+    public async Task<PagedResult<DepartmentListItemDto>> GetPagedAsync(DepartmentQueryParams queryParams)
+    {
+        return await _repository.GetPagedAsync(queryParams);
     }
 }

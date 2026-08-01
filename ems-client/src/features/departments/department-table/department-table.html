@@ -1,0 +1,73 @@
+@if (loading()) {
+    <div class="flex justify-center py-20">
+        <span class="loading loading-spinner loading-lg"></span>
+    </div>
+}
+
+@else if (departments().length === 0) {
+    <app-empty-state
+        icon="business"
+        title="No departments found"
+        subtitle="There are no departments matching your search.">
+    </app-empty-state>
+}
+
+@else {
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+        <div class="overflow-x-auto">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <button
+                                class="btn btn-ghost btn-sm px-0 hover:bg-transparent"
+                                (click)="sortChange.emit('name')">
+                                Department
+                                <mat-icon class="!text-lg">
+                                    {{ getSortIcon('name') }}
+                                </mat-icon>
+                            </button>
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                            <button
+                                class="btn btn-ghost btn-sm px-0 hover:bg-transparent"
+                                (click)="sortChange.emit('employeeCount')">
+                                Employees
+                                <mat-icon class="!text-lg">
+                                    {{ getSortIcon('employeeCount') }}
+                                </mat-icon>
+                            </button>
+                        </th>
+                        <th class="w-16"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for(department of departments(); track department.id){
+                    <tr>
+                        <td>
+                            <div class="font-semibold">
+                                {{ department.name }}
+                            </div>
+                        </td>
+                        <td>
+                            {{ department.description || '-' }}
+                        </td>
+                        <td>
+                            {{ department.employeeCount }}
+                        </td>
+                        <td (click)="$event.stopPropagation()">
+                            <app-action-menu
+                                [actions]="getActions()"
+                                (actionSelected)="onActionSelected($event, department)">
+                            </app-action-menu>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
