@@ -1,0 +1,14 @@
+<app-page-header
+    title="Create Designation"
+    subtitle="Add a new designation.">
+</app-page-header>
+
+<div class="mt-6">
+
+    <app-designation-form
+        [loading]="loading()"
+        (save)="createDesignation($event)"
+        (cancel)="cancel()">
+    </app-designation-form>
+
+</div>

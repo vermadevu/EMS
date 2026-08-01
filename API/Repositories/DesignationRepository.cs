@@ -1,4 +1,6 @@
 ﻿using API.Data;
+using API.DTOs.Designation;
+using API.Helpers.Pagination;
 using API.Interfaces.Repository;
 using API.Models.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -44,5 +46,56 @@ public class DesignationRepository(ApplicationDbContext context) : IDesignationR
     {
         return await _context.Designations
             .AnyAsync(d => d.Name.ToLower() == name.ToLower());
+    }
+
+    public async Task<PagedResult<DesignationListItemDto>> GetPagedAsync(DesignationQueryParams queryParams)
+    {
+        var query = _context.Designations
+            .Include(x => x.Employees)
+            .AsQueryable();
+
+        // Search
+        if (!string.IsNullOrWhiteSpace(queryParams.Search))
+        {
+            var search = queryParams.Search.ToLower();
+
+            query = query.Where(x =>
+                x.Name.ToLower().Contains(search));
+        }
+
+        // Sorting
+        query = (queryParams.SortBy.ToLower(), queryParams.SortDirection.ToLower()) switch
+        {
+            ("name", "desc") =>
+                query.OrderByDescending(x => x.Name),
+            ("employeecount", "asc") =>
+                query.OrderBy(x => x.Employees.Count),
+            ("employeecount", "desc") =>
+                query.OrderByDescending(x => x.Employees.Count),
+            _ =>
+                query.OrderBy(x => x.Name)
+        };
+
+        var totalCount = await query.CountAsync();
+
+        var items = await query
+            .Skip((queryParams.PageNumber - 1) * queryParams.PageSize)
+            .Take(queryParams.PageSize)
+            .Select(x => new DesignationListItemDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+                EmployeeCount = x.Employees.Count
+            })
+            .ToListAsync();
+
+        return new PagedResult<DesignationListItemDto>
+        {
+            Items = items,
+            PageNumber = queryParams.PageNumber,
+            PageSize = queryParams.PageSize,
+            TotalCount = totalCount
+        };
     }
 }

@@ -1,0 +1,15 @@
+<app-page-header
+    title="Edit Designation"
+    subtitle="Update designation information.">
+</app-page-header>
+
+<div class="mt-6">
+
+    <app-designation-form
+        [loading]="loading()"
+        [designation]="designation()"
+        (save)="updateDesignation($event)"
+        (cancel)="cancel()">
+    </app-designation-form>
+
+</div>

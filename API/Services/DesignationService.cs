@@ -1,5 +1,6 @@
 ﻿using API.DTOs.Designation;
 using API.Exceptions;
+using API.Helpers.Pagination;
 using API.Interfaces.Repository;
 using API.Interfaces.Service;
 using API.Models.Entities;
@@ -67,5 +68,10 @@ public class DesignationService(
         await _repository.DeleteAsync(designation);
 
         return true;
+    }
+
+    public async Task<PagedResult<DesignationListItemDto>> GetPagedAsync(DesignationQueryParams queryParams)
+    {
+        return await _repository.GetPagedAsync(queryParams);
     }
 }

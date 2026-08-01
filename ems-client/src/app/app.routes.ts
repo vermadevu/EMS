@@ -30,6 +30,8 @@ import { AssetEditComponent } from '../features/assets/asset-edit/asset-edit';
 import { AssetDetailComponent } from '../features/assets/asset-detail/asset-detail';
 import { DepartmentCreateComponent } from '../features/departments/department-create/department-create';
 import { DepartmentEditComponent } from '../features/departments/department-edit/department-edit';
+import { DesignationCreateComponent } from '../features/designations/designation-create/designation-create';
+import { DesignationEditComponent } from '../features/designations/designation-edit/designation-edit';
 
 export const routes: Routes = [
 
@@ -79,7 +81,7 @@ export const routes: Routes = [
 
       {
         path: 'departments',
-        children:[
+        children: [
           {
             path: '',
             component: DepartmentListComponent
@@ -97,7 +99,20 @@ export const routes: Routes = [
 
       {
         path: 'designations',
-        component: DesignationListComponent
+        children: [
+          {
+            path: '',
+            component: DesignationListComponent
+          },
+          {
+            path: 'create',
+            component: DesignationCreateComponent
+          },
+          {
+            path: 'edit/:id',
+            component: DesignationEditComponent
+          }
+        ]
       },
 
       {

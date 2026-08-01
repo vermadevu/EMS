@@ -1,5 +1,6 @@
 ﻿using API.Authorization;
 using API.DTOs.Designation;
+using API.Helpers.Pagination;
 using API.Interfaces.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ public class DesignationController(IDesignationService designationService) : Bas
 {
     private readonly IDesignationService _designationService = designationService;
 
-    [HttpGet]
+    [HttpGet("all")]
     [HasPermission(Permissions.Designations.Read)]
     public async Task<ActionResult<IEnumerable<DesignationDto>>> GetAll()
     {
@@ -70,5 +71,12 @@ public class DesignationController(IDesignationService designationService) : Bas
             return NotFound();
 
         return NoContent();
+    }
+
+    [HttpGet]
+    [HasPermission(Permissions.Designations.Read)]
+    public async Task<ActionResult<PagedResult<DesignationListItemDto>>> GetDesignations([FromQuery] DesignationQueryParams queryParams)
+    {
+        return Ok(await _designationService.GetPagedAsync(queryParams));
     }
 }

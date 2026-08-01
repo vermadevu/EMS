@@ -53,8 +53,7 @@ public class DepartmentRepository(ApplicationDbContext context) : IDepartmentRep
         return await _context.Departments.CountAsync();
     }
 
-    public async Task<PagedResult<DepartmentListItemDto>> GetPagedAsync(
-    DepartmentQueryParams queryParams)
+    public async Task<PagedResult<DepartmentListItemDto>> GetPagedAsync(DepartmentQueryParams queryParams)
     {
         var query = _context.Departments
             .Include(x => x.Employees)

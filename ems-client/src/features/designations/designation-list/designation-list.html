@@ -1,1 +1,36 @@
-<p>designation-list works!</p>
+<app-page-header
+    title="Designations"
+    subtitle="Manage designations."
+    buttonText="Add Designation"
+    buttonIcon="add"
+    buttonRoute="/designations/create">
+</app-page-header>
+
+<div class="mt-6">
+    <app-designation-toolbar
+        [search]="state().search"
+        (searchChange)="search($event)">
+    </app-designation-toolbar>
+</div>
+
+<div class="mt-6">
+    <app-designation-table
+        [designations]="designations()"
+        [loading]="loading()"
+        [sortBy]="state().sortBy"
+        [sortDirection]="state().sortDirection"
+        (sortChange)="sort($event)"
+        (action)="handleAction($event)">
+    </app-designation-table>
+</div>
+
+<div class="mt-6">
+    @if(page(); as page){
+        <app-pagination
+            [pageNumber]="page.pageNumber"
+            [pageSize]="page.pageSize"
+            [totalCount]="page.totalCount"
+            (pageChange)="changePage($event)">
+        </app-pagination>
+    }
+</div>

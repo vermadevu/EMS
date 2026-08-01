@@ -73,6 +73,7 @@ public class DepartmentController(IDepartmentService departmentService) : BaseAp
     }
 
     [HttpGet]
+    [HasPermission(Permissions.Departments.Read)]
     public async Task<ActionResult<PagedResult<DepartmentListItemDto>>> GetDepartments([FromQuery] DepartmentQueryParams queryParams)
     {
         return Ok(await _departmentService.GetPagedAsync(queryParams));
