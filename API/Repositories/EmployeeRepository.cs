@@ -123,7 +123,7 @@ public class EmployeeRepository(ApplicationDbContext context) : IEmployeeReposit
         return await _context.Employees
             .Include(e => e.Department)
             .Include(e => e.Designation)
-            .Where(e => e.Status == EmployeeStatus.Pending)
+            .Where(e => e.Status == EmployeeStatus.Pending || e.Status == EmployeeStatus.DocumentsSubmitted)
             .OrderByDescending(e => e.JoiningDate)
             .ThenByDescending(e => e.Id)
             .Take(count)
