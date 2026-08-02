@@ -12,7 +12,6 @@ import { CurrentUserService } from './current-user.service';
 
 @Service()
 export class AuthService {
-
     private readonly http = inject(HttpClient);
     private readonly router = inject(Router);
 
@@ -22,6 +21,10 @@ export class AuthService {
     readonly isAuthenticated = computed(() =>
         this.currentUserService.isAuthenticated()
     );
+
+    currentUser() {
+        return this.currentUserService.user();
+    }
 
     login(request: LoginRequest) {
 
@@ -66,17 +69,17 @@ export class AuthService {
         ).pipe(
 
             tap(user => {
-            this.currentUserService.setUser(user);
+                this.currentUserService.setUser(user);
             }),
 
             catchError(() => {
 
-            this.tokenService.remove();
-            this.currentUserService.clear();
+                this.tokenService.remove();
+                this.currentUserService.clear();
 
-            return of(null);
-    })
-  );
-}
+                return of(null);
+            })
+        );
+    }
 
 }

@@ -43,7 +43,7 @@ public static class RolePermissions
 
         Permissions.Documents.Read,
         Permissions.Documents.Upload,
-Permissions.Documents.Delete
+        Permissions.Documents.Delete
     ];
 
     public static readonly IEnumerable<string> Manager =
@@ -58,6 +58,8 @@ Permissions.Documents.Delete
     public static readonly IEnumerable<string> Employee =
     [
         Permissions.Dashboard.View,
+        Permissions.Assets.ReadOwn,
+        Permissions.Employees.Profile,
         Permissions.Documents.ReadOwn,
         Permissions.Documents.UploadOwn,
         Permissions.Documents.DeleteOwn,

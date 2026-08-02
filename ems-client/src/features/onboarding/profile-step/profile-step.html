@@ -1,0 +1,264 @@
+@if (loading()) {
+
+<div class="flex justify-center py-20">
+    <span class="loading loading-spinner loading-lg"></span>
+</div>
+
+}
+
+@else if (profile(); as profile) {
+
+<form
+    [formGroup]="form"
+    (ngSubmit)="save()"
+    class="space-y-6">
+
+    <!-- Header -->
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+        <div class="card-body">
+            <div class="flex items-center gap-5">
+                <div class="avatar">
+                    @if (profile.profileImage) {
+                        <div class="w-20 rounded-full">
+                            <img
+                                [src]="profile.profileImage"
+                                [alt]="profile.fullName">
+                        </div>
+
+                    } @else {
+                        <div class="bg-primary text-primary-content rounded-full w-20 flex items-center justify-center">
+                            <span class="text-2xl font-semibold">
+                                {{ profile.firstName[0] }}
+                            </span>
+                        </div>
+                    }
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold">
+                        {{ profile.fullName }}
+                    </h2>
+                    <p class="text-base-content/60">
+                        {{ profile.employeeCode }}
+                    </p>
+                    <p class="text-sm text-base-content/60 mt-1">
+                        {{ profile.designationName }}
+                        •
+                        {{ profile.departmentName }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Organization -->
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+        <div class="card-body">
+            <h3 class="card-title">
+                Organization
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+
+                <app-detail-item
+                    label="Employee Code"
+                    [value]="profile.employeeCode">
+                </app-detail-item>
+
+                <app-detail-item
+                    label="Department"
+                    [value]="profile.departmentName">
+                </app-detail-item>
+
+                <app-detail-item
+                    label="Designation"
+                    [value]="profile.designationName">
+                </app-detail-item>
+
+                <app-detail-item
+                    label="Manager"
+                    [value]="profile.managerName">
+                </app-detail-item>
+
+                <app-detail-item
+                    label="Joining Date"
+                    [value]="profile.joiningDate | date:'dd MMM yyyy'">
+                </app-detail-item>
+
+                <app-detail-item
+                    label="Email"
+                    [value]="profile.email">
+                </app-detail-item>
+            </div>
+        </div>
+    </div>
+
+    <!-- Personal Information -->
+
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+
+        <div class="card-body">
+
+            <h3 class="card-title">
+                Personal Information
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
+
+                <fieldset class="fieldset">
+
+                    <legend class="fieldset-legend">
+                        Address
+                    </legend>
+
+                    <input
+                        type="text"
+                        class="input input-bordered w-full"
+                        formControlName="address">
+
+                </fieldset>
+
+                <fieldset class="fieldset">
+
+                    <legend class="fieldset-legend">
+                        City
+                    </legend>
+
+                    <input
+                        type="text"
+                        class="input input-bordered w-full"
+                        formControlName="city">
+                </fieldset>
+
+                <fieldset class="fieldset">
+
+                    <legend class="fieldset-legend">
+                        State
+                    </legend>
+
+                    <input
+                        type="text"
+                        class="input input-bordered w-full"
+                        formControlName="state">
+                </fieldset>
+
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">
+                        Country
+                    </legend>
+
+                    <input
+                        type="text"
+                        class="input input-bordered w-full"
+                        formControlName="country">
+                </fieldset>
+
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">
+                        Date of Birth
+                    </legend>
+                    <input
+                        type="date"
+                        class="input input-bordered w-full"
+                        formControlName="dateOfBirth">
+
+                </fieldset>
+
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">
+                        Gender
+                    </legend>
+
+                    <select
+                        class="select select-bordered w-full"
+                        formControlName="gender">
+                        <option value="">
+                            Select Gender
+                        </option>
+                        <option value="Male">
+                            Male
+                        </option>
+                        <option value="Female">
+                            Female
+                        </option>
+                        <option value="Other">
+                            Other
+                        </option>
+                    </select>
+                </fieldset>
+
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">
+                        Blood Group
+                    </legend>
+                    <select
+                        class="select select-bordered w-full"
+                        formControlName="bloodGroup">
+
+                        <option value="">
+                            Select Blood Group
+                        </option>
+
+                        <option>A+</option>
+                        <option>A-</option>
+                        <option>B+</option>
+                        <option>B-</option>
+                        <option>AB+</option>
+                        <option>AB-</option>
+                        <option>O+</option>
+                        <option>O-</option>
+                    </select>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+
+    <!-- Emergency Contact -->
+
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+        <div class="card-body">
+            <h3 class="card-title">
+                Emergency Contact
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">
+                        Contact Name
+                    </legend>
+                    <input
+                        type="text"
+                        class="input input-bordered w-full"
+                        formControlName="emergencyContactName">
+                </fieldset>
+
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">
+                        Contact Number
+                    </legend>
+                    <input
+                        type="text"
+                        class="input input-bordered w-full"
+                        formControlName="emergencyContactPhone">
+                </fieldset>
+
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">
+                        Relationship
+                    </legend>
+                    <input
+                        type="text"
+                        class="input input-bordered w-full"
+                        formControlName="emergencyContactRelationship">
+                </fieldset>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex justify-end">
+        <button
+            class="btn btn-primary"
+            type="submit">
+            Save & Continue
+        </button>
+    </div>
+</form>
+}

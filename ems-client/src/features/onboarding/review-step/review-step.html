@@ -1,0 +1,424 @@
+@if (loading()) {
+
+<div class="flex justify-center py-20">
+
+    <span class="loading loading-spinner loading-lg"></span>
+
+</div>
+
+}
+
+@else if(profile(); as profile){
+
+<div class="space-y-6">
+
+    <!-- Header -->
+
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+
+        <div class="card-body">
+
+            <div class="flex items-center gap-5">
+
+                <div class="avatar">
+                    @if (profile.profileImage) {
+                        <div class="w-20 rounded-full">
+                            <img
+                                [src]="profile.profileImage"
+                                [alt]="profile.fullName">
+                        </div>
+
+                    } @else {
+                        <div class="bg-primary text-primary-content rounded-full w-20 flex items-center justify-center">
+                            <span class="text-2xl font-semibold">
+                                {{ profile.firstName[0] }}
+                            </span>
+                        </div>
+                    }
+                </div>
+
+                <div>
+
+                    <h2 class="text-2xl font-bold">
+
+                        {{ profile.fullName }}
+
+                    </h2>
+
+                    <p class="text-base-content/60">
+
+                        {{ profile.employeeCode }}
+
+                    </p>
+
+                    <p class="text-sm text-base-content/60">
+
+                        {{ profile.designationName }}
+
+                        •
+
+                        {{ profile.departmentName }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Organization -->
+
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+
+        <div class="card-body">
+
+            <h3 class="card-title">
+
+                Organization
+
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+
+                <app-detail-item
+                    label="Employee Code"
+                    [value]="profile.employeeCode">
+                </app-detail-item>
+
+                <app-detail-item
+                    label="Department"
+                    [value]="profile.departmentName">
+                </app-detail-item>
+
+                <app-detail-item
+                    label="Designation"
+                    [value]="profile.designationName">
+                </app-detail-item>
+
+                <app-detail-item
+                    label="Manager"
+                    [value]="profile.managerName">
+                </app-detail-item>
+
+                <app-detail-item
+                    label="Joining Date"
+                    [value]="profile.joiningDate | date:'dd MMM yyyy'">
+                </app-detail-item>
+
+                <app-detail-item
+                    label="Email"
+                    [value]="profile.email">
+                </app-detail-item>
+
+                <app-detail-item
+                    label="Phone"
+                    [value]="profile.phone">
+                </app-detail-item>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Personal Information -->
+
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+
+        <div class="card-body">
+
+            <h3 class="card-title">
+
+                Personal Information
+
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+
+                <app-detail-item
+                    label="Address"
+                    [value]="profile.address">
+                </app-detail-item>
+
+                <app-detail-item
+                    label="City"
+                    [value]="profile.city">
+                </app-detail-item>
+
+                <app-detail-item
+                    label="State"
+                    [value]="profile.state">
+                </app-detail-item>
+
+                <app-detail-item
+                    label="Country"
+                    [value]="profile.country">
+                </app-detail-item>
+
+                <app-detail-item
+                    label="Date of Birth"
+                    [value]="profile.dateOfBirth | date:'dd MMM yyyy'">
+                </app-detail-item>
+
+                <app-detail-item
+                    label="Gender"
+                    [value]="profile.gender">
+                </app-detail-item>
+
+                <app-detail-item
+                    label="Blood Group"
+                    [value]="profile.bloodGroup">
+                </app-detail-item>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Emergency Contact -->
+
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+
+        <div class="card-body">
+
+            <h3 class="card-title">
+
+                Emergency Contact
+
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+
+                <app-detail-item
+                    label="Contact Name"
+                    [value]="profile.emergencyContactName">
+                </app-detail-item>
+
+                <app-detail-item
+                    label="Contact Number"
+                    [value]="profile.emergencyContactPhone">
+                </app-detail-item>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Documents -->
+
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+
+        <div class="card-body">
+
+            <h3 class="card-title">
+
+                Uploaded Documents
+
+            </h3>
+
+            <div class="overflow-x-auto mt-4">
+
+                <table class="table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Document Type</th>
+
+                            <th>File Name</th>
+
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @for(document of documents(); track document.id){
+
+                        <tr>
+
+                            <td>
+
+                                {{ document.documentType }}
+
+                            </td>
+
+                            <td>
+
+                                {{ document.originalFileName }}
+
+                            </td>
+
+                            <td>
+
+                                <span class="badge badge-success">
+
+                                    Uploaded
+
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Assets -->
+
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+
+        <div class="card-body">
+
+            <h3 class="card-title">
+
+                Assigned Assets
+
+            </h3>
+
+            <div class="overflow-x-auto mt-4">
+
+                <table class="table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Asset</th>
+
+                            <th>Type</th>
+
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @for(asset of assets(); track asset.id){
+
+                        <tr>
+
+                            <td>
+
+                                <div>
+
+                                    <div class="font-semibold">
+
+                                        {{ asset.assetName }}
+
+                                    </div>
+
+                                    <div class="text-sm opacity-60">
+
+                                        {{ asset.assetCode }}
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+
+                                {{ getAssetTypeName(asset.assetType) }}
+
+                            </td>
+
+                            <td>
+
+                                <app-status-badge
+                                    [status]="asset.status">
+                                </app-status-badge>
+
+                            </td>
+
+                        </tr>
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Final Confirmation -->
+
+    <div class="card bg-success/10 border border-success/20 shadow-sm">
+
+        <div class="card-body">
+
+            <label class="flex items-start gap-4 cursor-pointer">
+
+                <input
+                    type="checkbox"
+                    class="checkbox checkbox-success"
+                    [checked]="confirmed()"
+                    (change)="confirmed.set($any($event.target).checked)">
+
+                <div>
+
+                    <h3 class="font-semibold">
+
+                        Final Confirmation
+
+                    </h3>
+
+                    <p class="text-base-content/70 mt-1">
+
+                        I confirm that all the information provided above is correct. I understand that submitting this form will complete my onboarding process.
+
+                    </p>
+
+                </div>
+
+            </label>
+
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+
+    <div class="flex justify-between">
+
+        <button
+            class="btn btn-outline"
+            routerLink="/onboarding/policies">
+
+            Previous
+
+        </button>
+
+        <button
+            class="btn btn-primary"
+            [disabled]="!confirmed()"
+            (click)="finish()">
+            Finish Onboarding
+        </button>
+    </div>
+</div>
+}

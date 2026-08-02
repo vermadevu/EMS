@@ -35,7 +35,7 @@
                         Select Employee
                     </option>
 
-                    @for(employee of employees; track employee.id){
+                    @for(employee of employees(); track employee.id){
                         <option [value]="employee.id">
                             {{ employee.employeeCode }}
                             -

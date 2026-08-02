@@ -18,11 +18,7 @@ public static class RolePermissionSeeder
         await SeedRoleAsync(context, roleManager, Roles.Employee, RolePermissions.Employee);
     }
 
-    private static async Task SeedRoleAsync(
-        ApplicationDbContext context,
-        RoleManager<IdentityRole> roleManager,
-        string roleName,
-        IEnumerable<string> permissions)
+    private static async Task SeedRoleAsync(ApplicationDbContext context, RoleManager<IdentityRole> roleManager, string roleName, IEnumerable<string> permissions)
     {
         var role = await roleManager.FindByNameAsync(roleName);
 

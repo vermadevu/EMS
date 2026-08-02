@@ -27,6 +27,13 @@ public static class PermissionDefinitions
                 Category = "Employee",
                 Description = "Allows viewing employees."
             },
+            new()
+            {
+                Name = Permissions.Employees.Profile,
+                DisplayName = "Employee Profile",
+                Category = "Employee",
+                Description = "Allows manage employee profile."
+            },
 
             new()
             {
@@ -210,6 +217,14 @@ public static class PermissionDefinitions
                 DisplayName = "View Assets",
                 Category = "Asset",
                 Description = "Allows viewing assets."
+            },
+
+             new()
+            {
+                Name = Permissions.Assets.ReadOwn,
+                DisplayName = "View own Assets",
+                Category = "Asset",
+                Description = "Allows viewing own assets."
             },
 
             new()

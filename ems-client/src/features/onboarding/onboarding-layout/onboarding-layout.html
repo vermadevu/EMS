@@ -1,0 +1,15 @@
+<app-onboarding-header
+    [steps]="steps()">
+</app-onboarding-header>
+
+<div class="grid grid-cols-12 gap-6 mt-6">
+    <div class="col-span-12 lg:col-span-3">
+        <app-onboarding-sidebar
+            [steps]="steps()">
+        </app-onboarding-sidebar>
+    </div>
+
+    <div class="col-span-12 lg:col-span-9">
+        <router-outlet />
+    </div>
+</div>

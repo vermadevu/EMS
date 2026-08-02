@@ -1,0 +1,132 @@
+<div class="card bg-base-100 border border-base-300 shadow-sm">
+
+    <div class="card-body">
+
+        <h2 class="card-title">
+            Upload Required Documents
+        </h2>
+
+        <p class="text-base-content/60">
+            Please upload all required documents before continuing.
+        </p>
+
+        @if(loading()){
+
+            <div class="flex justify-center py-12">
+
+                <span class="loading loading-spinner loading-lg"></span>
+
+            </div>
+
+        }
+
+        @else{
+
+            <div class="space-y-5 mt-6">
+
+                @for(documentType of requiredDocuments; track documentType.type){
+
+                    @let uploadedDocument = getDocument(documentType.type);
+
+                    <div class="border border-base-300 rounded-xl p-5">
+
+                        <div class="flex justify-between items-start">
+
+                            <div>
+
+                                <h3 class="font-semibold text-lg">
+                                    {{ documentType.label }}
+                                </h3>
+
+                                @if(uploadedDocument){
+
+                                    <div class="mt-3">
+
+                                        <div class="flex items-center gap-2 text-success">
+
+                                            <mat-icon>
+                                                check_circle
+                                            </mat-icon>
+
+                                            <span class="font-medium">
+                                                Uploaded
+                                            </span>
+
+                                        </div>
+
+                                        <p class="text-sm text-base-content/70 mt-2">
+
+                                            {{ uploadedDocument.originalFileName }}
+
+                                        </p>
+
+                                    </div>
+
+                                }
+
+                                @else{
+
+                                    <p class="text-base-content/60 mt-2">
+
+                                        Waiting for upload
+
+                                    </p>
+
+                                }
+
+                            </div>
+
+                            @if(uploadedDocument){
+
+                                <button
+                                    class="btn btn-error btn-sm"
+                                    (click)="deleteDocument(uploadedDocument.id)">
+
+                                    Delete
+
+                                </button>
+
+                            }
+
+                        </div>
+
+                        @if(!uploadedDocument){
+
+                            <div class="mt-5 flex items-center gap-3">
+
+                                <input
+                                    type="file"
+                                    class="file-input file-input-bordered w-full"
+                                    (change)="onFileSelected($event, documentType.type)">
+
+                                <button
+                                    class="btn btn-primary"
+                                    [disabled]="!getSelectedFile(documentType.type)"
+                                    (click)="upload(documentType.type)">
+                                    Upload
+                                </button>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        }
+
+        <div class="divider"></div>
+
+        <div class="flex justify-between">
+
+            <button
+                class="btn btn-outline"
+                routerLink="/onboarding/profile">
+                Previous
+            </button>
+
+            <button
+                class="btn btn-primary"
+                (click)="continue()">
+                Continue
+            </button>
+        </div>
+    </div>
+</div>

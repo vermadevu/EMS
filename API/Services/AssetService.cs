@@ -9,11 +9,12 @@ using AutoMapper;
 
 namespace API.Services;
 
-public class AssetService( IAssetRepository repository, IMapper mapper, IEmployeeRepository employeeRepository) : IAssetService
+public class AssetService( IAssetRepository repository, IMapper mapper, IEmployeeRepository employeeRepository, ICurrentUserService currentUserService) : IAssetService
 {
     private readonly IEmployeeRepository _employeeRepository = employeeRepository;
     private readonly IAssetRepository _repository = repository;
     private readonly IMapper _mapper = mapper;
+    private readonly ICurrentUserService _currentUserService = currentUserService;
 
     public async Task<IEnumerable<AssetDto>> GetAllAsync()
     {
@@ -137,4 +138,12 @@ public class AssetService( IAssetRepository repository, IMapper mapper, IEmploye
         return _mapper.Map<IEnumerable<AssetDto>>(assets);
     }
 
+    public async Task<IEnumerable<AssetDto>> GetMyAssetsAsync()
+    {
+        var employeeId = _currentUserService.EmployeeId;
+
+        var assets = await _repository.GetByEmployeeAsync(employeeId);
+
+        return _mapper.Map<IEnumerable<AssetDto>>(assets);
+    }
 }

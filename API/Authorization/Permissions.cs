@@ -10,6 +10,7 @@ public static class Permissions
     public static class Employees
     {
         public const string Read = "Employee.Read";
+        public const string Profile= "Employee.Profile";
         public const string Create = "Employee.Create";
         public const string Update = "Employee.Update";
         public const string Delete = "Employee.Delete";
@@ -48,6 +49,7 @@ public static class Permissions
     public static class Assets
     {
         public const string Read = "Asset.Read";
+        public const string ReadOwn = "Asset.ReadOwn";
         public const string Create = "Asset.Create";
         public const string Update = "Asset.Update";
         public const string Delete = "Asset.Delete";

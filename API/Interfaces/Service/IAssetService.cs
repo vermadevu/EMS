@@ -14,4 +14,6 @@ public interface IAssetService
     Task ReturnAsync(int assetId);
     Task<PagedResult<AssetListItemDto>> GetPagedAsync(AssetQueryParams queryParams);
     Task<IEnumerable<AssetDto>> GetByEmployeeAsync(int employeeId);
+    Task<IEnumerable<AssetDto>> GetMyAssetsAsync();
+
 }

@@ -11,9 +11,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 
 [Authorize]
-public class EmployeeController(IEmployeeService employeeService) : BaseApiController
+public class EmployeeController(IEmployeeService employeeService, ICurrentUserService currentUserService) : BaseApiController
 {
     private readonly IEmployeeService _employeeService = employeeService;
+    private readonly ICurrentUserService _currentUserService = currentUserService;
 
     [HttpGet("all")]
     [HasPermission(Permissions.Employees.Read)]
@@ -135,4 +136,25 @@ public class EmployeeController(IEmployeeService employeeService) : BaseApiContr
     {
         return Ok(await _employeeService.GetManagersAsync());
     }
+
+    [HttpGet("me")]
+    [HasPermission(Permissions.Employees.Profile)]
+    public async Task<ActionResult<EmployeeProfileDto>> GetMyProfile()
+    {
+        var employeeId = _currentUserService.EmployeeId;
+
+        return Ok(await _employeeService.GetMyProfileAsync(employeeId));
+    }
+
+    [HttpPut("me")]
+    [HasPermission(Permissions.Employees.Profile)]
+    public async Task<IActionResult> UpdateMyProfile(UpdateProfileDto dto)
+    {
+        var employeeId = _currentUserService.EmployeeId;
+
+        await _employeeService.UpdateMyProfileAsync(employeeId, dto);
+
+        return NoContent();
+    }
+
 }

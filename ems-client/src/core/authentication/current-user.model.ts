@@ -3,7 +3,7 @@ export interface CurrentUser {
   employeeId: number;
   displayName: string;
   email: string;
-  employeeStatus: number;
+  employeeStatus: string;
   roles: string[];
   permissions: string[];
   profileImage: string;

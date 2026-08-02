@@ -54,4 +54,24 @@ export class DocumentService {
             `${this.baseUrl}/${id}`
         );
     }
+
+    getMyDocuments(): Observable<Document[]> {
+        return this.http.get<Document[]>(
+            `${this.baseUrl}/me`
+        );
+    }
+
+    uploadMyDocument(formData: FormData): Observable<Document> {
+        return this.http.post<Document>(
+            `${this.baseUrl}/me`,
+            formData
+        );
+    }
+
+    deleteMyDocument(id: number): Observable<void> {
+        return this.http.delete<void>(
+            `${this.baseUrl}/me/${id}`
+        );
+    }
+
 }

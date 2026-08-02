@@ -51,6 +51,13 @@ public class MappingProfile : Profile
             .ForMember(d => d.Designation,
                 o => o.MapFrom(s => s.Designation.Name));
 
+        CreateMap<Employee, EmployeeProfileDto>()
+            .ForMember(
+                d => d.ManagerName,
+                o => o.MapFrom(s => s.Manager == null ? null : s.Manager.FullName)
+            );
+        CreateMap<UpdateProfileDto, Employee>();
+
         // Asset
         CreateMap<Asset, AssetDto>()
             .ForMember(dest => dest.EmployeeName,
@@ -71,6 +78,8 @@ public class MappingProfile : Profile
         CreateMap<Document, DocumentDto>()
             .ForMember(dest => dest.EmployeeName,
                 opt => opt.MapFrom(src => src.Employee.FullName));
+
+        CreateMap<UploadDocumentDto, Document>();
 
         // Permission
         CreateMap<Permission, PermissionDto>();

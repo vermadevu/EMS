@@ -1,0 +1,22 @@
+<div class="card bg-base-100 border border-base-300 shadow-sm">
+    <div class="card-body p-3">
+        @for(step of steps(); track step.id){
+            <a
+                [routerLink]="step.route"
+                routerLinkActive="bg-primary text-primary-content"
+                class="flex items-center gap-3 rounded-xl px-4 py-3 hover:bg-base-200 transition">
+
+                <mat-icon>
+                    @if(step.completed){
+                        check_circle
+                    } @else {
+                        {{ step.icon }}
+                    }
+                </mat-icon>
+                <span>
+                    {{ step.title }}
+                </span>
+            </a>
+        }
+    </div>
+</div>

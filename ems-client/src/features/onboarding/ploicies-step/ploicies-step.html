@@ -1,0 +1,76 @@
+<div class="space-y-6">
+
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+        <div class="card-body">
+            <h2 class="card-title">
+                Company Policies
+            </h2>
+            <p class="text-base-content/60">
+                Please read and acknowledge each company policy before continuing your onboarding.
+            </p>
+        </div>
+    </div>
+
+    <div class="space-y-2">
+        @for(policy of policies(); track policy.id){
+        <div class="card bg-base-100 border border-base-300 shadow-sm">
+            <div class="card-body">
+                <label class="flex items-start gap-4 cursor-pointer">
+                    <input
+                        type="checkbox"
+                        class="checkbox checkbox-primary mt-1"
+                        [checked]="policy.accepted"
+                        (change)="togglePolicy(policy.id, $any($event.target).checked)">
+
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-lg">
+                            {{ policy.title }}
+                        </h3>
+                        <p class="text-base-content/60 mt-2">
+                            {{ policy.description }}
+                        </p>
+                    </div>
+                </label>
+            </div>
+        </div>
+        }
+    </div>
+
+    <div class="card bg-primary/5 border border-primary/20 shadow-sm">
+        <div class="card-body">
+            <label class="flex items-start gap-4 cursor-pointer">
+                <input
+                    type="checkbox"
+                    class="checkbox checkbox-primary mt-1"
+                    [checked]="confirmationAccepted()"
+                    (change)="confirmationAccepted.set($any($event.target).checked)">
+
+                <div>
+
+                    <h3 class="font-semibold">
+                        Final Confirmation
+                    </h3>
+
+                    <p class="text-base-content/70 mt-1">
+                        I confirm that I have read, understood and agree to comply with all of the above company policies.
+                    </p>
+                </div>
+            </label>
+        </div>
+    </div>
+
+    <div class="flex justify-between">
+        <button
+            class="btn btn-outline"
+            routerLink="/onboarding/assets">
+            Previous
+        </button>
+
+        <button
+            class="btn btn-primary"
+            [disabled]="!canContinue()"
+            (click)="continue()">
+            Continue
+        </button>
+    </div>
+</div>

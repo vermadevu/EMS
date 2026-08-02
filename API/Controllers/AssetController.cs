@@ -89,4 +89,11 @@ public class AssetController(IAssetService service) : BaseApiController
     {
         return Ok(await _service.GetByEmployeeAsync(employeeId));
     }
+
+    [HttpGet("me")]
+    [HasPermission(Permissions.Assets.ReadOwn)]
+    public async Task<ActionResult<IEnumerable<AssetDto>>> GetMyAssets()
+    {
+        return Ok(await _service.GetMyAssetsAsync());
+    }
 }

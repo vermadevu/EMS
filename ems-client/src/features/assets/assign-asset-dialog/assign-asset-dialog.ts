@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
@@ -29,7 +29,7 @@ export class AssignAssetDialogComponent {
   readonly dialogRef = inject(MatDialogRef<AssignAssetDialogComponent>);
   readonly data = inject(MAT_DIALOG_DATA);
 
-  employees: EmployeeListItem[] = [];
+  readonly employees = signal<EmployeeListItem[]>([]);
 
   readonly form = this.fb.nonNullable.group({
     employeeId: [0, Validators.required]
@@ -45,7 +45,7 @@ export class AssignAssetDialogComponent {
       .subscribe({
         next: employees =>{
           console.log(employees)
-           this.employees = employees
+           this.employees.set(employees)
           }
       });
 

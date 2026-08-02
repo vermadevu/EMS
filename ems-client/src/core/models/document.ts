@@ -1,7 +1,7 @@
 export interface Document {
   id: number;
   originalFileName: string;
-  documentType: DocumentType;
+  documentType: string;
   fileSize: number;
   uploadedOn: string;
   employeeId: number;

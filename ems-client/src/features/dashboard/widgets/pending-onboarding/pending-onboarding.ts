@@ -10,9 +10,9 @@ import { EmployeeListCard } from '../../../../shared/components/employee-list-ca
   styleUrl: './pending-onboarding.css',
 })
 export class PendingOnboarding {
-      readonly widget = input.required<DashboardWidget>();
+  readonly widget = input.required<DashboardWidget>();
 
-    readonly data = computed(() =>
-        this.widget().data as PendingOnboardingWidget
-    );
+  readonly data = computed(() =>
+    this.widget().data as PendingOnboardingWidget
+  );
 }

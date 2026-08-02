@@ -194,4 +194,29 @@ public class EmployeeService (
         return await _repository.GetManagersAsync();
     }
 
+    public async Task<EmployeeProfileDto> GetMyProfileAsync(
+    int employeeId)
+    {
+        var employee = await _repository.GetByIdAsync(employeeId);
+
+        if (employee == null)
+            throw new NotFoundException("Employee not found.");
+
+        return _mapper.Map<EmployeeProfileDto>(employee);
+    }
+
+    public async Task UpdateMyProfileAsync(
+    int employeeId,
+    UpdateProfileDto dto)
+    {
+        var employee = await _repository.GetByIdAsync(employeeId);
+
+        if (employee == null)
+            throw new NotFoundException("Employee not found.");
+
+        _mapper.Map(dto, employee);
+
+        await _repository.UpdateAsync(employee);
+    }
+
 }

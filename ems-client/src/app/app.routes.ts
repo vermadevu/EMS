@@ -32,6 +32,14 @@ import { DepartmentCreateComponent } from '../features/departments/department-cr
 import { DepartmentEditComponent } from '../features/departments/department-edit/department-edit';
 import { DesignationCreateComponent } from '../features/designations/designation-create/designation-create';
 import { DesignationEditComponent } from '../features/designations/designation-edit/designation-edit';
+import { OnboardingLayoutComponent } from '../features/onboarding/onboarding-layout/onboarding-layout';
+import { ProfileStepComponent } from '../features/onboarding/profile-step/profile-step';
+import { DocumentsStepComponent } from '../features/onboarding/documents-step/documents-step';
+import { AssetsStepComponent } from '../features/onboarding/assets-step/assets-step';
+import { ReviewStepComponent } from '../features/onboarding/review-step/review-step';
+import { PloiciesStepComponent } from '../features/onboarding/ploicies-step/ploicies-step';
+import { onboardingGuard } from '../core/guards/onboarding-guard';
+import { dashboardGuard } from '../core/guards/dashboard-guard';
 
 export const routes: Routes = [
 
@@ -44,7 +52,7 @@ export const routes: Routes = [
   {
     path: '',
     component: Shell,
-    canActivate: [authGuard],
+    canActivate: [authGuard,dashboardGuard],
     children: [
 
       {
@@ -160,11 +168,42 @@ export const routes: Routes = [
       {
         path: 'user-permissions',
         component: UserPermissionsComponent
-      }
+      },
 
     ]
   },
-
+  {
+    path: 'onboarding',
+    canActivate: [onboardingGuard],
+    component: OnboardingLayoutComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: 'profile',
+        pathMatch: 'full'
+      },
+      {
+        path: 'profile',
+        component: ProfileStepComponent
+      },
+      {
+        path: 'documents',
+        component: DocumentsStepComponent
+      },
+      {
+        path: 'assets',
+        component: AssetsStepComponent
+      },
+      {
+        path: 'policies',
+        component: PloiciesStepComponent
+      },
+      {
+        path: 'review',
+        component: ReviewStepComponent
+      }
+    ]
+  },
   {
     path: '**',
     redirectTo: ''

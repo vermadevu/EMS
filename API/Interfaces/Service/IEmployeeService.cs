@@ -16,4 +16,6 @@ public interface IEmployeeService
     Task<bool> DeactivateEmployeeAsync(int id);
     Task<PagedResult<EmployeeListItemDto>> GetPagedAsync(EmployeeQueryParams query);
     Task<IEnumerable<EmployeeListItemDto>> GetManagersAsync();
+    Task<EmployeeProfileDto> GetMyProfileAsync(int employeeId);
+    Task UpdateMyProfileAsync(int employeeId, UpdateProfileDto dto);
 }

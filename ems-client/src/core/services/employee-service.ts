@@ -10,11 +10,14 @@ import { Employee } from '../../features/employees/models/employee';
 import { CreateEmployeeRequest } from '../../features/employees/models/create-employee-request';
 import { UpdateEmployeeRequest } from '../../features/employees/models/update-employee-request';
 import { Observable } from 'rxjs';
+import { EmployeeProfile } from '../models/employee-profile';
+import { UpdateProfile } from '../models/update-profile';
 
 @Service()
 export class EmployeeService {
 
   private readonly http = inject(HttpClient);
+  private readonly baseUrl = environment.apiUrl +API_ENDPOINTS.employees;
 
   getEmployees(query: EmployeeListState) {
     let params = new HttpParams();
@@ -53,24 +56,24 @@ export class EmployeeService {
     }
 
     return this.http.get<PagedResult<EmployeeListItem>>(
-      `${environment.apiUrl}${API_ENDPOINTS.employees}`,
+      `${this.baseUrl}`,
       { params }
     );
 
   }
 
   getAll() {
-    return this.http.get<EmployeeListItem[]>(`${environment.apiUrl}${API_ENDPOINTS.employees}/all`);
+    return this.http.get<EmployeeListItem[]>(`${this.baseUrl}/all`);
   }
 
   getStatuses() {
     return this.http.get<StatusOption[]>(
-      `${environment.apiUrl}${API_ENDPOINTS.employees}/statuses`
+      `${this.baseUrl}/statuses`
     );
   }
 
   getManagers() {
-    return this.http.get<Employee[]>(`${environment.apiUrl}${API_ENDPOINTS.employees}/managers`);
+    return this.http.get<Employee[]>(`${this.baseUrl}/managers`);
   }
 
   create(request: CreateEmployeeRequest) {
@@ -103,6 +106,23 @@ export class EmployeeService {
 
   deactivate(id: number): Observable<void> {
     return this.http.patch<void>(`${environment.apiUrl}/employee/${id}/deactivate`, {});
+  }
+
+  getMyProfile() {
+    return this.http.get<EmployeeProfile>(
+      `${this.baseUrl}/me`
+    );
+  }
+
+  updateMyProfile(dto: UpdateProfile) {
+    return this.http.put(
+      `${this.baseUrl}/me`,
+      dto
+    );
+  }
+
+  completeOnboarding(){
+    return this.http.patch(`${this.baseUrl}/me/complete-onboarding`,{});
   }
 
 }

@@ -41,7 +41,7 @@ public class DocumentController(IDocumentService documentService) : BaseApiContr
         return Ok(await _documentService.GetByEmployeeIdAsync(employeeId));
     }
 
-    [HttpGet("my-documents")]
+    [HttpGet("me")]
     [HasPermission(Permissions.Documents.ReadOwn)]
     public async Task<ActionResult<IEnumerable<DocumentDto>>> GetMyDocuments()
     {
@@ -61,6 +61,19 @@ public class DocumentController(IDocumentService documentService) : BaseApiContr
             document);
     }
 
+    [HttpPost("me")]
+    [HasPermission(Permissions.Documents.UploadOwn)]
+    public async Task<ActionResult<DocumentDto>> UploadMyDocument([FromForm] UploadDocumentDto dto)
+    {
+        var document = await _documentService.UploadMyDocumentAsync(dto);
+
+        return CreatedAtAction(
+            nameof(GetDocument),
+            new { id = document.Id },
+            document);
+    }
+
+
     [HttpDelete("{id:int}")]
     [HasPermission(Permissions.Documents.Delete)]
     public async Task<IActionResult> DeleteDocument(int id)
@@ -73,7 +86,7 @@ public class DocumentController(IDocumentService documentService) : BaseApiContr
         return NoContent();
     }
 
-    [HttpDelete("my-documents/{id:int}")]
+    [HttpDelete("me/{id:int}")]
     [HasPermission(Permissions.Documents.DeleteOwn)]
     public async Task<IActionResult> DeleteMyDocument(int id)
     {

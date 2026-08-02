@@ -88,4 +88,10 @@ export class AssetService {
             `${this.baseUrl}/employee/${employeeId}`
         );
     }
+
+    getMyAssets() {
+        return this.http.get<Asset[]>(
+            `${this.baseUrl}/me`
+        );
+    }
 }

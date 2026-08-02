@@ -83,6 +83,13 @@ public class DocumentService( IDocumentRepository repository, ICloudinaryService
         return _mapper.Map<IEnumerable<DocumentDto>>(documents);
     }
 
+    public async Task<DocumentDto> UploadMyDocumentAsync(UploadDocumentDto dto)
+    {
+        dto.EmployeeId = _currentUserService.EmployeeId;
+
+        return await UploadAsync(dto);
+    }
+
     public async Task<bool> DeleteMyDocumentAsync(int id)
     {
         var employeeId = _currentUserService.EmployeeId;
