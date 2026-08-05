@@ -1,0 +1,19 @@
+:host {
+    display: block;
+}
+
+mat-dialog-content {
+    min-width: 500px;
+    max-width: 550px;
+}
+
+.font-mono {
+    font-family: monospace;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    word-break: break-all;
+}
+
+.alert {
+    margin-top: 1rem;
+}

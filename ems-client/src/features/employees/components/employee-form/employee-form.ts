@@ -14,6 +14,7 @@ import { CreateEmployeeRequest } from '../../models/create-employee-request';
 import { UpdateEmployeeRequest } from '../../models/update-employee-request';
 import { ImageUploadComponent } from '../../../../shared/components/image-upload/image-upload';
 import { NotificationService } from '../../../../core/services/notification-service';
+import { StatusBadge } from '../../../../shared/components/status-badge/status-badge';
 
 @Component({
   selector: 'app-employee-form',
@@ -21,7 +22,8 @@ import { NotificationService } from '../../../../core/services/notification-serv
   imports: [
     MatIconModule,
     ReactiveFormsModule,
-    ImageUploadComponent
+    ImageUploadComponent,
+    StatusBadge
   ],
   templateUrl: './employee-form.html',
   styleUrl: './employee-form.css',
@@ -34,6 +36,11 @@ export class EmployeeFormComponent implements OnInit {
   readonly mode = input<'create' | 'edit'>('create');
   readonly isEditMode = computed(() => this.mode() === 'edit');
   readonly employee = input<Employee | null>(null);
+  readonly pageTitle = computed(() =>
+    this.isEditMode()
+      ? 'Update Employee Information'
+      : 'Create New Employee'
+  );
 
   private readonly notification = inject(NotificationService);
 
@@ -65,7 +72,18 @@ export class EmployeeFormComponent implements OnInit {
         joiningDate: employee.joiningDate,
         departmentId: employee.departmentId,
         designationId: employee.designationId,
-        managerId: employee.managerId
+        managerId: employee.managerId,
+        profileImage: employee.profileImage,
+        dateOfBirth: employee.dateOfBirth,
+        gender: employee.gender,
+        bloodGroup: employee.bloodGroup,
+        address: employee.address,
+        city: employee.city,
+        state: employee.state,
+        country: employee.country,
+        emergencyContactName: employee.emergencyContactName,
+        emergencyContactPhone: employee.emergencyContactPhone,
+        emergencyContactRelationship: employee.emergencyContactRelationship,
       });
     });
   }
@@ -83,7 +101,17 @@ export class EmployeeFormComponent implements OnInit {
     departmentId: [0, Validators.min(1)],
     designationId: [0, Validators.min(1)],
     managerId: [null as number | null],
-    profileImage: ['']
+    profileImage: [null as string| null],
+    dateOfBirth: [null as string | null],
+    gender: [null as string | null],
+    bloodGroup: [null as string | null],
+    address: [null as string | null],
+    city: [null as string | null],
+    state: [null as string | null],
+    country: [null as string | null],
+    emergencyContactName: [null as string | null],
+    emergencyContactPhone: [null as string | null],
+    emergencyContactRelationship: [null as string | null]
   });
 
   submit(): void {

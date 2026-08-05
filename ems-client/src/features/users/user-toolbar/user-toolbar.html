@@ -1,0 +1,44 @@
+<div class="card bg-base-100 shadow-sm border border-base-300">
+    <div class="card-body">
+        <div class="flex flex-col lg:flex-row gap-4 justify-between">
+            <div class="flex flex-1 flex-col md:flex-row gap-4">
+                <app-search-box
+                    class="flex-1"
+                    placeholder="Search users..."
+                    [value]="search()"
+                    (valueChange)="searchChange.emit($event)">
+                </app-search-box>
+
+                <select
+                    class="select select-bordered"
+                    (change)="onRoleChanged($event)">
+                    <option value="">
+                        All Roles
+                    </option>
+
+                    @for(role of roles(); track role){
+                        <option [value]="role">
+                            {{ role }}
+                        </option>
+                    }
+                </select>
+
+                <select
+                    class="select select-bordered"
+                    (change)="onStatusChanged($event)">
+
+                    <option value="">
+                        All Statuses
+                    </option>
+
+                    <option value="true">
+                        Active
+                    </option>
+                    <option value="false">
+                        Disabled
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>

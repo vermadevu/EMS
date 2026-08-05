@@ -1,0 +1,109 @@
+@if (loading()) {
+<div class="flex justify-center py-20">
+    <span class="loading loading-spinner loading-lg"></span>
+</div>
+}
+
+@else if(users().length === 0){
+<app-empty-state
+    icon="manage_accounts"
+    title="No users found"
+    subtitle="There are no users matching your search.">
+</app-empty-state>
+}
+
+@else{
+<div class="card bg-base-100 border border-base-300 shadow-sm">
+    <div class="overflow-x-auto">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Employee</th>
+                    <th>Username</th>
+                    <th>Roles</th>
+                    <th>Status</th>
+                    <th class="w-16"></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @for(user of users(); track user.id){
+                <tr>
+                    <td>
+                        <button
+                            class="text-left hover:text-primary transition-colors cursor-pointer"
+                            (click)="userDetails(user)">
+                            <div class="flex items-center gap-3">
+                                <div class="avatar">
+                                    @if(user.profileImage){
+                                        <div class="w-10 rounded-full">
+                                            <img
+                                                [src]="user.profileImage"
+                                                [alt]="user.fullName">
+                                        </div>
+                                    }
+
+                                    @else{
+                                        <div class="bg-primary text-primary-content rounded-full w-10 flex items-center justify-center">
+                                            <span class="text-lg font-semibold">
+                                                {{ user.fullName.charAt(0) }}
+                                            </span>
+                                        </div>
+                                    }
+                                </div>
+
+                                <div>
+                                    <div class="font-semibold">
+                                        {{ user.fullName }}
+                                    </div>
+                                    <div class="text-sm opacity-60">
+                                        {{ user.employeeCode }}
+                                    </div>
+                                </div>
+                            </div>
+                        </button>
+                    </td>
+
+                    <td>
+                        {{ user.username }}
+                    </td>
+
+                    <td>
+                        <div class="flex flex-wrap gap-1">
+                            @for(role of user.roles; track role){
+                                <div class="badge badge-outline">
+                                    {{ role }}
+                                </div>
+                            }
+                        </div>
+                    </td>
+
+                    <td>
+
+                        @if(user.isActive){
+                            <div class="badge badge-success">
+                                Active
+                            </div>
+                        }
+
+                        @else{
+                            <div class="badge badge-error">
+                                Disabled
+                            </div>
+                        }
+                    </td>
+
+                    <td>
+                        <app-action-menu
+                            [actions]="getActions(user)"
+                            (actionSelected)="onActionSelected($event, user)">
+                        </app-action-menu>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+}

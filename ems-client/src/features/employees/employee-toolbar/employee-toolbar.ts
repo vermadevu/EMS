@@ -37,7 +37,9 @@ export class EmployeeToolbarComponent {
   }
 
   onDesignationChanged(event: Event): void {
-  const value = (event.target as HTMLSelectElement).value;
-  this.statusChange.emit(value || undefined);
-}
+    const value = (event.target as HTMLSelectElement).value;
+    this.designationChange.emit(
+      value ? Number(value) : undefined
+    );
+  }
 }

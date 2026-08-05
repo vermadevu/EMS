@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from "@angular/router";
 
@@ -17,4 +17,10 @@ export class PageHeaderComponent {
   readonly buttonText = input<string>();
   readonly buttonIcon = input('add');
   readonly buttonRoute = input<string | any[]>();
+  readonly buttonClass = input('btn-primary');
+  readonly secondButtonClass = input('btn-success');
+  readonly secondButtonText = input<string>();
+  readonly secondButtonIcon = input<string>();
+  readonly secondButtonClick = output<void>();
+
 }

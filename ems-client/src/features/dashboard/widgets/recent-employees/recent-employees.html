@@ -1,5 +1,15 @@
-        <app-employee-list-card
-            [title]="widget().title"
-            [employees]="data().employees"
-            viewAllRoute="/employees">
-        </app-employee-list-card>
+@if (widget().type === DashboardWidgetType.PendingApproval) {
+    
+    <app-pending-approval
+    [title]="widget().title" 
+    [employees]="data().employees" 
+    route="/employees?status=DocumentsSubmitted" />
+    
+}
+@if (widget().type === DashboardWidgetType.RecentEmployees) {
+    <app-employee-list-card 
+    [title]="widget().title" 
+    [employees]="data().employees" 
+    route="/employees">
+    </app-employee-list-card>
+}

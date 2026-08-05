@@ -1,1 +1,44 @@
-<p>user-list works!</p>
+<app-page-header
+    title="Users"
+    subtitle="Manage user accounts and access permissions."
+    buttonText="Create User"
+    buttonIcon="person_add"
+    buttonRoute="/users/create">
+</app-page-header>
+
+<div class="mt-6">
+
+    <app-user-toolbar
+        [search]="state().search"
+        [roles]="roles()"
+        (searchChange)="search($event)"
+        (roleChange)="changeRole($event)"
+        (statusChange)="changeStatus($event)">
+    </app-user-toolbar>
+
+</div>
+
+<div class="mt-6">
+
+    <app-user-table
+        [users]="users()"
+        [loading]="loading()"
+        (action)="handleAction($event)">
+    </app-user-table>
+
+</div>
+
+<div class="mt-6">
+
+    @if(page(); as page){
+
+        <app-pagination
+            [pageNumber]="page.pageNumber"
+            [pageSize]="page.pageSize"
+            [totalCount]="page.totalCount"
+            (pageChange)="changePage($event)">
+        </app-pagination>
+
+    }
+
+</div>

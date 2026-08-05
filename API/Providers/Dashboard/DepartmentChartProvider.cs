@@ -1,6 +1,6 @@
 ﻿namespace API.Providers.Dashboard
 {
-    public class UserStatisticsProvider
+    public class DepartmentChartProvider
     {
     }
 }

@@ -1,0 +1,87 @@
+<div class="card bg-base-100 shadow-md border border-base-300 h-full">
+    <div class="card-body">
+
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="card-title">
+                    {{ title() }}
+                </h2>
+            </div>
+            <button (click)="go()" class="btn btn-sm btn-outline btn-primary">
+                View All
+            </button>
+        </div>
+
+        @if (employeeList().length === 0) {
+        <div class="py-10 text-center">
+            <span class="material-symbols-outlined text-5xl opacity-40">
+                group_off
+            </span>
+            <p class="mt-3 text-base-content/60">
+                No employees are waiting for approval.
+            </p>
+        </div>
+        }
+        @else {
+        <div class="divide-y divide-base-300 mt-2">
+            @for(employee of employeeList(); track employee.id){
+            <div class="flex items-center justify-between py-4">
+                <div class="flex items-center gap-4">
+
+                    <div class="avatar">
+
+                        @if (employee.profileImage) {
+                        <div class="w-10 rounded-full">
+                            <img [src]="employee.profileImage" [alt]="employee.fullName">
+                        </div>
+
+                        } @else {
+                        <div class="bg-primary text-primary-content rounded-full w-10 flex items-center justify-center">
+                            <span class="text-lg font-semibold">
+                                {{ employee.fullName.charAt(0) }}
+                            </span>
+                        </div>
+                        }
+                    </div>
+                    <!-- Employee Info -->
+                    <div>
+                        <p class="font-semibold">
+                            {{ employee.fullName }}
+                        </p>
+                        <p class="text-sm opacity-70">
+                            {{ employee.employeeCode }}
+                            •
+                            {{ employee.designation }}
+                            •
+                            {{ employee.department }}
+                        </p>
+                    </div>
+                </div>
+                <!-- Status -->
+                <!-- <div>
+                    <div class="badge badge-outline" [class.badge-success]="employee.status === 'Active'"
+                        [class.badge-warning]="employee.status === 'Pending'"
+                        [class.badge-error]="employee.status === 'Inactive'">
+                        {{ employee.status }}
+                    </div>
+                </div> -->
+                <div class="flex gap-2 justify-end">
+                    <button class="btn btn-ghost btn-sm" (click)="view(employee)">
+                        <mat-icon>
+                            visibility
+                        </mat-icon>
+                        View
+                    </button>
+                    <button class="btn btn-ghost btn-sm text-green-400" (click)="approve(employee)">
+                        <mat-icon>
+                            check
+                        </mat-icon>
+                        Approve
+                    </button>
+                </div>
+            </div>
+            }
+        </div>
+        }
+    </div>
+</div>

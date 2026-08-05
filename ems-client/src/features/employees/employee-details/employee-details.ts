@@ -12,6 +12,8 @@ import { AssetService } from '../../../core/services/asset-service';
 import { DocumentService } from '../../../core/services/document-service';
 import { Asset } from '../../../core/models/asset';
 import { Document } from '../../../core/models/document';
+import { ConfirmationService } from '../../../core/services/confirmation-service';
+import { NotificationService } from '../../../core/services/notification-service';
 
 @Component({
   selector: 'app-employee-details',
@@ -26,8 +28,10 @@ import { Document } from '../../../core/models/document';
   styleUrl: './employee-details.css',
 })
 export class EmployeeDetailsComponent {
+
+  private readonly confirmationService = inject(ConfirmationService);
   private readonly employeeService = inject(EmployeeService);
-  private readonly assetService = inject(AssetService);
+  private readonly notificationService = inject(NotificationService);  private readonly assetService = inject(AssetService);
   private readonly documentService = inject(DocumentService);
   private readonly route = inject(ActivatedRoute);
 
@@ -72,4 +76,30 @@ export class EmployeeDetailsComponent {
         next: assets => this.assets.set(assets)
       });
   }
+
+
+
+    approve(employee: Employee) {
+      this.confirmationService.confirm({
+        title: 'Approve Employee',
+        message: `Approve onboarding for ${employee.fullName}?`,
+        icon: 'task_alt',
+        confirmText: 'Approve',
+        confirmButtonClass: 'btn-success'
+      })
+        .subscribe(confirmed => {
+          if (!confirmed) {
+            return;
+          }
+  
+          this.employeeService.activate(employee.id).subscribe({
+            next: () => {
+              this.notificationService.success(
+                'Employee approved successfully.'
+              );
+            },
+            error: console.error
+          });
+        });
+    }
 }

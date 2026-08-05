@@ -2,17 +2,22 @@
 
     @case (DashboardWidgetType.EmployeeStatistics)
     @case (DashboardWidgetType.DepartmentStatistics)
-    @case (DashboardWidgetType.DesignationStatistics)
     @case (DashboardWidgetType.AssetStatistics)
-    @case (DashboardWidgetType.UserStatistics) {
+    @case (DashboardWidgetType.PendingApprovalStatistics) {
 
         <app-statistic-card [widget]="widget()" />
 
     }
 
     @case (DashboardWidgetType.RecentEmployees) {
-
+        
         <app-recent-employees [widget]="widget()" />
+
+    }
+
+    @case (DashboardWidgetType.PendingApproval) {
+
+        <app-recent-employees [widget]="widget()"/>
 
     }
 

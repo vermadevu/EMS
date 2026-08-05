@@ -1,5 +1,7 @@
-﻿using API.DTOs.User;
+﻿using API.Constants;
+using API.DTOs.User;
 using API.Exceptions;
+using API.Helpers.Pagination;
 using API.Interfaces.Repository;
 using API.Interfaces.Service;
 using API.Models.Identity;
@@ -11,11 +13,13 @@ namespace API.Services
     public class UserService(
         UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager,
-        IEmployeeRepository employeeRepository) : IUserService
+        IEmployeeRepository employeeRepository,
+        IApplicationUserRepository userRepository) : IUserService
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly RoleManager<IdentityRole> _roleManager = roleManager;
         private readonly IEmployeeRepository _employeeRepository = employeeRepository;
+        private readonly IApplicationUserRepository _userRepository = userRepository;
         public async Task<IEnumerable<UserDto>> GetAllAsync()
         {
             var users = await _userManager.Users
@@ -50,7 +54,7 @@ namespace API.Services
                 .ToListAsync();
         }
 
-        public async Task<UserDto> CreateAsync(CreateUserDto dto)
+        public async Task<CreateUserResponseDto> CreateAsync(CreateUserDto dto)
         {
             var employee = await _employeeRepository.GetByIdAsync(dto.EmployeeId) ?? throw new NotFoundException("Employee not found.");
 
@@ -59,7 +63,7 @@ namespace API.Services
                 throw new BadRequestException("User account already exists for this employee.");
             }
 
-            var existingUser = await _userManager.FindByEmailAsync(dto.Email);
+            var existingUser = await _userManager.FindByEmailAsync(employee.Email);
 
             if (existingUser != null)
             {
@@ -68,17 +72,19 @@ namespace API.Services
 
             await ValidateRolesAsync(dto.Roles);
 
+            var password = GenerateTemporaryPassword(employee.FirstName);
+
             var user = new ApplicationUser
             {
-                EmployeeId = dto.EmployeeId,
+                EmployeeId = employee.Id,
                 DisplayName = employee.FullName,
-                UserName = dto.Email,
-                Email = dto.Email,
+                UserName = employee.Email,
+                Email = employee.Email,
                 EmailConfirmed = true,
                 IsActive = true
             };
 
-            var result = await _userManager.CreateAsync(user, dto.Password);
+            var result = await _userManager.CreateAsync(user, password);
 
             EnsureSuccess(result);
 
@@ -86,21 +92,21 @@ namespace API.Services
 
             if (!roleResult.Succeeded)
             {
-                // Delete the user if something goes wrong if user created and roles couldn't assign then user gets deleted to ensure no user exists without a 
                 await _userManager.DeleteAsync(user);
 
                 EnsureSuccess(roleResult);
             }
 
-            return new UserDto
+            var roles = dto.Roles.Any()
+                  ? dto.Roles
+                  : new List<string> { Roles.Employee };
+
+            await _userManager.AddToRolesAsync(user, roles);
+
+            return new CreateUserResponseDto
             {
-                Id = user.Id,
-                Email = user.Email!,
-                DisplayName = user.DisplayName,
-                EmployeeId = user.EmployeeId,
-                EmployeeName = employee.FullName,
-                IsActive = user.IsActive,
-                Roles = dto.Roles
+                Username = user.UserName!,
+                TemporaryPassword = password
             };
         }
         public async Task<bool> UpdateAsync(string id, UpdateUserDto dto)
@@ -128,7 +134,7 @@ namespace API.Services
 
             return true;
         }
-        
+
         public async Task<bool> UpdateRolesAsync(string id, UpdateUserRolesDto dto)
         {
             var user = await GetUserAsync(id);
@@ -241,7 +247,7 @@ namespace API.Services
         {
             if (!result.Succeeded)
             {
-                throw new Exception(string.Join(", ",
+                throw new BadRequestException(string.Join(", ",
                     result.Errors.Select(e => e.Description)));
             }
         }
@@ -251,6 +257,31 @@ namespace API.Services
             return _userManager.Users
                 .Include(u => u.Employee)
                 .FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+        public async Task<List<AvailableEmployeeDto>> GetAvailableEmployeesAsync()
+        {
+            return await _employeeRepository
+                .GetEmployeesWithoutAccountAsync();
+        }
+
+        private static string GenerateTemporaryPassword(string firstName)
+        {
+            firstName = firstName.Trim();
+
+            if (!string.IsNullOrWhiteSpace(firstName))
+            {
+                firstName = char.ToUpper(firstName[0]) +
+                            firstName.Substring(1).ToLower();
+            }
+
+            var random = Random.Shared.Next(1000, 9999);
+
+            return $"{firstName}@DEMS{random}";
+        }
+        public async Task<PagedResult<UserListItemDto>> GetPagedAsync(UserQueryParams query)
+        {
+            return await _userRepository.GetPagedAsync(query);
         }
     }
 }

@@ -1,0 +1,77 @@
+<h2 mat-dialog-title class="flex items-center gap-2">
+    <mat-icon class="text-success">
+        task_alt
+    </mat-icon>
+    User Account Created
+</h2>
+
+<mat-dialog-content>
+    <p class="text-base-content/70 mb-6">
+        The user account has been created successfully.
+        Please save the temporary password before closing this dialog.
+    </p>
+
+    <div class="space-y-5">
+        <div>
+            <label class="text-sm font-semibold">
+                Employee
+            </label>
+
+            <div class="mt-1 p-3 rounded-lg border border-base-300 bg-base-200">
+                {{ data.employeeName }}
+            </div>
+        </div>
+
+        <div>
+            <label class="text-sm font-semibold">
+                Username
+            </label>
+            <div class="mt-1 p-3 rounded-lg border border-base-300 bg-base-200">
+                {{ data.username }}
+            </div>
+        </div>
+        <div>
+
+            <label class="text-sm font-semibold">
+                Temporary Password
+            </label>
+
+            <div class="mt-1 flex items-center justify-between gap-3 rounded-lg border border-base-300 bg-base-200 p-3">
+                <span class="font-mono">
+                    {{ data.temporaryPassword }}
+                </span>
+
+                <button
+                    mat-stroked-button
+                    color="primary"
+                    type="button"
+                    (click)="copyPassword()">
+                    <mat-icon>
+                        content_copy
+                    </mat-icon>
+                    Copy
+                </button>
+            </div>
+        </div>
+
+        <div class="alert alert-warning">
+            <mat-icon>
+                warning
+            </mat-icon>
+            <span>
+                This temporary password will only be shown once.
+                Make sure you save or share it with the employee before closing.
+            </span>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+    <button
+        mat-flat-button
+        color="primary"
+        (click)="close()">
+        Done
+    </button>
+</mat-dialog-actions>

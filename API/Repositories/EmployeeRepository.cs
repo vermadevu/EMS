@@ -2,6 +2,7 @@
 using API.Data;
 using API.DTOs;
 using API.DTOs.Employee;
+using API.DTOs.User;
 using API.Helpers.Pagination;
 using API.Interfaces.Repository;
 using API.Interfaces.Service;
@@ -118,12 +119,24 @@ public class EmployeeRepository(ApplicationDbContext context) : IEmployeeReposit
             .ToListAsync();
     }
 
+    public async Task<List<Employee>> GetPendingApprovalAsync(int count = 5)
+    {
+        return await _context.Employees
+            .Include(e => e.Department)
+            .Include(e => e.Designation)
+            .Where(e => e.Status == EmployeeStatus.DocumentsSubmitted)
+            .OrderByDescending(e => e.JoiningDate)
+            .ThenByDescending(e => e.Id)
+            .Take(count)
+            .ToListAsync();
+    }
+
     public async Task<List<Employee>> GetPendingOnboardingAsync(int count = 5)
     {
         return await _context.Employees
             .Include(e => e.Department)
             .Include(e => e.Designation)
-            .Where(e => e.Status == EmployeeStatus.Pending || e.Status == EmployeeStatus.DocumentsSubmitted)
+            .Where(e => e.Status == EmployeeStatus.DocumentsSubmitted || e.Status == EmployeeStatus.Pending)
             .OrderByDescending(e => e.JoiningDate)
             .ThenByDescending(e => e.Id)
             .Take(count)
@@ -160,9 +173,10 @@ public class EmployeeRepository(ApplicationDbContext context) : IEmployeeReposit
             employees = employees.Where(e =>
                 e.DesignationId == query.DesignationId);
 
-        if (query.Status.HasValue)
-            employees = employees.Where(e =>
-                e.Status == query.Status);
+        if (query.Status?.Any() == true)
+        {
+            employees = employees.Where(e => query.Status.Contains(e.Status));
+        }
 
         // Sorting
 
@@ -211,5 +225,21 @@ public class EmployeeRepository(ApplicationDbContext context) : IEmployeeReposit
                 FullName = employee.FirstName + " " + employee.LastName
             }
         ).ToListAsync();
+    }
+
+    public async Task<List<AvailableEmployeeDto>> GetEmployeesWithoutAccountAsync()
+    {
+        return await _context.Employees
+            .Where(e => !_context.Users.Any(u => u.EmployeeId == e.Id))
+            .OrderBy(e => e.FirstName)
+            .ThenBy(e => e.LastName)
+            .Select(e => new AvailableEmployeeDto
+            {
+                EmployeeId = e.Id,
+                EmployeeCode = e.EmployeeCode,
+                FullName = e.FullName,
+                Email = e.Email
+            })
+            .ToListAsync();
     }
 }

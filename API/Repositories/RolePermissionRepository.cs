@@ -54,7 +54,7 @@ namespace API.Repositories
                                 PermissionId = permission.Id,
                                 Name = permission.Name,
                                 DisplayName = permission.DisplayName,
-                                Description = permission.Description,
+                                Description = permission.Description!,
                                 Assigned = assignedPermissionIds.Contains(permission.Id)
                             })
                             .ToList();

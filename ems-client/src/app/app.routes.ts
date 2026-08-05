@@ -40,6 +40,7 @@ import { ReviewStepComponent } from '../features/onboarding/review-step/review-s
 import { PloiciesStepComponent } from '../features/onboarding/ploicies-step/ploicies-step';
 import { onboardingGuard } from '../core/guards/onboarding-guard';
 import { dashboardGuard } from '../core/guards/dashboard-guard';
+import { UserCreateComponent } from '../features/users/user-create/user-create';
 
 export const routes: Routes = [
 
@@ -157,7 +158,16 @@ export const routes: Routes = [
 
       {
         path: 'users',
-        component: UserListComponent
+        children:[
+          {
+            path:'',
+            component: UserListComponent
+          },
+          {
+            path:'create',
+            component: UserCreateComponent
+          }
+        ]
       },
 
       {

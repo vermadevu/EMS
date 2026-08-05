@@ -1,5 +1,6 @@
 ﻿using API.Authorization;
 using API.DTOs.User;
+using API.Helpers.Pagination;
 using API.Interfaces.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ public class UsersController(IUserService userService) : BaseApiController
 {
     private readonly IUserService _userService = userService;
 
-    [HttpGet]
+    [HttpGet("all")]
     [HasPermission(Permissions.Users.Read)]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
     {
@@ -51,14 +52,10 @@ public class UsersController(IUserService userService) : BaseApiController
 
     [HttpPost]
     [HasPermission(Permissions.Users.Create)]
-    public async Task<ActionResult<UserDto>> CreateUser(CreateUserDto dto)
+    public async Task<ActionResult<CreateUserResponseDto>> CreateUser(CreateUserDto dto)
     {
-        var user = await _userService.CreateAsync(dto);
+        return Ok(await _userService.CreateAsync(dto));
 
-        return CreatedAtAction(
-            nameof(GetUser),
-            new { id = user.Id },
-            user);
     }
 
     [HttpPut("{id}")]
@@ -120,4 +117,21 @@ public class UsersController(IUserService userService) : BaseApiController
 
         return NoContent();
     }
+
+    [HttpGet("available-employees")]
+    [HasPermission(Permissions.Users.Read)]
+    public async Task<ActionResult<List<AvailableEmployeeDto>>> GetAvailableEmployees()
+    {
+        return Ok(
+            await _userService.GetAvailableEmployeesAsync()
+        );
+    }
+
+    [HttpGet]
+    [HasPermission(Permissions.Users.Read)]
+    public async Task<ActionResult<PagedResult<UserListItemDto>>> GetUsers([FromQuery] UserQueryParams query)
+    {
+        return Ok(await _userService.GetPagedAsync(query));
+    }
+
 }

@@ -12,7 +12,7 @@ import { DepartmentService } from '../../../core/services/department-service';
 import { Department } from '../../../core/models/department';
 import { StatusOption } from '../../../core/models/status-option';
 import { DesignationService } from '../../../core/services/designation-service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Designation } from '../../../core/models/designation';
 import { ConfirmationService } from '../../../core/services/confirmation-service';
 import { NotificationService } from '../../../core/services/notification-service';
@@ -48,7 +48,8 @@ export class EmployeeListComponent {
 
   private readonly router = inject(Router);
   private readonly confirmationService = inject(ConfirmationService);
-  private readonly notificationService = inject(NotificationService)
+  private readonly notificationService = inject(NotificationService);
+  private readonly route = inject(ActivatedRoute);
 
   constructor() {
 
@@ -69,9 +70,36 @@ export class EmployeeListComponent {
 
   ngOnInit(): void {
     this.loadDepartments();
-    this.loadEmployees();
     this.loadStatuses();
     this.loadDesignations();
+
+    this.route.queryParamMap.subscribe(params => {
+
+      const statuses = params.getAll('status');
+
+      this.state.update(state => ({
+        ...state,
+        status: statuses.length > 1
+          ? statuses
+          : statuses[0],
+
+
+        search: params.get('search') ?? '',
+
+        departmentId: params.get('departmentId')
+          ? Number(params.get('departmentId'))
+          : undefined,
+
+        designationId: params.get('designationId')
+          ? Number(params.get('designationId'))
+          : undefined,
+
+        pageNumber: params.get('page')
+          ? Number(params.get('page'))
+          : 1
+      }));
+      this.loadEmployees();
+    });
   }
 
   readonly state = signal<EmployeeListState>({

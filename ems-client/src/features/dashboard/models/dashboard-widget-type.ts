@@ -1,13 +1,23 @@
 export enum DashboardWidgetType {
     EmployeeStatistics = 'EmployeeStatistics',
+    PendingApprovalStatistics = 'PendingApprovalStatistics',
+
     DepartmentStatistics = 'DepartmentStatistics',
-    DesignationStatistics = 'DesignationStatistics',
     AssetStatistics = 'AssetStatistics',
-    UserStatistics = 'UserStatistics',
-    RecentEmployees = 'RecentEmployees',
+    DocumentStatistics = 'DocumentStatistics',
+
+    EmployeeStatusChart = 'EmployeeStatusChart',
+    DepartmentChart = 'DepartmentChart',
+
     PendingOnboarding = 'PendingOnboarding',
-    MyDocuments = 'MyDocuments',
+    PendingApproval = 'PendingApproval',
+    RecentEmployees = 'RecentEmployees',
+    RecentDocuments = 'RecentDocuments',
+
     MyAssets = 'MyAssets',
+    MyDocuments = 'MyDocuments',
+    OnboardingStatus = 'OnboardingStatus',
+
     QuickActions = 'QuickActions',
     Announcements = 'Announcements'
 }

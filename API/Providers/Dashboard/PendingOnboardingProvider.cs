@@ -17,20 +17,17 @@ public class PendingOnboardingProvider(
     private readonly IEmployeeRepository _employeeRepository = employeeRepository;
     private readonly IMapper _mapper = mapper;
 
-    public DashboardWidgetType WidgetType =>
-        DashboardWidgetType.PendingOnboarding;
+    public DashboardWidgetType WidgetType => DashboardWidgetType.PendingOnboarding;
 
     public bool CanBuild(DashboardContext context)
     {
-        return context.Permissions.Contains(
-            Permissions.Employees.Read);
+        return context.Permissions.Contains(Permissions.Employees.Read);
     }
 
     public async Task<DashboardWidgetDto> BuildAsync(
         DashboardContext context)
     {
-        var employees = await _employeeRepository
-            .GetPendingOnboardingAsync();
+        var employees = await _employeeRepository.GetPendingOnboardingAsync();
 
         return new DashboardWidgetDto
         {

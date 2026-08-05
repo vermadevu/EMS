@@ -1,295 +1,536 @@
-<div class="max-w-3xl mx-auto">
+<div class="max-w-7xl mx-auto">
 
-    <form
-        [formGroup]="form"
-        (ngSubmit)="submit()"
-        class="card bg-base-100 border border-base-300 shadow-sm">
+    <form [formGroup]="form" (ngSubmit)="submit()" class="card bg-base-100 border border-base-300 shadow-sm">
+        <div class="border border-base-300 rounded-2xl p-8">
+            <div class="flex items-center gap-2 mb-8">
+                <mat-icon>
+                    person
+                </mat-icon>
 
-        <div class="card-body">
-
-            <h2 class="card-title text-2xl">
-                Employee Information
-            </h2>
-
-            <p class="text-base-content/60">
-                Enter the employee details below.
-            </p>
-
-            <!-- Profile Photo -->
-
-            <div class="divider"></div>
-
-            <h3 class="text-lg font-semibold">
-                Profile Photo
-            </h3>
-
-            <div class="flex justify-center mt-4">
-                <app-image-upload
-                    formControlName="profileImage">
-                </app-image-upload>
+                <h3 class="text-2xl font-semibold">
+                    Employee Information
+                </h3>
 
             </div>
 
-            <!-- Personal Information -->
+            <div class="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-10">
+                <div class="flex flex-col items-center lg:border-r border-base-300 lg:pr-8">
 
-            <div class="divider"></div>
+                    <app-image-upload 
+                        formControlName="profileImage">
+                    </app-image-upload>
 
-            <h3 class="text-lg font-semibold">
-                Personal Information
-            </h3>
+                    <p class="text-sm text-base-content/60 mt-4">
+                        Profile Photo
+                    </p>
 
-            <!-- First Name -->
+                    @if(isEditMode()){
+                    <div class="w-full mt-8 space-y-4">
+                        <div>
+                            <label class="text-xs uppercase text-base-content/60">
+                                Employee Code
+                            </label>
 
-            <fieldset class="fieldset">
-                <legend class="fieldset-legend">
-                    First Name
-                </legend>
+                            <div class="mt-1 rounded-lg border border-base-300 bg-base-200 px-4 py-3 font-medium">
+                                {{ employee()?.employeeCode }}
+                            </div>
+                        </div>
 
-                <input
-                    type="text"
-                    class="input input-bordered w-full"
-                    placeholder="John"
-                    formControlName="firstName">
+                        <div>
+                            <div class="mt-6">
+                                <label class="text-xs uppercase text-base-content/60">
+                                    Status
+                                </label>
 
-                @if(form.controls.firstName.touched &&
-                form.controls.firstName.invalid){
-                    <label class="label">
-                        <span class="label-text-alt text-error">
-                            First name is required.
-                        </span>
-                    </label>
-                }
-            </fieldset>
-
-            <!-- Last Name -->
-
-            <fieldset class="fieldset">
-                <legend class="fieldset-legend">
-                    Last Name
-                </legend>
-
-                <input
-                    type="text"
-                    class="input input-bordered w-full"
-                    placeholder="Doe"
-                    formControlName="lastName">
-
-                @if(form.controls.lastName.touched &&
-                form.controls.lastName.invalid){
-                    <label class="label">
-                        <span class="label-text-alt text-error">
-                            Last name is required.
-                        </span>
-                    </label>
-                }
-            </fieldset>
-
-            <!-- Email -->
-
-            <fieldset class="fieldset">
-                <legend class="fieldset-legend">
-                    Email
-                </legend>
-
-                <input
-                    type="email"
-                    class="input input-bordered w-full"
-                    placeholder="john@example.com"
-                    formControlName="email">
-
-                @if(form.controls.email.touched){
-                    @if(form.controls.email.hasError('required')){
-                        <label class="label">
-                            <span class="label-text-alt text-error">
-                                Email is required.
-                            </span>
-                        </label>
+                                <div class="mt-2">
+                                    <app-status-badge 
+                                        [status]="employee()!.status">
+                                    </app-status-badge>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     }
 
-                    @if(form.controls.email.hasError('email')){
-                        <label class="label">
-                            <span class="label-text-alt text-error">
-                                Enter a valid email.
-                            </span>
-                        </label>
+                </div>
+
+                <div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                        <fieldset class="fieldset">
+                            <legend class="fieldset-legend">
+                                First Name
+                            </legend>
+
+                            <input type="text" class="input input-bordered w-full" placeholder="John"
+                                formControlName="firstName">
+
+                            @if(form.controls.firstName.touched &&
+                            form.controls.firstName.invalid){
+                            <label class="label">
+                                <span class="label-text-alt text-error">
+                                    First name is required.
+                                </span>
+                            </label>
+                            }
+                        </fieldset>
+
+                        <fieldset class="fieldset">
+                            <legend class="fieldset-legend">
+                                Last Name
+                            </legend>
+
+                            <input type="text" class="input input-bordered w-full" placeholder="Doe"
+                                formControlName="lastName">
+
+                            @if(form.controls.lastName.touched &&
+                            form.controls.lastName.invalid){
+
+                            <label class="label">
+                                <span class="label-text-alt text-error">
+                                    Last name is required.
+                                </span>
+                            </label>
+                            }
+
+                        </fieldset>
+
+                        <fieldset class="fieldset">
+                            <legend class="fieldset-legend">
+                                Email
+                            </legend>
+
+                            <input type="email" class="input input-bordered w-full" placeholder="john.doe@company.com"
+                                formControlName="email">
+
+                            @if(form.controls.email.touched){
+                            @if(form.controls.email.hasError('required')){
+                            <label class="label">
+                                <span class="label-text-alt text-error">
+                                    Email is required.
+                                </span>
+                            </label>
+                            }
+
+                            @if(form.controls.email.hasError('email')){
+                            <label class="label">
+                                <span class="label-text-alt text-error">
+                                    Enter a valid email.
+                                </span>
+                            </label>
+                            }
+
+                            }
+
+                        </fieldset>
+
+                        <fieldset class="fieldset">
+                            <legend class="fieldset-legend">
+                                Phone Number
+                            </legend>
+
+                            <input type="text" class="input input-bordered w-full" placeholder="+91 9876543210"
+                                formControlName="phone">
+
+                            @if(form.controls.phone.touched){
+                            @if(form.controls.phone.hasError('required')){
+                            <label class="label">
+                                <span class="label-text-alt text-error">
+                                    Phone number is required.
+                                </span>
+                            </label>
+                            }
+
+                            @if(form.controls.phone.hasError('pattern')){
+                            <label class="label">
+                                <span class="label-text-alt text-error">
+                                    Enter a valid phone number.
+                                </span>
+                            </label>
+                            }
+                            }
+
+                        </fieldset>
+
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 mt-6">
+                        <fieldset class="fieldset">
+                            <legend class="fieldset-legend">
+                                Joining Date
+                            </legend>
+
+                            <input type="date" class="input input-bordered w-full" formControlName="joiningDate">
+
+                            @if(form.controls.joiningDate.touched &&
+                            form.controls.joiningDate.invalid){
+
+                            <label class="label">
+
+                                <span class="label-text-alt text-error">
+
+                                    Joining date is required.
+
+                                </span>
+
+                            </label>
+
+                            }
+
+                        </fieldset>
+                        <fieldset class="fieldset">
+
+                            <legend class="fieldset-legend">
+
+                                Department
+
+                            </legend>
+
+                            <select class="select select-bordered w-full" formControlName="departmentId">
+
+                                <option [ngValue]="0">
+
+                                    Select Department
+
+                                </option>
+
+                                @for(department of lookupData().departments; track department.id){
+
+                                <option [value]="department.id">
+
+                                    {{ department.name }}
+
+                                </option>
+
+                                }
+
+                            </select>
+
+                            @if(form.controls.departmentId.touched &&
+                            form.controls.departmentId.invalid){
+
+                            <label class="label">
+
+                                <span class="label-text-alt text-error">
+
+                                    Department is required.
+
+                                </span>
+
+                            </label>
+
+                            }
+
+                        </fieldset>
+
+                        <fieldset class="fieldset">
+
+                            <legend class="fieldset-legend">
+
+                                Designation
+
+                            </legend>
+
+                            <select class="select select-bordered w-full" formControlName="designationId">
+
+                                <option [ngValue]="0">
+
+                                    Select Designation
+
+                                </option>
+
+                                @for(designation of lookupData().designations; track designation.id){
+
+                                <option [value]="designation.id">
+
+                                    {{ designation.name }}
+
+                                </option>
+
+                                }
+
+                            </select>
+
+                            @if(form.controls.designationId.touched &&
+                            form.controls.designationId.invalid){
+
+                            <label class="label">
+
+                                <span class="label-text-alt text-error">
+
+                                    Designation is required.
+
+                                </span>
+
+                            </label>
+
+                            }
+
+                        </fieldset>
+
+                        <fieldset class="fieldset">
+
+                            <legend class="fieldset-legend">
+
+                                Reporting Manager
+
+                            </legend>
+
+                            <select class="select select-bordered w-full" formControlName="managerId">
+
+                                <option [ngValue]="null">
+
+                                    No Manager
+
+                                </option>
+
+                                @for(manager of lookupData().managers; track manager.id){
+
+                                <option [ngValue]="manager.id">
+
+                                    {{ manager.fullName }}
+
+                                </option>
+
+                                }
+
+                            </select>
+
+                        </fieldset>
+                    </div>
+
+
+                    @if(isEditMode()){
+
+                    <div class="divider font-bold divider-start my-8">
+                        Personal Details
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 mt-6">
+                        <fieldset class="fieldset">
+                            <legend class="fieldset-legend">
+                                Date of Birth
+                            </legend>
+
+                            <input type="date" class="input input-bordered w-full" formControlName="dateOfBirth">
+
+                        </fieldset>
+
+
+                        <fieldset class="fieldset">
+                            <legend class="fieldset-legend">
+                                Gender
+                            </legend>
+
+                            <select class="select select-bordered w-full" formControlName="gender">
+                                <option value="Male">
+                                    Male
+                                </option>
+
+                                <option value="Female">
+                                    Female
+                                </option>
+
+                                <option value="Other">
+                                    Other
+                                </option>
+
+                            </select>
+
+                        </fieldset>
+
+                        <fieldset class="fieldset">
+                            <legend class="fieldset-legend">
+                                Blood Group
+                            </legend>
+
+                            <select class="select select-bordered w-full" formControlName="bloodGroup">
+                                <option>A+</option>
+                                <option>A-</option>
+                                <option>B+</option>
+                                <option>B-</option>
+                                <option>AB+</option>
+                                <option>AB-</option>
+                                <option>O+</option>
+                                <option>O-</option>
+                            </select>
+                        </fieldset>
+                    </div>
+
+
+                    <div class="divider font-bold divider-start my-8">
+                        Address
+                    </div>
+
+                    <fieldset class="fieldset">
+                        <legend class="fieldset-legend">
+                            Address
+                        </legend>
+
+                        <textarea rows="3" class="textarea textarea-bordered w-full"
+                            placeholder="Enter complete address" formControlName="address">
+
+                        </textarea>
+
+                    </fieldset>
+
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 mt-4">
+                        <fieldset class="fieldset">
+                            <legend class="fieldset-legend">
+                                City
+                            </legend>
+
+                            <input type="text" class="input input-bordered w-full" placeholder="City"
+                                formControlName="city">
+
+                        </fieldset>
+
+                        <fieldset class="fieldset">
+                            <legend class="fieldset-legend">
+                                State
+                            </legend>
+
+                            <input type="text" class="input input-bordered w-full" placeholder="State"
+                                formControlName="state">
+
+                        </fieldset>
+
+                        <fieldset class="fieldset">
+                            <legend class="fieldset-legend">
+                                Country
+                            </legend>
+
+                            <input type="text" class="input input-bordered w-full" placeholder="Country"
+                                formControlName="country">
+
+                        </fieldset>
+
+                    </div>
+
+
+                    <div class="divider font-bold divider-start my-8">
+
+                        Emergency Contact
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+
+                        <!-- Contact Name -->
+
+                        <fieldset class="fieldset">
+
+                            <legend class="fieldset-legend">
+
+                                Contact Name
+
+                            </legend>
+
+                            <input type="text" class="input input-bordered w-full" placeholder="Enter contact name"
+                                formControlName="emergencyContactName">
+
+                        </fieldset>
+
+                        <!-- Relationship -->
+
+                        <fieldset class="fieldset">
+
+                            <legend class="fieldset-legend">
+
+                                Relationship
+
+                            </legend>
+
+                            <input type="text" class="input input-bordered w-full"
+                                placeholder="Father, Mother, Spouse..." formControlName="emergencyContactRelationship">
+
+                        </fieldset>
+
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 mt-4">
+
+                        <!-- Contact Phone -->
+
+                        <fieldset class="fieldset">
+
+                            <legend class="fieldset-legend">
+
+                                Contact Phone
+
+                            </legend>
+
+                            <input type="text" class="input input-bordered w-full" placeholder="+91 9876543210"
+                                formControlName="emergencyContactPhone">
+
+                        </fieldset>
+
+                    </div>
+
                     }
-                }
 
-            </fieldset>
+                    <div class="divider my-10"></div>
 
-            <!-- Phone -->
+                    <div class="flex items-center justify-between">
 
-            <fieldset class="fieldset">
-                <legend class="fieldset-legend">
-                    Phone
-                </legend>
+                        <div class="text-sm text-base-content/60">
 
-                <input
-                    type="text"
-                    class="input input-bordered w-full"
-                    placeholder="+91 9999888877"
-                    formControlName="phone">
+                            @if(isEditMode()){
 
-                @if(form.controls.phone.touched){
-                    @if(form.controls.phone.hasError('required')){
-                        <label class="label">
-                            <span class="label-text-alt text-error">
-                                Phone number is required.
-                            </span>
-                        </label>
-                    }
+                            Last updated employee information.
 
-                    @if(form.controls.phone.hasError('pattern')){
-                        <label class="label">
-                            <span class="label-text-alt text-error">
-                                Enter a valid phone number.
-                            </span>
-                        </label>
-                    }
-                }
-            </fieldset>
+                            } @else {
 
-            <!-- Employment Information -->
+                            Please verify all information before creating the employee.
 
-            <div class="divider"></div>
+                            }
 
-            <h3 class="text-lg font-semibold">
-                Employment Information
-            </h3>
+                        </div>
 
-            <!-- Joining Date -->
+                        <div class="flex gap-3">
 
-            <fieldset class="fieldset">
-                <legend class="fieldset-legend">
-                    Joining Date
-                </legend>
+                            <button type="button" class="btn btn-outline" (click)="cancel()">
 
-                <input
-                    type="date"
-                    class="input input-bordered w-full"
-                    formControlName="joiningDate">
+                                <mat-icon>
 
-                @if(form.controls.joiningDate.touched &&
-                form.controls.joiningDate.invalid){
-                    <label class="label">
-                        <span class="label-text-alt text-error">
-                            Joining date is required.
-                        </span>
-                    </label>
-                }
+                                    close
 
-            </fieldset>
+                                </mat-icon>
 
-            <!-- Department -->
+                                Cancel
 
-            <fieldset class="fieldset">
-                <legend class="fieldset-legend">
-                    Department
-                </legend>
+                            </button>
 
-                <select
-                    class="select select-bordered w-full"
-                    formControlName="departmentId">
+                            <button type="submit" class="btn btn-primary min-w-48"
+                                [disabled]="loading() || form.invalid">
 
-                    <option [ngValue]="0">
-                        Select Department
-                    </option>
+                                @if(loading()){
 
-                    @for(department of lookupData().departments; track department.id){
-                        <option [value]="department.id">
-                            {{ department.name }}
-                        </option>
-                    }
-                </select>
+                                <span class="loading loading-spinner loading-sm"></span>
 
-                @if(form.controls.departmentId.touched &&
-                form.controls.departmentId.invalid){
-                    <label class="label">
-                        <span class="label-text-alt text-error">
-                            Department is required.
-                        </span>
-                    </label>
-                }
-            </fieldset>
+                                } @else {
 
-            <!-- Designation -->
+                                <mat-icon>
 
-            <fieldset class="fieldset">
-                <legend class="fieldset-legend">
-                    Designation
-                </legend>
+                                    {{ isEditMode() ? 'save' : 'person_add' }}
 
-                <select
-                    class="select select-bordered w-full"
-                    formControlName="designationId">
+                                </mat-icon>
 
-                    <option [ngValue]="0">
-                        Select Designation
-                    </option>
+                                }
 
-                    @for(designation of lookupData().designations; track designation.id){
-                        <option [value]="designation.id">
-                            {{ designation.name }}
-                        </option>
-                    }
-                </select>
+                                {{ isEditMode()
+                                ? 'Update Employee'
+                                : 'Create Employee'
+                                }}
 
-                @if(form.controls.designationId.touched &&
-                form.controls.designationId.invalid){
-                    <label class="label">
-                        <span class="label-text-alt text-error">
-                            Designation is required.
-                        </span>
-                    </label>
-                }
-            </fieldset>
+                            </button>
 
-            <!-- Manager -->
+                        </div>
 
-            <fieldset class="fieldset">
-                <legend class="fieldset-legend">
-                    Manager
-                </legend>
+                    </div>
 
-                <select
-                    class="select select-bordered w-full"
-                    formControlName="managerId">
-                    <option [ngValue]="null">
-                        No Manager
-                    </option>
 
-                    @for(manager of lookupData().managers; track manager.id){
-                        <option [ngValue]="manager.id">
-                            {{ manager.fullName }}
-                        </option>
-                    }
-                </select>
-            </fieldset>
-
-            <div class="divider my-8"></div>
-
-            <div class="flex justify-end gap-3">
-                <button
-                    type="button"
-                    class="btn btn-outline">
-                    Cancel
-                </button>
-
-                <button
-                    type="submit"
-                    class="btn btn-primary"
-                    [disabled]="form.invalid || loading()">
-
-                    @if(loading()){
-                        <span class="loading loading-spinner loading-sm"></span>
-                    }
-                    @else{
-                        <mat-icon>
-                            {{ isEditMode() ? 'save' : 'person_add' }}
-                        </mat-icon>
-                    }
-                    {{ isEditMode() ? 'Update Employee' : 'Create Employee' }}
-                </button>
+                </div>
             </div>
         </div>
     </form>

@@ -1,5 +1,6 @@
 ﻿using API.DTOs;
 using API.DTOs.Employee;
+using API.DTOs.User;
 using API.Helpers.Pagination;
 using API.Models.Entities;
 
@@ -23,6 +24,8 @@ public interface IEmployeeRepository
     Task<int> CountAsync();
     Task<List<Employee>> GetRecentEmployeesAsync(int count = 5);
     Task<List<Employee>> GetPendingOnboardingAsync(int count = 5);
+    Task<List<Employee>> GetPendingApprovalAsync(int count = 5);
     Task<PagedResult<Employee>> GetPagedAsync(EmployeeQueryParams query);
     Task<List<EmployeeListItemDto>> GetManagersAsync();
+    Task<List<AvailableEmployeeDto>> GetEmployeesWithoutAccountAsync();
 }

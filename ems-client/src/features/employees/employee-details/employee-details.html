@@ -1,5 +1,11 @@
-<app-page-header title="Employee Details" subtitle="View employee information." buttonText="Edit Employee"
-    buttonIcon="edit" [buttonRoute]="['/employees', 'edit', employee()?.id]">
+<app-page-header
+    title="Employee Details"
+    subtitle="View employee information."
+    buttonText="Edit Employee"
+    buttonIcon="edit"
+    [buttonRoute]="['/employees','edit',employee()?.id]"
+    [secondButtonText]="employee()?.status === 'DocumentsSubmitted' ? 'Approve' : undefined"    secondButtonIcon="check_circle"
+    (secondButtonClick)="approve(employee()!)">
 </app-page-header>
 
 @if(loading()){
@@ -14,104 +20,227 @@
 
 @else if(employee(); as employee){
 
-<div class="space-y-6">
-
-    <!-- Header -->
-
-    <div class="card bg-base-100 border border-base-300 shadow-sm">
-        <div class="card-body">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-5">
-
-                    <!-- Avatar -->
-                    @if(employee.profileImage){
-                    <div class="avatar">
-                        <div class="w-20 rounded-full">
-                            <img [src]="employee.profileImage" [alt]="employee.fullName">
+    <div class="flex flex-col gap-6">
+        <div class="card bg-base-100 border border-base-300 shadow-sm">
+            <div class="card-body">
+                <div class="flex items-center gap-2 mb-8">
+                    <mat-icon>
+                        person
+                    </mat-icon>
+    
+                    <h3 class="text-2xl font-semibold">
+                        Employee Information
+                    </h3>
+    
+                </div>
+    
+                <div class="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-10">
+    
+                    <div
+                        class="flex flex-col items-center lg:border-r border-base-300 lg:pr-8">
+    
+                        @if(employee.profileImage){
+    
+                            <div class="avatar">
+    
+                                <div class="w-40 rounded-full">
+    
+                                    <img
+                                        [src]="employee.profileImage"
+                                        [alt]="employee.fullName">
+    
+                                </div>
+    
+                            </div>
+    
+                        } @else {
+    
+                            <div class="avatar placeholder">
+    
+                                <div
+                                    class="flex bg-primary text-primary-content items-center justify-center rounded-full w-40">
+    
+                                    <span class="text-5xl">
+    
+                                        {{ employee.firstName[0] }}{{ employee.lastName[0] }}
+    
+                                    </span>
+    
+                                </div>
+    
+                            </div>
+    
+                        }
+    
+                        <div class="w-full mt-8 space-y-5">
+    
+                            <div>
+    
+                                <label class="text-xs uppercase text-base-content/60">
+    
+                                    Employee Code
+    
+                                </label>
+    
+                                <div
+                                    class="mt-2 rounded-lg border border-base-300 bg-base-200 px-4 py-3 font-medium">
+    
+                                    {{ employee.employeeCode }}
+    
+                                </div>
+    
+                            </div>
+    
+                            <div>
+    
+                                <label class="text-xs uppercase text-base-content/60">
+    
+                                    Status
+    
+                                </label>
+    
+                                <div class="mt-2">
+    
+                                    <app-status-badge
+                                        [status]="employee.status">
+                                    </app-status-badge>
+    
+                                </div>
+    
+                            </div>
+    
                         </div>
+    
                     </div>
-                    }
-
-                    @else{
-                    <div class="avatar placeholder">
-                        <div class="flex bg-primary text-primary-content items-center justify-center rounded-full w-20">
-                            <span class="text-2xl font-semibold">
-                                {{ employee.firstName[0] }}{{ employee.lastName[0] }}
-                            </span>
-                        </div>
-                    </div>
-                    }
-
-                    <!-- Details -->
+    
                     <div>
-                        <h2 class="text-2xl font-bold">
-                            {{ employee.fullName }}
-                        </h2>
-                        <p class="text-base-content/60">
-                            {{ employee.employeeCode }}
-                        </p>
-                        <p class="text-sm text-base-content/60 mt-1">
-                            {{ employee.designationName }}
-                            •
-                            {{ employee.departmentName }}
-                        </p>
+                        <div
+                            class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                            <app-detail-item
+                                label="First Name"
+                                [value]="employee.firstName">
+                            </app-detail-item>
+    
+                            <app-detail-item
+                                label="Last Name"
+                                [value]="employee.lastName">
+                            </app-detail-item>
+    
+                            <app-detail-item
+                                label="Email"
+                                [value]="employee.email">
+                            </app-detail-item>
+    
+                            <app-detail-item
+                                label="Phone"
+                                [value]="employee.phone">
+                            </app-detail-item>
+    
+                            <app-detail-item
+                                label="Joining Date"
+                                [value]="employee.joiningDate | date:'dd MMM yyyy'">
+                            </app-detail-item>
+    
+                            <app-detail-item
+                                label="Department"
+                                [value]="employee.departmentName">
+                            </app-detail-item>
+    
+                            <app-detail-item
+                                label="Designation"
+                                [value]="employee.designationName">
+                            </app-detail-item>
+    
+                            <app-detail-item
+                                label="Reporting Manager"
+                                [value]="employee.managerName">
+                            </app-detail-item>
+                        </div>
+    
+                        <div class="divider text-xl font-bold divider-start my-8">
+                                Personal Details
+                            </div>
+    
+                        <div
+                            class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 mt-6">
+    
+                            <app-detail-item
+                                label="Date of Birth"
+                                [value]="employee.dateOfBirth ? (employee.dateOfBirth | date:'dd MMM yyyy') : '-'">
+                            </app-detail-item>
+    
+                            <app-detail-item
+                                label="Gender"
+                                [value]="employee.gender || '-'">
+                            </app-detail-item>
+    
+                            <app-detail-item
+                                label="Blood Group"
+                                [value]="employee.bloodGroup || '-'">
+                            </app-detail-item>
+    
+                        </div>
+    
+                        <div class="divider text-xl font-bold divider-start my-8">
+                                Address
+                            </div>
+    
+                        <div
+                            class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 mt-6">
+    
+                            <div class="md:col-span-2">
+    
+                                <app-detail-item
+                                    label="Address"
+                                    [value]="employee.address || '-'">
+                                </app-detail-item>
+    
+                            </div>
+    
+                            <app-detail-item
+                                label="City"
+                                [value]="employee.city || '-'">
+                            </app-detail-item>
+    
+                            <app-detail-item
+                                label="State"
+                                [value]="employee.state || '-'">
+                            </app-detail-item>
+    
+                            <app-detail-item
+                                label="Country"
+                                [value]="employee.country || '-'">
+                            </app-detail-item>
+    
+                        </div>
+                        
+                        <div class="divider text-xl font-bold divider-start my-8">
+                                Emergency Details
+                            </div>
+    
+                        <div
+                            class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 mt-6">
+                            <app-detail-item
+                                label="Contact Name"
+                                [value]="employee.emergencyContactName || '-'">
+                            </app-detail-item>
+    
+                            <app-detail-item
+                                label="Relationship"
+                                [value]="employee.emergencyContactRelationship || '-'">
+                            </app-detail-item>
+    
+                            <app-detail-item
+                                label="Contact Phone"
+                                [value]="employee.emergencyContactPhone || '-'">
+                            </app-detail-item>
+                        </div>
                     </div>
                 </div>
-                <app-status-badge [status]="employee.status">
-                </app-status-badge>
             </div>
         </div>
-    </div>
 
-    <!-- Personal Information -->
-
-    <div class="card bg-base-100 border border-base-300 shadow-sm">
-        <div class="card-body">
-            <h3 class="card-title">
-                Personal Information
-            </h3>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                <app-detail-item label="First Name" [value]="employee.firstName">
-                </app-detail-item>
-
-                <app-detail-item label="Last Name" [value]="employee.lastName">
-                </app-detail-item>
-
-                <app-detail-item label="Email" [value]="employee.email">
-                </app-detail-item>
-
-                <app-detail-item label="Phone" [value]="employee.phone">
-                </app-detail-item>
-            </div>
-        </div>
-    </div>
-
-    <!-- Organization -->
-
-    <div class="card bg-base-100 border border-base-300 shadow-sm">
-        <div class="card-body">
-            <h3 class="card-title">
-                Organization
-            </h3>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-
-                <app-detail-item label="Department" [value]="employee.departmentName">
-                </app-detail-item>
-
-                <app-detail-item label="Designation" [value]="employee.designationName">
-                </app-detail-item>
-
-                <app-detail-item label="Manager" [value]="employee.managerName">
-                </app-detail-item>
-
-                <app-detail-item label="Joining Date" [value]="employee.joiningDate | date:'dd MMM yyyy'">
-                </app-detail-item>
-            </div>
-        </div>
-    </div>
-
+        
 
     <div class="card bg-base-100 border border-base-300 shadow-sm">
         <div class="card-body">
@@ -181,5 +310,103 @@
             }
         </div>
     </div>
-</div>
+    </div>
+
+
+    
+
+
+
+<!-- <div class="space-y-6">
+
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+        <div class="card-body">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-5">
+
+                    @if(employee.profileImage){
+                    <div class="avatar">
+                        <div class="w-20 rounded-full">
+                            <img [src]="employee.profileImage" [alt]="employee.fullName">
+                        </div>
+                    </div>
+                    }
+
+                    @else{
+                    <div class="avatar placeholder">
+                        <div class="flex bg-primary text-primary-content items-center justify-center rounded-full w-20">
+                            <span class="text-2xl font-semibold">
+                                {{ employee.firstName[0] }}{{ employee.lastName[0] }}
+                            </span>
+                        </div>
+                    </div>
+                    }
+
+                    <div>
+                        <h2 class="text-2xl font-bold">
+                            {{ employee.fullName }}
+                        </h2>
+                        <p class="text-base-content/60">
+                            {{ employee.employeeCode }}
+                        </p>
+                        <p class="text-sm text-base-content/60 mt-1">
+                            {{ employee.designationName }}
+                            •
+                            {{ employee.departmentName }}
+                        </p>
+                    </div>
+                </div>
+                <app-status-badge [status]="employee.status">
+                </app-status-badge>
+            </div>
+        </div>
+    </div>
+
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+        <div class="card-body">
+            <h3 class="card-title">
+                Employee Information
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                <app-detail-item label="First Name" [value]="employee.firstName">
+                </app-detail-item>
+
+                <app-detail-item label="Last Name" [value]="employee.lastName">
+                </app-detail-item>
+
+                <app-detail-item label="Email" [value]="employee.email">
+                </app-detail-item>
+
+                <app-detail-item label="Phone" [value]="employee.phone">
+                </app-detail-item>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+        <div class="card-body">
+            <h3 class="card-title">
+                Organization
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+
+                <app-detail-item label="Department" [value]="employee.departmentName">
+                </app-detail-item>
+
+                <app-detail-item label="Designation" [value]="employee.designationName">
+                </app-detail-item>
+
+                <app-detail-item label="Manager" [value]="employee.managerName">
+                </app-detail-item>
+
+                <app-detail-item label="Joining Date" [value]="employee.joiningDate | date:'dd MMM yyyy'">
+                </app-detail-item>
+            </div>
+        </div>
+    </div>
+
+</div> -->
 }

@@ -17,7 +17,7 @@ import { UpdateProfile } from '../models/update-profile';
 export class EmployeeService {
 
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = environment.apiUrl +API_ENDPOINTS.employees;
+  private readonly baseUrl = environment.apiUrl + API_ENDPOINTS.employees;
 
   getEmployees(query: EmployeeListState) {
     let params = new HttpParams();
@@ -52,7 +52,13 @@ export class EmployeeService {
     }
 
     if (query.status) {
-      params = params.set('status', query.status);
+      if (Array.isArray(query.status)) {
+        query.status.forEach(status => {
+          params = params.append('status', status);
+        });
+      } else {
+        params = params.set('status', query.status);
+      }
     }
 
     return this.http.get<PagedResult<EmployeeListItem>>(
@@ -121,8 +127,8 @@ export class EmployeeService {
     );
   }
 
-  completeOnboarding(){
-    return this.http.patch(`${this.baseUrl}/me/complete-onboarding`,{});
+  completeOnboarding() {
+    return this.http.patch(`${this.baseUrl}/me/complete-onboarding`, {});
   }
 
 }

@@ -4,7 +4,7 @@ export interface EmployeeListState {
     search: string;
     departmentId?: number;
     designationId?: number;
-    status?: string;
+    status?: string | string[];
     sortBy: string;
     sortDirection: 'asc' | 'desc';
 }

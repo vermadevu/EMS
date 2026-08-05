@@ -9,14 +9,35 @@
             </p>
         }
     </div>
+    <div class="flex gap-2">
     @if (buttonText() && buttonRoute()) {
-        <a
-            [routerLink]="buttonRoute()"
-            class="btn btn-primary">
-            <mat-icon>
-                {{ buttonIcon() }}
-            </mat-icon>
-            {{ buttonText() }}
-        </a>
-    }
+            <a
+                [routerLink]="buttonRoute()"
+                class="btn"
+                [class]="buttonClass()">
+                <mat-icon>
+                    {{ buttonIcon() }}
+                </mat-icon>
+                {{ buttonText() }}
+            </a>
+        }
+        @if(secondButtonText()){
+
+            <button
+                type="button"
+                class="btn"
+                [class]="secondButtonClass()"
+                (click)="secondButtonClick.emit()">
+
+                <mat-icon>
+                    {{ secondButtonIcon() }}
+                </mat-icon>
+
+                {{ secondButtonText() }}
+
+            </button>
+
+        }
+        </div>
+    
 </div>

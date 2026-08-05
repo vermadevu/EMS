@@ -85,7 +85,7 @@ public class DesignationRepository(ApplicationDbContext context) : IDesignationR
             {
                 Id = x.Id,
                 Name = x.Name,
-                Description = x.Description,
+                Description = x.Description!,
                 EmployeeCount = x.Employees.Count
             })
             .ToListAsync();

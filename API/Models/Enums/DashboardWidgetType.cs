@@ -1,15 +1,19 @@
 ﻿namespace API.Models.Enums;
-
 public enum DashboardWidgetType
 {
     EmployeeStatistics,
+    PendingApprovalStatistics,
     DepartmentStatistics,
-    DesignationStatistics,
     AssetStatistics,
-    UserStatistics,
+    DocumentStatistics,
+
+    EmployeeStatusChart,
+    DepartmentChart,
 
     PendingOnboarding,
+    PendingApproval,
     RecentEmployees,
+    RecentDocuments,
 
     MyAssets,
     MyDocuments,

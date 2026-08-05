@@ -117,17 +117,17 @@ builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
 
 builder.Services.AddScoped<IUserPermissionRepository, UserPermissionRepository>();
 builder.Services.AddScoped<IUserPermissionService, UserPermissionService>();
+builder.Services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
 
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 builder.Services.AddScoped<IDashboardWidgetProvider, EmployeeStatisticsProvider>();
 builder.Services.AddScoped<IDashboardWidgetProvider, DepartmentStatisticsProvider>();
-//builder.Services.AddScoped<IDashboardWidgetProvider, DesignationStatisticsProvider>();
 builder.Services.AddScoped<IDashboardWidgetProvider, AssetStatisticsProvider>();
-//builder.Services.AddScoped<IDashboardWidgetProvider, UserStatisticsProvider>();
-builder.Services.AddScoped<IDashboardWidgetProvider, RecentEmployeesProvider>();
-
+builder.Services.AddScoped<IDashboardWidgetProvider, PendingApprovalStatisticsProvider>();
 builder.Services.AddScoped<IDashboardWidgetProvider, PendingOnboardingProvider>();
+builder.Services.AddScoped<IDashboardWidgetProvider, PendingApprovalProvider>();
+builder.Services.AddScoped<IDashboardWidgetProvider, RecentEmployeesProvider>();
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
     {
@@ -179,7 +179,7 @@ if (app.Environment.IsDevelopment())
 }
 
 //app.UseHttpsRedirection();
-//app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200", "https://localhost:4200")); // Add the cors origins where you need to allow the access.
 
 app.UseSwagger();
