@@ -5,9 +5,10 @@ using API.Interfaces.Service;
 
 namespace API.Services
 {
-    public class RolePermissionService(IRolePermissionRepository repository) : IRolePermissionService
+    public class RolePermissionService(IRolePermissionRepository repository, IPermissionService permissionService) : IRolePermissionService
     {
         private readonly IRolePermissionRepository _repository = repository;
+        private readonly IPermissionService _permissionService = permissionService;
      
         public async Task<IEnumerable<RoleDto>> GetRolesAsync()
         {
@@ -38,6 +39,13 @@ namespace API.Services
             }
 
             await _repository.UpdateRolePermissionsAsync(roleId, dto.PermissionIds);
+
+            var userIds = await _repository.GetUserIdsInRoleAsync(roleId);
+
+            foreach (var userId in userIds)
+            {
+                await _permissionService.RefreshPermissionsAsync(userId);
+            }
         }
     }
-}
+}   

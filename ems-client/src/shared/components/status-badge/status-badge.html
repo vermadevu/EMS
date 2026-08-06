@@ -1,3 +1,9 @@
 <div class="badge badge-outline" [class]="badgeClass()">
-    {{ status() }}
+    @if(status() === "DocumentsSubmitted"){
+        Documents
+    }
+    @else {
+        {{ status() }}
+    }
+
 </div>

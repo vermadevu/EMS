@@ -5,11 +5,8 @@ import { CurrentUser } from '../authentication/current-user.model';
 export class CurrentUserService {
 
   readonly user = signal<CurrentUser | null>(null);
-
   readonly isAuthenticated = computed(() => this.user() !== null);
-
   readonly roles = computed(() => this.user()?.roles ?? []);
-
   readonly permissions = computed(() => this.user()?.permissions ?? []);
 
   setUser(user: CurrentUser): void {

@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-status-badge',
@@ -6,7 +6,7 @@ import { Component, computed, input } from '@angular/core';
   templateUrl: './status-badge.html',
   styleUrl: './status-badge.css',
 })
-export class StatusBadge {
+export class StatusBadge{
 
   readonly status = input.required<string>();
 

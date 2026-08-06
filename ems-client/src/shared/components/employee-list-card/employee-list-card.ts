@@ -1,10 +1,13 @@
 import { Component, inject, input } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { EmployeeListItem } from '../../models/employee-list-item';
+import { StatusBadge } from '../status-badge/status-badge';
 
 @Component({
   selector: 'app-employee-list-card',
-  imports: [],
+  imports: [
+    StatusBadge
+  ],
   templateUrl: './employee-list-card.html',
   styleUrl: './employee-list-card.css',
 })

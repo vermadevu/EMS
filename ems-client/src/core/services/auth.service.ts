@@ -82,4 +82,13 @@ export class AuthService {
         );
     }
 
+    refreshCurrentUser() {
+        return this.http.get<CurrentUser>(`${environment.apiUrl}${API_ENDPOINTS.account.me}`)
+            .pipe(
+                tap(user => {
+                    this.currentUserService.setUser(user);
+                })
+            );
+    }
+
 }

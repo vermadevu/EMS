@@ -121,7 +121,6 @@ export class DocumentsStepComponent implements OnInit {
     const formData = new FormData();
 
     formData.append('file', file);
-    console.log(type.toString());
     formData.append('documentType', type.toString());
     this.loading.set(true);
     this.documentService

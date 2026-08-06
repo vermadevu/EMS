@@ -44,7 +44,6 @@ export class AssignAssetDialogComponent {
       .getAll()
       .subscribe({
         next: employees =>{
-          console.log(employees)
            this.employees.set(employees)
           }
       });

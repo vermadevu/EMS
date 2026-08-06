@@ -41,6 +41,7 @@ import { PloiciesStepComponent } from '../features/onboarding/ploicies-step/ploi
 import { onboardingGuard } from '../core/guards/onboarding-guard';
 import { dashboardGuard } from '../core/guards/dashboard-guard';
 import { UserCreateComponent } from '../features/users/user-create/user-create';
+import { RolePermissionDetailsComponent } from '../features/users/role-permissions/role-permission-details/role-permission-details';
 
 export const routes: Routes = [
 
@@ -172,7 +173,16 @@ export const routes: Routes = [
 
       {
         path: 'role-permissions',
-        component: RolePermissionsComponent
+        children: [
+          {
+            path: '',
+            component: RolePermissionsComponent
+          },
+          {
+            path:':id',
+            component: RolePermissionDetailsComponent
+          }
+        ]
       },
 
       {

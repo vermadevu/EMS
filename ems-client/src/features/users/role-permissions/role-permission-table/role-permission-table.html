@@ -1,0 +1,65 @@
+@if (loading()) {
+    <div class="flex justify-center py-20">
+        <span class="loading loading-spinner loading-lg"></span>
+    </div>
+}
+
+@else if (roles().length === 0) {
+    <app-empty-state
+        icon="admin_panel_settings"
+        title="No roles found"
+        subtitle="There are no roles available.">
+    </app-empty-state>
+}
+
+@else {
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+        <div class="overflow-x-auto">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Role
+                        </th>
+                        <th class="text-right">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @for(role of roles(); track role.id){
+                    <tr
+                        class="cursor-pointer hover:bg-base-200 transition-colors"
+                        (click)="openRole(role)">
+                        <td>
+                            <div class="flex items-center gap-3">
+                                <div>
+                                    <div class="font-semibold">
+                                        {{ role.name }}
+                                    </div>
+
+                                    <div class="text-sm opacity-60">
+                                        Manage permissions
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="text-right">
+                            <button
+                                class="btn btn-ghost btn-sm"
+                                (click)="openRole(role)">
+                                View Details
+                                <mat-icon>
+                                    chevron_right
+                                </mat-icon>
+                            </button>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

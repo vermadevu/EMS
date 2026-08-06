@@ -63,11 +63,9 @@
                 </div>
                 <!-- Status -->
                 <div>
-                    <div class="badge badge-outline" [class.badge-success]="employee.status === 'Active'"
-                        [class.badge-warning]="employee.status === 'Pending'"
-                        [class.badge-error]="employee.status === 'Inactive'">
-                        {{ employee.status }}
-                    </div>
+                    <app-status-badge
+                    status="{{employee.status}}">
+                    </app-status-badge>
                 </div>
             </div>
             }

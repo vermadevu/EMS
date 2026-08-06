@@ -11,15 +11,11 @@ import { PendingApproval } from "../../pending-approval/pending-approval";
   templateUrl: './recent-employees.html',
   styleUrl: './recent-employees.css',
 })
-export class RecentEmployees implements OnInit {
+export class RecentEmployees {
     readonly widget = input.required<DashboardWidget>();
     readonly  DashboardWidgetType = DashboardWidgetType;
 
     readonly data = computed(() =>
         this.widget().data as RecentEmployeesWidget
     );
-
-    ngOnInit() : void {
-        console.log(this.widget());
-    }
 }

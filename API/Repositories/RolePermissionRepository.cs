@@ -4,15 +4,17 @@ using API.DTOs.RolePermissionManagement;
 using API.Exceptions;
 using API.Interfaces.Repository;
 using API.Models.Authorization;
+using API.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Repositories
 {
-    public class RolePermissionRepository(ApplicationDbContext context, RoleManager<IdentityRole> roleManager) : IRolePermissionRepository
+    public class RolePermissionRepository(ApplicationDbContext context, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager) : IRolePermissionRepository
     {
         private readonly ApplicationDbContext _context = context;
         private readonly RoleManager<IdentityRole> _roleManager = roleManager;
+        private readonly UserManager<ApplicationUser> _userManager = userManager;
 
         public async Task<IEnumerable<IdentityRole>> GetRolesAsync()
         {
@@ -117,5 +119,18 @@ namespace API.Repositories
             return count == permissionIds.Count;
         }
 
+        public async Task<List<string>> GetUserIdsInRoleAsync(string roleId)
+        {
+            var role = await _roleManager.FindByIdAsync(roleId);
+
+            if (role == null)
+                return [];
+
+            var users = await _userManager.GetUsersInRoleAsync(role.Name!);
+
+            return users
+                .Select(x => x.Id)
+                .ToList();
+        }
     }
 }

@@ -4,13 +4,15 @@
 </app-page-header>
 
     
-<div class="mb-6">
-    <input
-        type="text"
-        class="input input-bordered w-full max-w-md"
-        placeholder="Search employees..."
-        [value]="state().search"
-        (input)="search($any($event.target).value)">
+<div class="card bg-base-100 border border-base-300 shadow-sm mt-4">
+    <div class="card-body">
+        <input 
+            type="text"
+            class="input input-bordered w-full max-w-md" 
+            placeholder="Search Users..."
+            [value]="state().search" 
+            (input)="search($any($event.target).value)">
+    </div>
 </div>
 
 <div class="mt-6">

@@ -1,1 +1,14 @@
-<p>user-permissions works!</p>
+<app-page-header title="User Permissions" subtitle="Manage Permissions assigned to each user.">
+</app-page-header>
+
+
+<div class="card bg-base-100 border border-base-300 shadow-sm mt-4">
+    <div class="card-body">
+        <input 
+            type="text"
+            class="input input-bordered w-full max-w-md" 
+            placeholder="Search Users..."
+            [value]="state().search" 
+            (input)="search($any($event.target).value)">
+    </div>
+</div>

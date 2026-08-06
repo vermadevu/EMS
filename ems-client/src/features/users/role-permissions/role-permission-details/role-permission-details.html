@@ -1,0 +1,112 @@
+<app-page-header
+    title="Role Permissions"
+    subtitle="Manage permissions assigned to this role.">
+</app-page-header>
+    
+@if (loading()) {
+<div class="flex justify-center py-20">
+    <span class="loading loading-spinner loading-lg"></span>
+</div>
+}
+
+@else if(role(); as role){
+<div class="space-y-6">
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+        <div class="card-body">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-3xl font-bold">
+                        {{ role.roleName }}
+                    </h2>
+
+                    <p class="text-base-content/60 mt-2">
+                        Manage permissions assigned to this role.
+                    </p>
+                </div>
+
+                <div class="text-right">
+                    <div class="text-3xl font-bold text-primary">
+                        {{ assignedPermissions() }} / {{ totalPermissions() }}
+                    </div>
+
+                    <div class="text-sm opacity-60">
+                        Permissions Assigned
+                    </div>
+                </div>
+            </div>
+
+            <progress
+                class="progress progress-primary w-full mt-6"
+                [value]="assignedPermissions()"
+                [max]="totalPermissions()">
+            </progress>
+        </div>
+    </div>
+
+    @for(category of role.categories; track category.name){
+    <div class="card bg-base-100 border border-base-300 shadow-sm">
+        <div class="card-body">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="text-xl font-semibold">
+                        {{ category.name }}
+                    </h3>
+
+                    <p class="text-sm opacity-60">
+                        {{ category.assignedPermissions }}
+                        /
+                        {{ category.totalPermissions }}
+                        permissions assigned
+                    </p>
+                </div>
+            </div>
+
+            <div class="divider my-4"></div>
+            <div class="space-y-5">
+                @for(permission of category.permissions; track permission.permissionId){
+                <label
+                    class="flex items-start gap-4 cursor-pointer">
+                    <input
+                        type="checkbox"
+                        class="checkbox checkbox-primary mt-1"
+                        [checked]="permission.assigned"
+                        (change)="togglePermission(
+                            permission.permissionId,
+                            $any($event.target).checked
+                        )">
+                    <div>
+
+                        <div class="font-medium">
+                            {{ permission.displayName }}
+                        </div>
+
+                        <div
+                            class="text-sm text-base-content/60 mt-1">
+                            {{ permission.description }}
+                        </div>
+                    </div>
+                </label>
+                }
+            </div>
+        </div>
+    </div>
+    }
+
+    <div class="flex justify-end gap-3">
+        <button
+            class="btn btn-outline"
+            routerLink="/role-permissions">
+            Cancel
+        </button>
+
+        <button
+            class="btn btn-primary"
+            (click)="save()">
+            <mat-icon>
+                save
+            </mat-icon>
+            Save Changes
+        </button>
+    </div>
+</div>
+}

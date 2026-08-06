@@ -1,1 +1,24 @@
-<p>role-permissions works!</p>
+<app-page-header
+    title="Role Permissions"
+    subtitle="Manage Permissions assigned to roles.">
+</app-page-header>
+
+<div class="card bg-base-100 border border-base-300 shadow-sm mt-4">
+    <div class="card-body">
+        <input 
+            type="text"
+            class="input input-bordered w-full max-w-md" 
+            placeholder="Search Users..."
+            (input)="search($any($event.target).value)">
+    </div>
+</div>
+
+
+<div class="mt-6">
+
+    <app-role-permission-table
+        [roles]="roles()"
+        [loading]="loading()">
+    </app-role-permission-table>
+
+</div>
