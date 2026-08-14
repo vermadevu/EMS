@@ -99,14 +99,6 @@ export class AuthService {
                     response.accessToken,
                     response.refreshToken
                 );
-            }),
-            switchMap(() =>
-                this.http.get<CurrentUser>(
-                    `${environment.apiUrl}${API_ENDPOINTS.account.me}`
-                )
-            ),
-            tap(user => {
-                this.currentUserService.setUser(user);
             })
         );
     }
