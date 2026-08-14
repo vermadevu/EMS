@@ -3,6 +3,7 @@ using API.Models.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace API.Services
@@ -45,8 +46,10 @@ namespace API.Services
                 ),
                 signingCredentials: credentials
             );
-
+            Console.WriteLine("Access Token Generated: "+DateTime.UtcNow);
             return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
         }
+
+        public string GenerateRefreshToken() => Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
     }
 }

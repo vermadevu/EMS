@@ -79,6 +79,27 @@ export class ReviewStepComponent implements OnInit {
           this.notificationService.success(
             'Welcome to the company!'
           );
+          this.router.navigateByUrl('/dashboard');
+        }
+      });
+  }
+
+    testFinish(): void {
+    this.loading.set(true);
+    this.employeeService
+      .getMyProfile()
+      .pipe(
+        finalize(() => this.loading.set(false))
+      )
+      .subscribe({
+        next: () => {
+          this.onboardingService.complete(
+            '/onboarding/review'
+          );
+          this.notificationService.success(
+            'Welcome to the company!'
+          );
+          console.log("onboarding complete")
           this.router.navigate([
             '/dashboard'
           ]);

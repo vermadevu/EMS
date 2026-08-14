@@ -32,11 +32,12 @@ export class AuthService {
             `${environment.apiUrl}${API_ENDPOINTS.account.login}`,
             request
         ).pipe(
-
             tap(response => {
-                this.tokenService.save(response.token);
+                this.tokenService.saveTokens(
+                    response.accessToken,
+                    response.refreshToken
+                );
             }),
-
             switchMap(() =>
                 this.http.get<CurrentUser>(
                     `${environment.apiUrl}${API_ENDPOINTS.account.me}`
@@ -50,33 +51,24 @@ export class AuthService {
     }
 
     logout(): void {
-
         this.tokenService.remove();
-
         this.currentUserService.clear();
-
         this.router.navigate(['/login']);
     }
 
     restoreSession() {
-
         if (!this.tokenService.hasToken) {
             return of(null);
         }
-
         return this.http.get<CurrentUser>(
             `${environment.apiUrl}${API_ENDPOINTS.account.me}`
         ).pipe(
-
             tap(user => {
                 this.currentUserService.setUser(user);
             }),
-
             catchError(() => {
-
                 this.tokenService.remove();
                 this.currentUserService.clear();
-
                 return of(null);
             })
         );
@@ -89,6 +81,34 @@ export class AuthService {
                     this.currentUserService.setUser(user);
                 })
             );
+    }
+
+    refreshToken() {
+
+        const request = {
+            accessToken: this.tokenService.token!,
+            refreshToken: this.tokenService.refreshToken!
+        };
+
+        return this.http.post<LoginResponse>(
+            `${environment.apiUrl}${API_ENDPOINTS.account.refresh}`,
+            request
+        ).pipe(
+            tap(response => {
+                this.tokenService.saveTokens(
+                    response.accessToken,
+                    response.refreshToken
+                );
+            }),
+            switchMap(() =>
+                this.http.get<CurrentUser>(
+                    `${environment.apiUrl}${API_ENDPOINTS.account.me}`
+                )
+            ),
+            tap(user => {
+                this.currentUserService.setUser(user);
+            })
+        );
     }
 
 }

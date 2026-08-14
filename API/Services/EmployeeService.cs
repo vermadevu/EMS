@@ -63,21 +63,21 @@ public class EmployeeService (
         return _mapper.Map<EmployeeDto>(employee);
     }
 
-    public async Task<bool> UpdateAsync(int id, UpdateEmployeeDto dto)
+    public async Task<bool> UpdateAsync(int id, UpdateEmployeeDto updateDto)
     {
-        if (!await _repository.DepartmentExistsAsync(dto.DepartmentId))
+        if (!await _repository.DepartmentExistsAsync(updateDto.DepartmentId))
             throw new NotFoundException("Department not found.");
 
-        if (!await _repository.DesignationExistsAsync(dto.DesignationId))
+        if (!await _repository.DesignationExistsAsync(updateDto.DesignationId))
             throw new NotFoundException("Designation not found.");
 
-        if (dto.ManagerId.HasValue)
+        if (updateDto.ManagerId.HasValue)
         {
-            if (dto.ManagerId.Value == id)
+            if (updateDto.ManagerId.Value == id)
                 throw new BadRequestException("An employee cannot be their own manager.");
 
 
-            if (!await _repository.ManagerExistsAsync(dto.ManagerId.Value))
+            if (!await _repository.ManagerExistsAsync(updateDto.ManagerId.Value))
                 throw new NotFoundException("Manager not found.");
         }
 
@@ -86,10 +86,10 @@ public class EmployeeService (
         if (employee == null)
             return false;
         // Reject Update if the email already exists with other employee
-        if (await _repository.ExistsByEmailAsync(dto.Email, id))
+        if (await _repository.ExistsByEmailAsync(updateDto.Email, id))
             throw new BadRequestException("Email already exists.");
 
-        _mapper.Map(dto, employee);
+        _mapper.Map(updateDto, employee);
 
         await _repository.UpdateAsync(employee);
 
@@ -197,25 +197,15 @@ public class EmployeeService (
     public async Task<EmployeeProfileDto> GetMyProfileAsync(
     int employeeId)
     {
-        var employee = await _repository.GetByIdAsync(employeeId);
-
-        if (employee == null)
-            throw new NotFoundException("Employee not found.");
+        var employee = await _repository.GetByIdAsync(employeeId) ?? throw new NotFoundException("Employee not found.");
 
         return _mapper.Map<EmployeeProfileDto>(employee);
     }
 
-    public async Task UpdateMyProfileAsync(
-    int employeeId,
-    UpdateProfileDto dto)
+    public async Task UpdateMyProfileAsync(int employeeId, UpdateProfileDto updateProfileDto)
     {
-        var employee = await _repository.GetByIdAsync(employeeId);
-
-        if (employee == null)
-            throw new NotFoundException("Employee not found.");
-
-        _mapper.Map(dto, employee);
-
+        var employee = await _repository.GetByIdAsync(employeeId) ?? throw new NotFoundException("Employee not found.");
+        _mapper.Map(updateProfileDto, employee);
         await _repository.UpdateAsync(employee);
     }
 

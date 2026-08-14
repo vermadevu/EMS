@@ -104,7 +104,7 @@ export class RolePermissionDetailsComponent {
       )
       .pipe(
         switchMap(() =>
-            this.authService.refreshCurrentUser()
+          this.authService.refreshCurrentUser()
         ),
         finalize(() =>
           this.saving.set(false)

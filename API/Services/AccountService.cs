@@ -1,5 +1,6 @@
 using API.DTOs.Auth;
 using API.Exceptions;
+using API.Interfaces.Repository;
 using API.Interfaces.Service;
 using API.Models.Identity;
 using Microsoft.AspNetCore.Http;
@@ -13,14 +14,18 @@ public class AccountService(
     SignInManager<ApplicationUser> signInManager,
     ITokenService tokenService,
     IPermissionService permissionService,
-    IHttpContextAccessor httpContextAccessor)
+    IRefreshTokenRepository refreshTokenRepository,
+    IHttpContextAccessor httpContextAccessor,
+    IConfiguration configuration)
     : IAccountService
 {
     private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
     private readonly ITokenService _tokenService = tokenService;
     private readonly IPermissionService _permissionService = permissionService;
+    private readonly IRefreshTokenRepository _refreshTokenRepository = refreshTokenRepository;
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+    private readonly IConfiguration _configuration = configuration;
 
     public async Task<LoginResponseDto> LoginAsync(LoginDto loginDto)
     {
@@ -48,11 +53,38 @@ public class AccountService(
 
         var roles = await _userManager.GetRolesAsync(user);
 
-        var token = await _tokenService.CreateTokenAsync(user, roles);
+        var accessToken = await _tokenService.CreateTokenAsync(user, roles);
+
+        var refreshToken = _tokenService.GenerateRefreshToken();
+
+        var existingRefreshToken = await _refreshTokenRepository.GetByUserIdAsync(user.Id);
+
+        if (existingRefreshToken is null)
+        {
+            await _refreshTokenRepository.AddAsync(new RefreshToken
+            {
+                UserId = user.Id,
+                Token = refreshToken,
+                CreatedAt = DateTime.UtcNow,
+                ExpiresAt = DateTime.UtcNow.AddDays(
+                    Convert.ToDouble(_configuration.GetValue<int>("Jwt:RefreshTokenExpiryInDays"))
+                )
+            });
+        }
+        else
+        {
+            existingRefreshToken.Token = refreshToken;
+            existingRefreshToken.CreatedAt = DateTime.UtcNow;
+            existingRefreshToken.ExpiresAt = DateTime.UtcNow.AddDays(
+                                     Convert.ToDouble(_configuration.GetValue<int>("Jwt:RefreshTokenExpiryInDays")));
+
+            await _refreshTokenRepository.UpdateAsync(existingRefreshToken);
+        }
 
         return new LoginResponseDto
         {
-            Token = token,
+            AccessToken = accessToken,
+            RefreshToken = refreshToken,
             Email = user.Email!,
             UserName = user.UserName!,
             EmployeeStatus = user.Employee.Status,
@@ -92,6 +124,45 @@ public class AccountService(
             Roles = roles,
             Permissions = permissions,
             ProfileImage = user.Employee?.ProfileImage
+        };
+    }
+
+    public async Task<RefreshResponseDto> RefreshAsync(RefreshRequestDto refreshDto)
+    {
+        var storedToken = await _refreshTokenRepository.GetByTokenAsync(refreshDto.RefreshToken);
+
+        if (storedToken == null)
+        {
+            throw new UnauthorizedException("Invalid refresh token.");
+        }
+
+        if (storedToken.ExpiresAt <= DateTime.UtcNow)
+        {
+            throw new UnauthorizedException("Refresh token expired.");
+        }
+
+        var user = storedToken.User;
+
+        if (!user.IsActive)
+        {
+            throw new UnauthorizedException("User account is inactive.");
+        }
+
+        var roles = await _userManager.GetRolesAsync(user);
+        var accessToken = await _tokenService.CreateTokenAsync(user, roles);
+        var refreshToken = _tokenService.GenerateRefreshToken();
+
+        storedToken.Token = refreshToken;
+        storedToken.CreatedAt = DateTime.UtcNow;
+        storedToken.ExpiresAt = DateTime.UtcNow.AddDays(
+                        Convert.ToDouble(_configuration.GetValue<int>("Jwt:RefreshTokenExpiryInDays")));
+
+        await _refreshTokenRepository.UpdateAsync(storedToken);
+
+        return new RefreshResponseDto
+        {
+            AccessToken = accessToken,
+            RefreshToken = refreshToken
         };
     }
 }

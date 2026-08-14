@@ -52,6 +52,7 @@ builder.Services.AddAuthentication(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
+        ClockSkew = TimeSpan.Zero,
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
@@ -128,6 +129,8 @@ builder.Services.AddScoped<IDashboardWidgetProvider, PendingApprovalStatisticsPr
 builder.Services.AddScoped<IDashboardWidgetProvider, PendingOnboardingProvider>();
 builder.Services.AddScoped<IDashboardWidgetProvider, PendingApprovalProvider>();
 builder.Services.AddScoped<IDashboardWidgetProvider, RecentEmployeesProvider>();
+
+builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
     {

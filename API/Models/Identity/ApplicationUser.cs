@@ -9,4 +9,5 @@ public class ApplicationUser : IdentityUser
     public bool IsActive { get; set; } = true;
     public int EmployeeId { get; set; }
     public Employee Employee { get; set; } = null!;
+    public RefreshToken? RefreshToken { get; set; }
 }

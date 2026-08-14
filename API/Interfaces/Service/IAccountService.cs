@@ -7,4 +7,5 @@ public interface IAccountService
 {
     Task<LoginResponseDto> LoginAsync(LoginDto dto);
     Task<CurrentUserDto> GetCurrentUserAsync();
+    Task<RefreshResponseDto> RefreshAsync(RefreshRequestDto dto);
 }

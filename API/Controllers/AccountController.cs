@@ -22,4 +22,12 @@ public class AccountController(IAccountService accountService)
     {
         return Ok(await _accountService.GetCurrentUserAsync());
     }
+
+    [HttpPost("refresh")]
+    public async Task<ActionResult<RefreshResponseDto>> Refresh(RefreshRequestDto refreshRequestDto)
+    {
+        return Ok(
+            await _accountService.RefreshAsync(refreshRequestDto)
+        );
+    }
 }

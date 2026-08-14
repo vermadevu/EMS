@@ -1,6 +1,7 @@
 export const API_ENDPOINTS = {
   account: {
     login: '/account/login',
+    refresh: '/account/refresh',
     me: '/account/me'
   },
 

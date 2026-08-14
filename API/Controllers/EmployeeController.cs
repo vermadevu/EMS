@@ -39,9 +39,9 @@ public class EmployeeController(IEmployeeService employeeService, ICurrentUserSe
 
     [HttpPost]
     [HasPermission(Permissions.Employees.Create)]
-    public async Task<ActionResult<EmployeeDto>> Create(CreateEmployeeDto dto)
+    public async Task<ActionResult<EmployeeDto>> Create(CreateEmployeeDto employeeDto)
     {
-        var employee = await _employeeService.CreateAsync(dto);
+        var employee = await _employeeService.CreateAsync(employeeDto);
 
         return CreatedAtAction(nameof(GetById),
             new { id = employee.Id },
@@ -50,9 +50,9 @@ public class EmployeeController(IEmployeeService employeeService, ICurrentUserSe
 
     [HttpPut("{id:int}")]
     [HasPermission(Permissions.Employees.Update)]
-    public async Task<ActionResult> Update(int id, UpdateEmployeeDto dto)
+    public async Task<ActionResult> Update(int id, UpdateEmployeeDto employeeDto)
     {
-        var updated = await _employeeService.UpdateAsync(id, dto);
+        var updated = await _employeeService.UpdateAsync(id, employeeDto);
 
         if (!updated)
             return NotFound();
